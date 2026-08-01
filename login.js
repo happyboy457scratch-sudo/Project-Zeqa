@@ -1,1 +1,0 @@
-export const login=()=>`<div class='card'><h2>ZeqaValues</h2><input id=u placeholder=Username><input id=p type=password placeholder=Password><button id=b>Sign In</button><p id=m></p></div>`;
