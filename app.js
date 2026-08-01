@@ -1,0 +1,1 @@
+const v=[['Latest Sale','12,800'],['7 Day Average','12,520'],['30 Day Average','12,310'],['All Time Average','11,940'],['Good Buy','≤11,700'],['Good Sell','≥13,000']];cards.innerHTML='<h2>Example Cape</h2><div class="grid">'+v.map(x=>`<div class="card"><div class="title">${x[0]}</div><div class="value">${x[1]}</div></div>`).join('')+'</div>';
