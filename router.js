@@ -1,1 +1,0 @@
-export const pages=['home','compare','value','collection'];
