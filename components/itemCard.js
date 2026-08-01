@@ -1,0 +1,1 @@
+export function itemCard(i){return `<div class='item-card'><h3>${i.name}</h3></div>`;}
