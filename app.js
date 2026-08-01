@@ -1,1 +1,0 @@
-fetch('data/items.json').then(r=>r.json()).then(items=>{let h='<table><tr><th>Item</th><th>Latest</th><th>7d</th><th>30d</th><th>All</th></tr>';for(const i of items){h+=`<tr><td>${i.name}</td><td>${i.latest_sale}</td><td>${i.avg7}</td><td>${i.avg30}</td><td>${i.avg_all}</td></tr>`}h+='</table>';app.innerHTML=h;});
