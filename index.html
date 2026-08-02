@@ -3,27 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ZeqaValues - Debug</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body style="background: #0d1117; color: #ffffff; font-family: monospace; padding: 20px;">
+  <title>ZeqaValues - Mineville PvP Cosmetic Analytics</title>
   
-  <div id="debug-log">
-    <h2 style="color: #5EF2B6;">ZeqaValues Diagnostics</h2>
-    <p style="color: #aaaaaa;">Testing module loading...</p>
-  </div>
-
-  <script>
-    window.addEventListener('error', function(e) {
-      document.getElementById('debug-log').innerHTML += `
-        <div style="background: rgba(231,76,60,0.2); border: 1px solid #e74c3c; padding: 12px; border-radius: 8px; margin-top: 12px; color: #ff6b6b;">
-          <strong>Module Error Caught:</strong><br>
-          ${e.message}<br>
-          <span style="color: #aaaaaa; font-size: 12px;">File: ${e.filename || 'Unknown Module'}</span>
-        </div>
-      `;
-    }, true);
-  </script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/popup.css">
+  <link rel="stylesheet" href="css/value.css">
+  <link rel="stylesheet" href="css/compare.css">
+  <link rel="stylesheet" href="css/collection.css">
+  <link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+  <div id="app"></div>
 
   <script type="module" src="app.js"></script>
 </body>
