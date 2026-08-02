@@ -1,0 +1,311 @@
+/* ==========================================================================
+   ZeqaValues - Trade Compare Engine Stylesheet
+   Side-by-side trade slots, valuation status badges, and item picker modal
+   ========================================================================== */
+
+.zv-compare-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Page Header */
+.zv-compare-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.zv-compare-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.zv-compare-subtitle {
+  color: #aaaaaa;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Outcome Results Banner */
+.zv-outcome-banner {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s ease;
+}
+
+.zv-outcome-badge {
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 800;
+  padding: 6px 20px;
+  border-radius: 30px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.zv-outcome-badge.fair {
+  background: rgba(94, 242, 182, 0.15);
+  color: #5EF2B6;
+  border: 1px solid #5EF2B6;
+}
+
+.zv-outcome-badge.win {
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ecc71;
+  border: 1px solid #2ecc71;
+}
+
+.zv-outcome-badge.loss {
+  background: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+}
+
+.zv-outcome-diff {
+  font-size: 15px;
+  color: #aaaaaa;
+}
+
+.zv-outcome-diff span {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* 2-Side Comparison Layout */
+.zv-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 820px) {
+  .zv-compare-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Player Trade Box */
+.zv-trade-box {
+  background: #14181f;
+  border: 1px solid #282e38;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.zv-trade-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #222730;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.zv-player-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #5EF2B6;
+  margin: 0;
+}
+
+.zv-box-clear-btn {
+  background: #202630;
+  border: 1px solid #303744;
+  color: #aaaaaa;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.zv-box-clear-btn:hover {
+  background: #e74c3c;
+  color: #ffffff;
+  border-color: #e74c3c;
+}
+
+/* Item List Slots */
+.zv-slots-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 220px;
+  flex: 1;
+}
+
+.zv-slot-item {
+  background: #1c222b;
+  border: 1px solid #2d3542;
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.zv-slot-item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.zv-slot-item-name {
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.zv-slot-item-val {
+  font-size: 12px;
+  color: #5EF2B6;
+}
+
+.zv-slot-remove-btn {
+  background: transparent;
+  border: none;
+  color: #888888;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.zv-slot-remove-btn:hover {
+  color: #ff5555;
+}
+
+/* Add Item Button Slot */
+.zv-add-slot-btn {
+  background: rgba(94, 242, 182, 0.05);
+  border: 2px dashed rgba(94, 242, 182, 0.3);
+  border-radius: 10px;
+  padding: 16px;
+  color: #5EF2B6;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+.zv-add-slot-btn:hover {
+  background: rgba(94, 242, 182, 0.12);
+  border-color: #5EF2B6;
+}
+
+/* Side Total Footer */
+.zv-trade-box-footer {
+  border-top: 1px solid #222730;
+  padding-top: 14px;
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.zv-total-label {
+  color: #aaaaaa;
+  font-size: 14px;
+}
+
+.zv-total-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Item Picker Modal */
+.zv-picker-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.zv-picker-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.zv-picker-modal {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.zv-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.zv-picker-title {
+  margin: 0;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.zv-picker-search {
+  width: 100%;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #ffffff;
+  outline: none;
+  margin-bottom: 14px;
+  box-sizing: border-box;
+}
+
+.zv-picker-list {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+}
+
+.zv-picker-item {
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.zv-picker-item:hover {
+  background: #30363d;
+}
