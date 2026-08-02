@@ -34,10 +34,9 @@ async function loadData() {
     console.warn('Could not fetch cosmetics.json, utilizing fallback dataset:', err);
     cosmeticsData = [
       { id: 1, name: 'Dragon Cape', category: 'Capes', rarity: 'Legendary', value: 25000, demand: 9, salesExistingRatio: 85, priceHistory: [21000, 22500, 23000, 24000, 25000] },
-      { id: 2, name: 'Galaxy Halo', category: 'Hats', rarity: 'Mythic', value: 42000, demand: 10, salesExistingRatio: 92, priceHistory: [35000, 38000, 40000, 41500, 42000] },
-      { id: 3, name: 'Ruby Trail', category: 'Trails', rarity: 'Rare', value: 8500, demand: 6, salesExistingRatio: 45, priceHistory: [7000, 7500, 8000, 8200, 8500] },
-      { id: 4, name: 'Shadow Aura', category: 'Auras', rarity: 'Epic', value: 16000, demand: 8, salesExistingRatio: 70, priceHistory: [14000, 14800, 15200, 15800, 16000] },
-      { id: 5, name: 'Emerald Wings', category: 'Wings', rarity: 'Legendary', value: 31000, demand: 9, salesExistingRatio: 88, priceHistory: [28000, 29500, 30000, 30800, 31000] }
+      { id: 2, name: 'Ancient Relic', category: 'Artifacts', rarity: 'Mythic', value: 42000, demand: 10, salesExistingRatio: 92, priceHistory: [35000, 38000, 40000, 41500, 42000] },
+      { id: 3, name: 'Fireball Projectile', category: 'Projectiles', rarity: 'Rare', value: 8500, demand: 6, salesExistingRatio: 45, priceHistory: [7000, 7500, 8000, 8200, 8500] },
+      { id: 4, name: 'Golden Key', category: 'Items', rarity: 'Epic', value: 16000, demand: 8, salesExistingRatio: 70, priceHistory: [14000, 14800, 15200, 15800, 16000] }
     ];
   }
 }
@@ -65,7 +64,7 @@ function saveWishlist(wl) {
    ========================================================================== */
 
 function renderApp() {
-  if (localStorage.getItem('loggedIn') !== '1') {
+  if (sessionStorage.getItem('loggedIn') !== '1') {
     renderLogin();
     return;
   }
@@ -142,8 +141,8 @@ function renderLogin() {
     <div style="max-width: 360px; margin: 80px auto; background: #14181f; border: 1px solid #282e38; border-radius: 14px; padding: 28px; text-align: center;">
       <h2 style="margin: 0 0 8px 0; color: #ffffff;">ZeqaValues</h2>
       <p style="color: #aaaaaa; font-size: 13px; margin-bottom: 20px;">Sign in to access Mineville PvP cosmetic analytics.</p>
-      <input id="u" placeholder="Username (happyboy457)" style="width: 100%; padding: 10px; margin-bottom: 12px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 8px; box-sizing: border-box;">
-      <input id="p" type="password" placeholder="Password (admin)" style="width: 100%; padding: 10px; margin-bottom: 16px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 8px; box-sizing: border-box;">
+      <input id="u" placeholder="Username" style="width: 100%; padding: 10px; margin-bottom: 12px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 8px; box-sizing: border-box;">
+      <input id="p" type="password" placeholder="Password" style="width: 100%; padding: 10px; margin-bottom: 16px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 8px; box-sizing: border-box;">
       <button id="b" style="width: 100%; background: #5EF2B6; border: none; color: #111; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">Sign In</button>
       <p id="m" style="text-align: center; font-size: 13px; margin-top: 12px;"></p>
     </div>
@@ -155,11 +154,11 @@ function renderLogin() {
     const m = document.getElementById('m');
 
     if (u === 'happyboy457' && p === 'admin') {
-      localStorage.setItem('loggedIn', '1');
+      sessionStorage.setItem('loggedIn', '1');
       localStorage.setItem('zv_active_user', u);
       renderApp();
     } else if (m) {
-      m.textContent = 'Invalid credentials. Use happyboy457 / admin';
+      m.textContent = 'Invalid credentials';
       m.style.color = '#e74c3c';
     }
   };
@@ -205,7 +204,7 @@ function renderHomePage(container) {
       <div style="margin-top: 32px; background: #14181f; border: 1px solid #282e38; border-radius: 14px; padding: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
         <div>
           <h3 style="margin: 0 0 4px 0; color: #ffffff;">Explore Full Valuation Directory</h3>
-          <p style="margin: 0; color: #aaaaaa; font-size: 13px;">Filter through Capes, Hats, Trails, Auras, and Wings with 10 sorting engines.</p>
+          <p style="margin: 0; color: #aaaaaa; font-size: 13px;">Filter through Artifacts, Capes, Projectiles, and Items.</p>
         </div>
         <button id="zv-launch-value" style="background: #5EF2B6; border: none; color: #111111; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer;">
           Open Directory →
@@ -233,12 +232,12 @@ function renderHomePage(container) {
    ========================================================================== */
 
 function renderValuePage(container) {
-  const categories = ['All', 'Capes', 'Hats', 'Trails', 'Auras', 'Wings'];
+  const categories = ['All', 'Artifacts', 'Capes', 'Projectiles', 'Items'];
 
   container.innerHTML = `
     <div style="max-width: 1200px; margin: 0 auto; padding: 24px;">
       <h1 style="color: #fff; margin: 0 0 6px 0;">Cosmetics Directory</h1>
-      <p style="color: #aaa; margin: 0 0 24px 0; font-size: 14px;">Filter and inspect real-time valuations across all cosmetic tiers.</p>
+      <p style="color: #aaa; margin: 0 0 24px 0; font-size: 14px;">Filter and inspect real-time valuations across all cosmetic categories.</p>
 
       <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 14px;">
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -669,7 +668,7 @@ function renderSettingsPage(container) {
   };
 
   container.querySelector('#zv-sign-out').onclick = () => {
-    localStorage.removeItem('loggedIn');
+    sessionStorage.removeItem('loggedIn');
     renderApp();
   };
 }
@@ -803,6 +802,7 @@ document.addEventListener('keydown', (e) => {
 
 // Application Entry Point
 async function init() {
+  sessionStorage.removeItem('loggedIn'); // Always start on the login view when visiting
   await loadData();
   renderApp();
 }
