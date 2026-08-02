@@ -1,96 +1,112 @@
 /**
- * ZeqaValues - Settings Page Controller
- * System configuration, user preferences, and cache clearing.
+ * ZeqaValues - SPA Master Router Engine
+ * Controls page switching across ['home', 'compare', 'value', 'collection', 'settings']
  */
 
-export class SettingsPage {
-  constructor(router = null) {
-    this.router = router;
+import { navbar } from '../components/navbar.js';
+import { login } from '../components/login.js';
+import { HomePage } from '../pages/home.js';
+import { ValuePage } from '../pages/value.js';
+import { ComparePage } from '../pages/compare.js';
+import { CollectionPage } from '../pages/collection.js';
+import { SettingsPage } from '../pages/settings.js';
+
+export const pages = ['home', 'compare', 'value', 'collection', 'settings'];
+
+export class Router {
+  constructor(appElement, cosmeticsData = []) {
+    this.app = appElement;
+    this.data = cosmeticsData;
+    this.currentPage = localStorage.getItem('lastPage') || 'home';
+  }
+
+  setData(data) {
+    this.data = data;
+  }
+
+  navigate(page) {
+    if (!pages.includes(page)) page = 'home';
+    this.currentPage = page;
+    localStorage.setItem('lastPage', page);
+    this.render();
   }
 
   render() {
-    const activeUser = localStorage.getItem('zv_active_user') || 'happyboy457';
-    const theme = localStorage.getItem('zv_theme') || 'dark';
+    if (localStorage.getItem('loggedIn') !== '1') {
+      this.renderLogin();
+      return;
+    }
 
-    return `
-      <div class="zv-settings-container">
-        <div class="zv-settings-header">
-          <h1 class="zv-settings-title">Application Settings</h1>
-          <p class="zv-settings-subtitle">Manage preferences, theme settings, and active session state.</p>
-        </div>
+    this.app.innerHTML = navbar() + `<main id="page-content"></main>`;
+    this.bindNavbar();
 
-        <div class="zv-settings-card">
-          <div class="zv-settings-card-title">Session Details</div>
-          <div class="zv-setting-row">
-            <div class="zv-setting-info">
-              <span class="zv-setting-label">Logged In User</span>
-              <span class="zv-setting-desc">Active account identity</span>
-            </div>
-            <span style="font-weight:700; color:#5EF2B6;">${activeUser}</span>
-          </div>
-        </div>
+    const content = document.getElementById('page-content');
+    if (!content) return;
 
-        <div class="zv-settings-card">
-          <div class="zv-settings-card-title">UI Preferences</div>
-          <div class="zv-setting-row">
-            <div class="zv-setting-info">
-              <span class="zv-setting-label">Color Theme</span>
-              <span class="zv-setting-desc">Base UI color profile</span>
-            </div>
-            <select class="zv-select-input" id="zv-theme-select">
-              <option value="dark" ${theme === 'dark' ? 'selected' : ''}>Dark (Default)</option>
-              <option value="mint" ${theme === 'mint' ? 'selected' : ''}>High-Contrast Mint</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="zv-settings-card">
-          <div class="zv-settings-card-title">Data & Maintenance</div>
-          <div class="zv-setting-row">
-            <div class="zv-setting-info">
-              <span class="zv-setting-label">Clear Local Collection Data</span>
-              <span class="zv-setting-desc">Resets all saved inventory and wishlist items in storage</span>
-            </div>
-            <button class="zv-danger-btn" id="zv-reset-storage">Reset Storage</button>
-          </div>
-          <div class="zv-setting-row" style="margin-top:12px;">
-            <div class="zv-setting-info">
-              <span class="zv-setting-label">Sign Out</span>
-              <span class="zv-setting-desc">Terminates current session</span>
-            </div>
-            <button class="zv-danger-btn" id="zv-sign-out">Log Out</button>
-          </div>
-        </div>
-      </div>
-    `;
+    switch (this.currentPage) {
+      case 'value': {
+        const page = new ValuePage(this.data);
+        content.innerHTML = page.render();
+        page.bindEvents(content);
+        break;
+      }
+      case 'compare': {
+        const page = new ComparePage(this.data);
+        content.innerHTML = page.render();
+        page.bindEvents(content);
+        break;
+      }
+      case 'collection': {
+        const page = new CollectionPage(this.data);
+        content.innerHTML = page.render();
+        page.bindEvents(content);
+        break;
+      }
+      case 'settings': {
+        const page = new SettingsPage(this);
+        content.innerHTML = page.render();
+        page.bindEvents(content);
+        break;
+      }
+      case 'home':
+      default: {
+        const page = new HomePage(this.data, this);
+        content.innerHTML = page.render();
+        page.bindEvents(content);
+        break;
+      }
+    }
   }
 
-  bindEvents(container) {
-    const root = container || document;
-
-    const themeSelect = root.querySelector('#zv-theme-select');
-    if (themeSelect) {
-      themeSelect.onchange = (e) => {
-        localStorage.setItem('zv_theme', e.target.value);
+  bindNavbar() {
+    const links = document.querySelectorAll('.topbar nav a');
+    links.forEach(link => {
+      link.style.cursor = 'pointer';
+      link.onclick = (e) => {
+        e.preventDefault();
+        const route = link.textContent.trim().toLowerCase();
+        this.navigate(route);
       };
-    }
+    });
+  }
 
-    const resetBtn = root.querySelector('#zv-reset-storage');
-    if (resetBtn) {
-      resetBtn.onclick = () => {
-        if (confirm('Are you sure you want to clear your local collection and wishlist?')) {
-          localStorage.removeItem('zv_user_inventory');
-          localStorage.removeItem('zv_user_wishlist');
-          alert('Local collection reset successfully.');
+  renderLogin() {
+    this.app.innerHTML = login();
+    const btn = document.getElementById('b');
+    if (btn) {
+      btn.onclick = () => {
+        const u = document.getElementById('u')?.value;
+        const p = document.getElementById('p')?.value;
+        const m = document.getElementById('m');
+
+        if (u === 'happyboy457' && p === 'admin') {
+          localStorage.setItem('loggedIn', '1');
+          localStorage.setItem('zv_active_user', u);
+          this.render();
+        } else if (m) {
+          m.textContent = 'Invalid credentials. Use happyboy457 / admin';
+          m.style.color = '#e74c3c';
         }
-      };
-    }
-
-    const signOutBtn = root.querySelector('#zv-sign-out');
-    if (signOutBtn) {
-      signOutBtn.onclick = () => {
-        localStorage.removeItem('loggedIn');
-        if (this.router) this.router.render();
       };
     }
   }
