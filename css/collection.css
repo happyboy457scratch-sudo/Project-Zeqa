@@ -1,1 +1,220 @@
+/* ==========================================================================
+   ZeqaValues - Collection & Wishlist Stylesheet
+   Portfolio widgets, tab navigation, inventory quantity badges, and wishlist UI
+   ========================================================================== */
 
+.zv-collection-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Header & Stat Dashboard */
+.zv-collection-header {
+  margin-bottom: 24px;
+}
+
+.zv-collection-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.5px;
+}
+
+.zv-collection-subtitle {
+  color: #aaaaaa;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Portfolio Summary Bar */
+.zv-portfolio-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.zv-stat-card {
+  background: #14181f;
+  border: 1px solid #282e38;
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+.zv-stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #aaaaaa;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.zv-stat-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.zv-stat-val.mint {
+  color: #5EF2B6;
+}
+
+/* View Switcher Tabs */
+.zv-collection-tabs {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid #282828;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+
+.zv-tab-link {
+  background: transparent;
+  border: none;
+  color: #aaaaaa;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.zv-tab-link:hover {
+  color: #ffffff;
+  background: #1a1a1a;
+}
+
+.zv-tab-link.active {
+  background: rgba(94, 242, 182, 0.12);
+  color: #5EF2B6;
+  border: 1px solid rgba(94, 242, 182, 0.3);
+}
+
+/* Inventory Cards Grid */
+.zv-inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.zv-inventory-card {
+  background: #14181f;
+  border: 1px solid #282e38;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.zv-inventory-card:hover {
+  transform: translateY(-2px);
+  border-color: #5EF2B6;
+}
+
+.zv-card-top {
+  margin-bottom: 14px;
+}
+
+.zv-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.zv-card-meta {
+  font-size: 12px;
+  color: #aaaaaa;
+  display: flex;
+  justify-content: space-between;
+}
+
+.zv-card-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #5EF2B6;
+  margin-top: 8px;
+}
+
+/* Quantity Control Widget */
+.zv-qty-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0d1117;
+  border: 1px solid #222730;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin-top: 12px;
+}
+
+.zv-qty-btn {
+  background: #202630;
+  border: 1px solid #303744;
+  color: #ffffff;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.zv-qty-btn:hover {
+  background: #5EF2B6;
+  color: #111111;
+  border-color: #5EF2B6;
+}
+
+.zv-qty-display {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Wishlist Action Button */
+.zv-wishlist-remove-btn {
+  width: 100%;
+  background: #202630;
+  border: 1px solid #303744;
+  color: #ff5555;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: all 0.2s ease;
+}
+
+.zv-wishlist-remove-btn:hover {
+  background: #e74c3c;
+  color: #ffffff;
+  border-color: #e74c3c;
+}
+
+/* Empty Collection View */
+.zv-collection-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: #141414;
+  border: 1px dashed #2a2a2a;
+  border-radius: 14px;
+  color: #aaaaaa;
+}
+
+.zv-collection-empty h3 {
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  font-size: 18px;
+}
