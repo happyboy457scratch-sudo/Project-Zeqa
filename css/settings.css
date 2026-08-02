@@ -1,0 +1,104 @@
+/* ==========================================================================
+   ZeqaValues - Settings & Dashboard Stylesheet
+   Preferences panel, theme options, and system reset controls
+   ========================================================================== */
+
+.zv-settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.zv-settings-header {
+  margin-bottom: 28px;
+}
+
+.zv-settings-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.5px;
+}
+
+.zv-settings-subtitle {
+  color: #aaaaaa;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Card Sections */
+.zv-settings-card {
+  background: #14181f;
+  border: 1px solid #282e38;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.zv-settings-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #222730;
+  padding-bottom: 10px;
+}
+
+/* Form Controls */
+.zv-setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #1c222b;
+}
+
+.zv-setting-row:last-child {
+  border-bottom: none;
+}
+
+.zv-setting-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.zv-setting-label {
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.zv-setting-desc {
+  font-size: 12px;
+  color: #aaaaaa;
+  margin-top: 2px;
+}
+
+.zv-select-input {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  outline: none;
+  font-size: 13px;
+}
+
+/* Buttons */
+.zv-danger-btn {
+  background: rgba(231, 76, 60, 0.15);
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.zv-danger-btn:hover {
+  background: #e74c3c;
+  color: #ffffff;
+}
