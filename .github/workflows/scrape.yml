@@ -1,129 +1,38 @@
-import os
-import json
-import time
-from playwright.sync_api import sync_playwright
+name: Auto Scrape Mineville Vault
 
-def run_scraper():
-    url = "https://milkyclan.com"
-    
-    rarity_map = {
-        "common": "Common",
-        "rare": "Rare",
-        "epic": "Epic",
-        "legendary": "Legendary",
-        "limited": "Limited",
-        "exotic": "Exotic",
-        "partner": "Partner"
-    }
+on:
+  workflow_dispatch:
 
-    cosmetics = []
+permissions:
+  contents: write
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(
-            headless=True,
-            args=[
-                "--disable-blink-features=AutomationControlled",
-                "--no-sandbox"
-            ]
-        )
-        
-        context = browser.new_context(
-            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-            viewport={"width": 1280, "height": 800}
-        )
-        
-        page = context.new_page()
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
 
-        # Network Interception: catch API endpoints serving cosmetic arrays
-        def handle_response(response):
-            nonlocal cosmetics
-            if "json" in response.headers.get("content-type", "") or "api" in response.url:
-                try:
-                    data = response.json()
-                    items = []
-                    if isinstance(data, list):
-                        items = data
-                    elif isinstance(data, dict):
-                        items = (
-                            data.get("cosmetics") or 
-                            data.get("items") or 
-                            data.get("data") or 
-                            data.get("vault") or 
-                            []
-                        )
-                    
-                    if items and isinstance(items, list):
-                        print(f"Intercepted payload ({len(items)} items) from: {response.url}")
-                        for idx, item in enumerate(items, 1):
-                            if isinstance(item, dict) and ("name" in item or "title" in item or "id" in item):
-                                name = item.get("name") or item.get("title") or f"Cosmetic {idx}"
-                                rarity_raw = str(item.get("rarity", "Common")).lower()
-                                rarity = rarity_map.get(rarity_raw, "Common")
-                                cosmetics.append({
-                                    "id": item.get("id", idx),
-                                    "name": name,
-                                    "category": item.get("category", "Items"),
-                                    "rarity": rarity,
-                                    "value": item.get("value", 10000),
-                                    "demand": item.get("demand", 5),
-                                    "salesExistingRatio": item.get("salesExistingRatio", 50),
-                                    "priceHistory": item.get("priceHistory", [8000, 8500, 9000, 9500, 10000]),
-                                    "imageUrl": item.get("imageUrl") or item.get("image") or item.get("icon") or ""
-                                })
-                except Exception:
-                    pass
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-        page.on("response", handle_response)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-        print(f"Connecting to {url}...")
-        page.goto(url, wait_until="networkidle", timeout=60000)
-        
-        # Scroll down to trigger lazy loading / pagination
-        for _ in range(5):
-            page.mouse.wheel(0, 1000)
-            time.sleep(1)
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright requests
+          playwright install chromium
+          playwright install-deps
 
-        # Fallback: DOM Parsing if network interception didn't capture data
-        if not cosmetics:
-            print("Fallback to DOM element parsing...")
-            cards = page.query_selector_all("[class*='item'], [class*='card'], [class*='cosmetic'], tr")
-            for idx, card in enumerate(cards, 1):
-                name_el = card.query_selector("h3, td, [class*='title'], [class*='name']")
-                rarity_el = card.query_selector("[class*='rarity'], [class*='badge']")
-                img_el = card.query_selector("img")
+      - name: Run Scraper
+        run: python scripts/scraper.py
 
-                if name_el:
-                    name_text = name_el.inner_text().strip()
-                    if name_text and len(name_text) < 50:
-                        rarity_str = rarity_el.inner_text().strip().lower() if rarity_el else "common"
-                        rarity = rarity_map.get(rarity_str, "Common")
-                        img_url = img_el.get_attribute("src") if img_el else ""
-
-                        cosmetics.append({
-                            "id": idx,
-                            "name": name_text,
-                            "category": "Items",
-                            "rarity": rarity,
-                            "value": 10000,
-                            "demand": 5,
-                            "salesExistingRatio": 50,
-                            "priceHistory": [8000, 8500, 9000, 9500, 10000],
-                            "imageUrl": img_url
-                        })
-
-        browser.close()
-
-        # Deduplicate and save outputs
-        os.makedirs("data", exist_ok=True)
-        output_file = "data/cosmetics.json"
-
-        unique_cosmetics = {c.get("name"): c for c in cosmetics if c.get("name")}.values()
-        final_list = list(unique_cosmetics)
-
-        with open(output_file, "w", encoding="utf-8") as f:
-            json.dump(final_list, f, indent=2)
-
-        print(f"Saved {len(final_list)} items to {output_file}!")
-
-if __name__ == "__main__":
-    run_scraper()
+      - name: Commit and Push Updated Data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/cosmetics.json
+          git commit -m "Auto-update Mineville cosmetics dataset" || exit 0
+          git push
