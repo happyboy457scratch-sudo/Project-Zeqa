@@ -33,12 +33,13 @@ async function loadData() {
   } catch (err) {
     console.warn('Could not fetch cosmetics.json, utilizing fallback dataset:', err);
     cosmeticsData = [
-      { id: 1, name: 'Dragon Cape', category: 'Capes', rarity: 'Legendary', value: 25000, demand: 9, salesExistingRatio: 85, priceHistory: [21000, 22500, 23000, 24000, 25000] },
-      { id: 2, name: 'Ancient Relic', category: 'Artifacts', rarity: 'Mythic', value: 42000, demand: 10, salesExistingRatio: 92, priceHistory: [35000, 38000, 40000, 41500, 42000] },
-      { id: 3, name: 'Fireball Projectile', category: 'Projectiles', rarity: 'Rare', value: 8500, demand: 6, salesExistingRatio: 45, priceHistory: [7000, 7500, 8000, 8200, 8500] },
-      { id: 4, name: 'Golden Key', category: 'Items', rarity: 'Epic', value: 16000, demand: 8, salesExistingRatio: 70, priceHistory: [14000, 14800, 15200, 15800, 16000] }
+      { id: 1, name: 'Dragon Cape', category: 'Capes', rarity: 'Legendary', value: 25000, demand: 9, salesExistingRatio: 85, imageUrl: '' },
+      { id: 2, name: 'Ancient Relic', category: 'Artifacts', rarity: 'Mythic', value: 42000, demand: 10, salesExistingRatio: 92, imageUrl: '' },
+      { id: 3, name: 'Fireball Projectile', category: 'Projectiles', rarity: 'Rare', value: 8500, demand: 6, salesExistingRatio: 45, imageUrl: '' },
+      { id: 4, name: 'Golden Key', category: 'Items', rarity: 'Epic', value: 16000, demand: 8, salesExistingRatio: 70, imageUrl: '' }
     ];
   }
+  renderApp();
 }
 
 function getInventory() {
@@ -60,7 +61,117 @@ function saveWishlist(wl) {
 }
 
 /* ==========================================================================
-   2. MAIN SPA ROUTER & LAYOUT RENDERER
+   2. HELPER RENDERING FUNCTIONS (CARDS & MODALS)
+   ========================================================================== */
+
+function getRarityBadgeColor(rarity = '') {
+  const r = rarity.toLowerCase();
+  switch (r) {
+    case 'rare': return '#1f6feb';
+    case 'epic': return '#8957e5';
+    case 'legendary': return '#d29922';
+    case 'limited': return '#da3633';
+    case 'exotic': return '#09b43a';
+    case 'partner': return '#f0883e';
+    default: return '#6e7681';
+  }
+}
+
+function renderItemCardHtml(item) {
+  const imgUrl = item.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+  const badgeBg = getRarityBadgeColor(item.rarity);
+  const valDisplay = item.value ? `${item.value.toLocaleString()} coins` : 'Valued';
+
+  return `
+    <div class="item-card" data-id="${item.id || item.name}" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s;">
+      <div style="width: 100%; height: 120px; background: #0d1117; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; overflow: hidden;">
+        <img src="${imgUrl}" alt="${item.name}" loading="lazy" style="max-width: 85%; max-height: 85%; object-fit: contain;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
+      </div>
+      <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 15px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">${item.name}</h3>
+      <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 8px;">
+        <span style="background: ${badgeBg}; color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase;">${item.rarity || 'Common'}</span>
+        <span style="color: #8b949e; font-size: 11px;">${item.category || 'Cosmetic'}</span>
+      </div>
+      <div style="color: #5EF2B6; font-weight: 700; font-size: 13px;">${valDisplay}</div>
+    </div>
+  `;
+}
+
+function bindCardClickEvents(container) {
+  container.querySelectorAll('.item-card').forEach(card => {
+    card.onclick = () => {
+      const id = card.dataset.id;
+      const item = cosmeticsData.find(i => String(i.id || i.name) === String(id));
+      if (item) openItemModal(item);
+    };
+  });
+}
+
+function openItemModal(item) {
+  const modalRoot = document.getElementById('zv-modal-root');
+  if (!modalRoot) return;
+
+  const imgUrl = item.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+  const badgeBg = getRarityBadgeColor(item.rarity);
+  const inv = getInventory();
+  const wl = getWishlist();
+  const itemId = item.id || item.name;
+  const isWishlisted = wl.includes(String(itemId));
+  const currentQty = inv[itemId] || 0;
+
+  modalRoot.innerHTML = `
+    <div id="zv-modal-backdrop" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center;">
+      <div style="background: #161b22; border: 1px solid #30363d; border-radius: 14px; padding: 24px; max-width: 400px; width: 90%; text-align: center; position: relative;">
+        <button id="zv-modal-close" style="position: absolute; top: 12px; right: 16px; background: none; border: none; color: #8b949e; font-size: 20px; cursor: pointer;">✕</button>
+        <div style="width: 100%; height: 160px; background: #0d1117; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+          <img src="${imgUrl}" alt="${item.name}" style="max-width: 85%; max-height: 85%; object-fit: contain;">
+        </div>
+        <h2 style="color: #fff; margin: 0 0 6px 0;">${item.name}</h2>
+        <div style="margin-bottom: 12px;">
+          <span style="background: ${badgeBg}; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">${item.rarity || 'Common'}</span>
+          <span style="color: #8b949e; font-size: 12px; margin-left: 8px;">${item.category || 'Cosmetic'}</span>
+        </div>
+        <div style="color: #5EF2B6; font-size: 18px; font-weight: 800; margin-bottom: 20px;">
+          ${item.value ? `${item.value.toLocaleString()} coins` : 'Valued Cosmetic'}
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button id="zv-modal-inv-btn" style="flex: 1; background: #21262d; border: 1px solid #30363d; color: #fff; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+            Add to Inv (${currentQty})
+          </button>
+          <button id="zv-modal-wl-btn" style="flex: 1; background: ${isWishlisted ? 'rgba(231,76,60,0.2)' : '#21262d'}; border: 1px solid ${isWishlisted ? '#e74c3c' : '#30363d'}; color: ${isWishlisted ? '#ff6b6b' : '#fff'}; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+            ${isWishlisted ? 'Wishlisted' : '+ Wishlist'}
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('zv-modal-close').onclick = () => modalRoot.innerHTML = '';
+  document.getElementById('zv-modal-backdrop').onclick = (e) => {
+    if (e.target.id === 'zv-modal-backdrop') modalRoot.innerHTML = '';
+  };
+
+  document.getElementById('zv-modal-inv-btn').onclick = () => {
+    const curInv = getInventory();
+    curInv[itemId] = (curInv[itemId] || 0) + 1;
+    saveInventory(curInv);
+    openItemModal(item);
+  };
+
+  document.getElementById('zv-modal-wl-btn').onclick = () => {
+    let curWl = getWishlist();
+    if (curWl.includes(String(itemId))) {
+      curWl = curWl.filter(id => String(id) !== String(itemId));
+    } else {
+      curWl.push(String(itemId));
+    }
+    saveWishlist(curWl);
+    openItemModal(item);
+  };
+}
+
+/* ==========================================================================
+   3. MAIN SPA ROUTER & LAYOUT RENDERER
    ========================================================================== */
 
 function renderApp() {
@@ -133,7 +244,7 @@ function bindNavbar() {
 }
 
 /* ==========================================================================
-   3. LOGIN VIEW
+   4. LOGIN VIEW
    ========================================================================== */
 
 function renderLogin() {
@@ -165,7 +276,7 @@ function renderLogin() {
 }
 
 /* ==========================================================================
-   4. HOME PAGE VIEW
+   5. HOME PAGE VIEW
    ========================================================================== */
 
 function renderHomePage(container) {
@@ -228,11 +339,11 @@ function renderHomePage(container) {
 }
 
 /* ==========================================================================
-   5. VALUE DIRECTORY PAGE
+   6. VALUE DIRECTORY PAGE
    ========================================================================== */
 
 function renderValuePage(container) {
-  const categories = ['All', 'Artifacts', 'Capes', 'Projectiles', 'Items'];
+  const categories = ['All', 'Artifacts', 'Capes', 'Projectiles', 'Items', 'Cosmetic'];
 
   container.innerHTML = `
     <div style="max-width: 1200px; margin: 0 auto; padding: 24px;">
@@ -326,7 +437,7 @@ function renderValueGridItemsHtml() {
 }
 
 /* ==========================================================================
-   6. COMPARE ENGINE PAGE
+   7. COMPARE ENGINE PAGE
    ========================================================================== */
 
 function renderComparePage(container) {
@@ -444,15 +555,21 @@ function renderComparePage(container) {
 
 function renderCompareSlotsHtml(items, side) {
   if (items.length === 0) return `<div style="text-align: center; color: #666; padding-top: 60px; font-size: 13px;">No items added.</div>`;
-  return items.map((item, index) => `
-    <div style="background: #0d1117; border: 1px solid #21262d; border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <div style="color: #fff; font-weight: 600; font-size: 14px;">${item.name}</div>
-        <div style="color: #5EF2B6; font-size: 12px;">${(item.value || 0).toLocaleString()} coins</div>
+  return items.map((item, index) => {
+    const imgUrl = item.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+    return `
+      <div style="background: #0d1117; border: 1px solid #21262d; border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <img src="${imgUrl}" style="width: 32px; height: 32px; object-fit: contain; border-radius: 4px; background: #161b22;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
+          <div>
+            <div style="color: #fff; font-weight: 600; font-size: 13px;">${item.name}</div>
+            <div style="color: #5EF2B6; font-size: 11px;">${(item.value || 0).toLocaleString()} coins</div>
+          </div>
+        </div>
+        <button class="zv-slot-remove-btn" data-side="${side}" data-index="${index}" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px;">✕</button>
       </div>
-      <button class="zv-slot-remove-btn" data-side="${side}" data-index="${index}" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px;">✕</button>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function renderPickerItemsHtml(query) {
@@ -461,19 +578,26 @@ function renderPickerItemsHtml(query) {
 
   if (filtered.length === 0) return `<div style="text-align: center; color: #888; padding: 20px;">No items found.</div>`;
 
-  return filtered.map(i => `
-    <div class="zv-picker-item" data-id="${i.id}" style="padding: 10px; border-bottom: 1px solid #21262d; display: flex; justify-content: space-between; cursor: pointer;">
-      <span style="color: #fff; font-weight: 600;">${i.name}</span>
-      <span style="color: #5EF2B6; font-weight: 700;">${(i.value || 0).toLocaleString()} coins</span>
-    </div>
-  `).join('');
+  return filtered.map(i => {
+    const imgUrl = i.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+    const itemKey = i.id || i.name;
+    return `
+      <div class="zv-picker-item" data-id="${itemKey}" style="padding: 8px; border-bottom: 1px solid #21262d; display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <img src="${imgUrl}" style="width: 28px; height: 28px; object-fit: contain; background: #0d1117; border-radius: 4px;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
+          <span style="color: #fff; font-weight: 600; font-size: 13px;">${i.name}</span>
+        </div>
+        <span style="color: #5EF2B6; font-weight: 700; font-size: 12px;">${(i.value || 0).toLocaleString()} coins</span>
+      </div>
+    `;
+  }).join('');
 }
 
 function bindPickerItemClicks(pickerList, pickerOverlay, container) {
   pickerList.querySelectorAll('.zv-picker-item').forEach(el => {
     el.onclick = () => {
       const id = el.dataset.id;
-      const selected = cosmeticsData.find(i => String(i.id) === String(id));
+      const selected = cosmeticsData.find(i => String(i.id || i.name) === String(id));
       if (selected) {
         if (compareActiveSide === 'left') compareLeftItems.push(selected);
         else compareRightItems.push(selected);
@@ -485,7 +609,7 @@ function bindPickerItemClicks(pickerList, pickerOverlay, container) {
 }
 
 /* ==========================================================================
-   7. COLLECTION & WISHLIST PAGE
+   8. COLLECTION & WISHLIST PAGE
    ========================================================================== */
 
 function renderCollectionPage(container) {
@@ -496,7 +620,7 @@ function renderCollectionPage(container) {
   let totalItemCount = 0;
 
   Object.entries(inv).forEach(([id, qty]) => {
-    const item = cosmeticsData.find(i => String(i.id) === String(id));
+    const item = cosmeticsData.find(i => String(i.id || i.name) === String(id));
     if (item) {
       totalNetWorth += (item.value || 0) * qty;
       totalItemCount += qty;
@@ -584,17 +708,23 @@ function renderCollectionInventoryHtml(inv) {
   }
 
   return entries.map(([id, qty]) => {
-    const item = cosmeticsData.find(i => String(i.id) === String(id));
+    const item = cosmeticsData.find(i => String(i.id || i.name) === String(id));
     if (!item) return '';
+    const imgUrl = item.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+    const itemId = item.id || item.name;
+
     return `
-      <div class="item-card" data-id="${item.id}" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 16px;">
-        <h3 style="margin: 0 0 4px 0; color: #fff;">${item.name}</h3>
-        <div style="font-size: 12px; color: #aaa; margin-bottom: 10px;">${item.category || 'Cosmetic'}</div>
-        <div style="font-size: 14px; font-weight: bold; color: #5EF2B6; margin-bottom: 12px;">${((item.value || 0) * qty).toLocaleString()} coins</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #0d1117; padding: 6px; border-radius: 6px;">
-          <button class="zv-btn-minus" data-id="${item.id}" style="background: #21262d; border: none; color: #fff; width: 28px; height: 28px; border-radius: 4px; cursor: pointer;">-</button>
-          <span style="color: #fff; font-size: 13px; font-weight: bold;">Qty: ${qty}</span>
-          <button class="zv-btn-plus" data-id="${item.id}" style="background: #21262d; border: none; color: #fff; width: 28px; height: 28px; border-radius: 4px; cursor: pointer;">+</button>
+      <div class="item-card" data-id="${itemId}" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; cursor: pointer;">
+        <div style="width: 100%; height: 100px; background: #0d1117; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+          <img src="${imgUrl}" style="max-width: 80%; max-height: 80%; object-fit: contain;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
+        </div>
+        <h3 style="margin: 0 0 4px 0; color: #fff; font-size: 14px; text-align: center;">${item.name}</h3>
+        <div style="font-size: 11px; color: #aaa; margin-bottom: 8px; text-align: center;">${item.category || 'Cosmetic'}</div>
+        <div style="font-size: 13px; font-weight: bold; color: #5EF2B6; margin-bottom: 10px; text-align: center;">${((item.value || 0) * qty).toLocaleString()} coins</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #0d1117; padding: 4px 8px; border-radius: 6px;">
+          <button class="zv-btn-minus" data-id="${itemId}" style="background: #21262d; border: none; color: #fff; width: 26px; height: 26px; border-radius: 4px; cursor: pointer;">-</button>
+          <span style="color: #fff; font-size: 12px; font-weight: bold;">Qty: ${qty}</span>
+          <button class="zv-btn-plus" data-id="${itemId}" style="background: #21262d; border: none; color: #fff; width: 26px; height: 26px; border-radius: 4px; cursor: pointer;">+</button>
         </div>
       </div>
     `;
@@ -607,21 +737,27 @@ function renderCollectionWishlistHtml(wl) {
   }
 
   return wl.map(id => {
-    const item = cosmeticsData.find(i => String(i.id) === String(id));
+    const item = cosmeticsData.find(i => String(i.id || i.name) === String(id));
     if (!item) return '';
+    const imgUrl = item.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+    const itemId = item.id || item.name;
+
     return `
-      <div class="item-card" data-id="${item.id}" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 16px;">
-        <h3 style="margin: 0 0 4px 0; color: #fff;">${item.name}</h3>
-        <div style="font-size: 12px; color: #aaa; margin-bottom: 10px;">${item.category || 'Cosmetic'}</div>
-        <div style="font-size: 14px; font-weight: bold; color: #5EF2B6; margin-bottom: 12px;">${(item.value || 0).toLocaleString()} coins</div>
-        <button class="zv-wishlist-remove-btn" data-id="${item.id}" style="width: 100%; background: rgba(231,76,60,0.15); border: 1px solid #e74c3c; color: #ff6b6b; padding: 6px; border-radius: 6px; font-size: 12px; cursor: pointer;">Remove Wishlist</button>
+      <div class="item-card" data-id="${itemId}" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; cursor: pointer;">
+        <div style="width: 100%; height: 100px; background: #0d1117; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+          <img src="${imgUrl}" style="max-width: 80%; max-height: 80%; object-fit: contain;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
+        </div>
+        <h3 style="margin: 0 0 4px 0; color: #fff; font-size: 14px; text-align: center;">${item.name}</h3>
+        <div style="font-size: 11px; color: #aaa; margin-bottom: 8px; text-align: center;">${item.category || 'Cosmetic'}</div>
+        <div style="font-size: 13px; font-weight: bold; color: #5EF2B6; margin-bottom: 10px; text-align: center;">${(item.value || 0).toLocaleString()} coins</div>
+        <button class="zv-wishlist-remove-btn" data-id="${itemId}" style="width: 100%; background: rgba(231,76,60,0.15); border: 1px solid #e74c3c; color: #ff6b6b; padding: 6px; border-radius: 6px; font-size: 12px; cursor: pointer;">Remove Wishlist</button>
       </div>
     `;
   }).join('');
 }
 
 /* ==========================================================================
-   8. SETTINGS PAGE
+   9. SETTINGS PAGE
    ========================================================================== */
 
 function renderSettingsPage(container) {
@@ -642,169 +778,30 @@ function renderSettingsPage(container) {
 
       <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 18px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <div style="color: #fff; font-weight: 600;">Reset Local Portfolio</div>
-          <div style="color: #aaa; font-size: 12px;">Clears all saved inventory and wishlist items</div>
+          <div style="color: #fff; font-weight: 600;">Clear Portfolio & Wishlist</div>
+          <div style="color: #aaa; font-size: 12px;">Reset stored inventory data</div>
         </div>
-        <button id="zv-reset-storage" style="background: #e74c3c; border: none; color: #fff; padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer;">Reset Storage</button>
+        <button id="zv-reset-storage" style="background: rgba(231,76,60,0.2); border: 1px solid #e74c3c; color: #ff6b6b; padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer;">Reset Data</button>
       </div>
 
-      <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 18px; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <div style="color: #fff; font-weight: 600;">Sign Out</div>
-          <div style="color: #aaa; font-size: 12px;">Terminates active session</div>
-        </div>
-        <button id="zv-sign-out" style="background: #30363d; border: 1px solid #444c56; color: #fff; padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer;">Log Out</button>
-      </div>
+      <button id="zv-logout-btn" style="width: 100%; margin-top: 12px; background: #21262d; border: 1px solid #30363d; color: #fff; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+        Sign Out
+      </button>
     </div>
   `;
 
   container.querySelector('#zv-reset-storage').onclick = () => {
-    if (confirm('Clear local collection and wishlist data?')) {
-      localStorage.removeItem('zv_user_inventory');
-      localStorage.removeItem('zv_user_wishlist');
-      alert('Portfolio reset successfully.');
-      renderApp();
-    }
+    localStorage.removeItem('zv_user_inventory');
+    localStorage.removeItem('zv_user_wishlist');
+    alert('Portfolio & Wishlist storage cleared!');
+    renderSettingsPage(container);
   };
 
-  container.querySelector('#zv-sign-out').onclick = () => {
+  container.querySelector('#zv-logout-btn').onclick = () => {
     sessionStorage.removeItem('loggedIn');
     renderApp();
   };
 }
 
-/* ==========================================================================
-   9. POPUP INSPECTOR MODAL
-   ========================================================================== */
-
-function openPopupModal(item) {
-  const modalRoot = document.getElementById('zv-modal-root');
-  if (!modalRoot) return;
-
-  const inv = getInventory();
-  const wl = getWishlist();
-  const isOwned = (inv[item.id] || 0) > 0;
-  const isWishlisted = wl.includes(item.id);
-
-  const priceHistory = item.priceHistory || [
-    Math.round((item.value || 10000) * 0.85),
-    Math.round((item.value || 10000) * 0.90),
-    Math.round((item.value || 10000) * 0.95),
-    (item.value || 10000)
-  ];
-
-  modalRoot.innerHTML = `
-    <div id="popup-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 10000;">
-      <div style="background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 24px; width: 90%; max-width: 480px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); color: #fff;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-          <div>
-            <h2 style="margin: 0 0 4px 0; font-size: 22px; color: #fff;">${item.name}</h2>
-            <div style="font-size: 13px; color: #aaa;">${item.category || 'Cosmetic'} • <span style="color: #5EF2B6;">${item.rarity || 'Common'}</span></div>
-          </div>
-          <button id="zv-modal-close-btn" style="background: none; border: none; color: #aaa; font-size: 20px; cursor: pointer;">✕</button>
-        </div>
-
-        <div style="background: #0d1117; border: 1px solid #21262d; border-radius: 12px; padding: 16px; margin-bottom: 16px; text-align: center;">
-          <div style="font-size: 12px; color: #aaa; text-transform: uppercase;">Estimated Market Value</div>
-          <div style="font-size: 28px; font-weight: 800; color: #5EF2B6; margin-top: 4px;">${(item.value || 0).toLocaleString()} coins</div>
-        </div>
-
-        <div style="margin-bottom: 16px;">
-          <div style="font-size: 12px; color: #aaa; margin-bottom: 8px;">Price Trend Graph</div>
-          <svg viewBox="0 0 300 80" style="width: 100%; height: 80px; background: #0d1117; border-radius: 8px; padding: 8px; box-sizing: border-box;">
-            <path d="${buildSvgPath(priceHistory)}" fill="none" stroke="#5EF2B6" stroke-width="3" />
-          </svg>
-        </div>
-
-        <div style="display: flex; gap: 12px;">
-          <button id="zv-add-inv-btn" style="flex: 1; background: #5EF2B6; border: none; color: #111; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
-            ${isOwned ? 'In Collection (+1)' : 'Add to Collection'}
-          </button>
-          <button id="zv-add-wl-btn" style="flex: 1; background: #21262d; border: 1px solid #30363d; color: #fff; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-            ${isWishlisted ? 'Wishlisted ★' : 'Add to Wishlist ☆'}
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-
-  modalRoot.querySelector('#zv-modal-close-btn').onclick = closePopupModal;
-  modalRoot.querySelector('#popup-overlay').onclick = (e) => {
-    if (e.target.id === 'popup-overlay') closePopupModal();
-  };
-
-  modalRoot.querySelector('#zv-add-inv-btn').onclick = () => {
-    const curInv = getInventory();
-    curInv[item.id] = (curInv[item.id] || 0) + 1;
-    saveInventory(curInv);
-    openPopupModal(item);
-  };
-
-  modalRoot.querySelector('#zv-add-wl-btn').onclick = () => {
-    let curWl = getWishlist();
-    if (curWl.includes(item.id)) {
-      curWl = curWl.filter(id => id !== item.id);
-    } else {
-      curWl.push(item.id);
-    }
-    saveWishlist(curWl);
-    openPopupModal(item);
-  };
-}
-
-function closePopupModal() {
-  const modalRoot = document.getElementById('zv-modal-root');
-  if (modalRoot) modalRoot.innerHTML = '';
-}
-
-function buildSvgPath(prices) {
-  if (!prices || prices.length < 2) return "M 0 40 L 300 40";
-  const min = Math.min(...prices);
-  const max = Math.max(...prices);
-  const range = max - min || 1;
-  const width = 280;
-  const height = 60;
-
-  return prices.map((p, idx) => {
-    const x = 10 + (idx / (prices.length - 1)) * width;
-    const y = 70 - ((p - min) / range) * height;
-    return `${idx === 0 ? 'M' : 'L'} ${x} ${y}`;
-  }).join(' ');
-}
-
-function renderItemCardHtml(item) {
-  return `
-    <div class="item-card" data-id="${item.id}" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 16px; transition: transform 0.2s;">
-      <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 16px;">${item.name}</h3>
-      <div style="font-size: 12px; color: #aaa; margin-bottom: 10px;">${item.category || 'Cosmetic'}</div>
-      <div style="font-size: 14px; font-weight: bold; color: #5EF2B6;">${(item.value || 0).toLocaleString()} coins</div>
-    </div>
-  `;
-}
-
-function bindCardClickEvents(container) {
-  const cards = container.querySelectorAll('.item-card');
-  cards.forEach(card => {
-    card.style.cursor = 'pointer';
-    card.onclick = (e) => {
-      if (e.target.closest('.zv-btn-plus') || e.target.closest('.zv-btn-minus') || e.target.closest('.zv-wishlist-remove-btn')) return;
-      const id = card.dataset.id;
-      const found = cosmeticsData.find(i => String(i.id) === String(id));
-      if (found) openPopupModal(found);
-    };
-  });
-}
-
-// Global ESC key event
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closePopupModal();
-});
-
-// Application Entry Point
-async function init() {
-  sessionStorage.removeItem('loggedIn'); // Always start on the login view when visiting
-  await loadData();
-  renderApp();
-}
-
-init();
+/* Initialize app once script is parsed */
+loadData();
