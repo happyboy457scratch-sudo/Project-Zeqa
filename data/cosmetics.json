@@ -1,1 +1,146 @@
-[]
+[
+  {
+    "name": "FILTERS",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "MY FAVORITES",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "ITEM LIST",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/27.webp"
+  },
+  {
+    "name": "Lava",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Lava",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "Critical",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "Flame",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "Redstone",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "Heart",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Critical",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Flame",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Redstone",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Heart",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "Enchantment Table",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "Villager Happy",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Villager Happy",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Mob Spell",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "Explode",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Explode",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "Splash",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "Water Splash",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Splash",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Water Splash",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  },
+  {
+    "name": "R-Enchantment Table",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": ""
+  }
+]
