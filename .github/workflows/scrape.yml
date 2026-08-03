@@ -110,5 +110,3 @@ def run_scraper():
                             "priceHistory": [8000, 8500, 9000, 9500, 10000],
                             "imageUrl": img_url
                         })
-
-        
