@@ -15,13 +15,13 @@ def run_scraper():
         "partner": "Partner"
     }
 
-    # UI labels, filters, and non-cosmetic text to exclude
-    ignore_keywords = [
-        "search", "menu", "login", "home", "values", "discord", "twitter", 
-        "copyright", "nav", "filter", "sort", "item list", "my favorites",
-        "no favorites", "tags", "range", "shards", "coins", "settings",
-        "collection", "compare", "category", "rarity", "type"
-    ]
+    # Only filter out actual UI system buttons & navigation links
+    exact_system_labels = {
+        "home", "value", "values", "compare", "collection", "settings",
+        "item list", "my favorites", "no favorites yet.", "tags",
+        "shard value range", "existing items range", "primary color",
+        "subcategory", "type", "rarity", "search"
+    }
 
     cosmetics = {}
 
@@ -30,25 +30,26 @@ def run_scraper():
             return
         name_clean = str(name).strip()
         
-        # Must be valid length and not already captured
-        if not name_clean or name_clean in cosmetics or len(name_clean) <= 2:
+        if not name_clean or name_clean in cosmetics:
             return
             
         name_lower = name_clean.lower()
         
-        # Skip site headers, UI buttons, and filter labels
-        if any(ignore in name_lower for ignore in ignore_keywords):
+        # Skip exact UI section headers and system tabs
+        if name_lower in exact_system_labels:
             return
             
-        # Skip pure numbers or shard totals (e.g., "1,250,000")
-        if name_clean.replace(",", "").replace(" ", "").isdigit():
-            return
+        # Ignore raw unit prices like "0 coins" or "0 shards" if captured as titles
+        if name_lower.endswith("coins") or name_lower.endswith("shards"):
+            # Only ignore if it starts with a number (e.g., "0 coins", "500,000 shards")
+            if name_clean.split()[0].replace(",", "").isdigit():
+                return
 
         rarity_str = str(rarity_raw).lower() if rarity_raw else "common"
         cosmetics[name_clean] = {
             "name": name_clean,
             "rarity": rarity_map.get(rarity_str, "Common"),
-            "category": str(category).strip() if category and str(category).strip().lower() not in ignore_keywords else "Cosmetic",
+            "category": str(category).strip() if category and str(category).strip().lower() not in exact_system_labels else "Cosmetic",
             "imageUrl": str(img_url).strip() if img_url else ""
         }
 
@@ -70,7 +71,7 @@ def run_scraper():
             
             page = context.new_page()
 
-            # 1. Listen for dynamic API data payloads
+            # 1. Dynamic API Response Listener
             def handle_response(response):
                 try:
                     content_type = response.headers.get("content-type", "")
@@ -101,43 +102,18 @@ def run_scraper():
             page.goto(url, wait_until="domcontentloaded", timeout=45000)
             page.wait_for_timeout(4000)
 
-            # 2. Extract embedded script state if present
-            try:
-                scripts = page.query_selector_all("script")
-                for sc in scripts:
-                    txt = sc.inner_text().strip()
-                    if "rarity" in txt or "imageUrl" in txt:
-                        if txt.startswith("{") or txt.startswith("["):
-                            parsed = json.loads(txt)
-                            def recursive_script_scan(node):
-                                if isinstance(node, dict):
-                                    if "name" in node:
-                                        add_item(
-                                            node.get("name"),
-                                            node.get("rarity"),
-                                            node.get("category") or node.get("type"),
-                                            node.get("imageUrl") or node.get("image") or node.get("icon")
-                                        )
-                                    for v in node.values():
-                                        recursive_script_scan(v)
-                                elif isinstance(node, list):
-                                    for item in node:
-                                        recursive_script_scan(item)
-                            recursive_script_scan(parsed)
-            except Exception:
-                pass
+            # 2. Page Scroll Loop
+            print("Scrolling to load all items...")
+            for step in range(20):
+                page.mouse.wheel(0, 1000)
+                page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                page.wait_for_timeout(800)
 
-            # 3. Smooth scroll to collect item cards specifically
-            print("Scrolling page to collect items...")
-            for step in range(15):
-                page.mouse.wheel(0, 1500)
-                page.wait_for_timeout(1000)
-
-                # Focus specifically on elements likely containing cosmetics
-                cards = page.query_selector_all("[class*='item'], [class*='card'], [class*='cosmetic'], tr")
+                # Extract content from item card elements
+                cards = page.query_selector_all("div, article, section")
                 for el in cards:
                     try:
-                        name_el = el.query_selector("h1, h2, h3, h4, h5, p, span")
+                        name_el = el.query_selector("h1, h2, h3, h4, h5, p, span, div")
                         if name_el:
                             name_text = name_el.inner_text().strip()
                             rarity_el = el.query_selector("[class*='rarity'], [class*='badge']")
@@ -158,7 +134,7 @@ def run_scraper():
     except Exception as e:
         print(f"Scraper execution notice: {e}")
 
-    # Save output dataset cleanly
+    # Write output to JSON
     os.makedirs("data", exist_ok=True)
     output_file = "data/cosmetics.json"
     final_list = list(cosmetics.values())
@@ -166,7 +142,7 @@ def run_scraper():
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(final_list, f, indent=2)
 
-    print(f"Completed clean scrape! Saved {len(final_list)} valid cosmetics to {output_file}.")
+    print(f"Done! Cleanly saved {len(final_list)} cosmetics to {output_file}.")
 
 if __name__ == "__main__":
     run_scraper()
