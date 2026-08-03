@@ -1,78 +1,55 @@
-import json
-import os
-import hashlib
-import requests
+name: Trade Data Scraper & Pages Deploy
 
-DATA_FILE = "data/trades.json"
-TARGET_URL = "https://inpvp.net/mineville/trades?mode=pvp"
+on:
+  schedule:
+    # Runs every 5 minutes (GitHub may queue jobs up to 7-10 minutes during peak times)
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
 
-# Headers to mimic a real browser request
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-    "Accept": "application/json, text/plain, */*"
-}
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
-def load_existing_trades():
-    """Load existing trades from JSON file to prevent duplicates."""
-    if os.path.exists(DATA_FILE):
-        try:
-            with open(DATA_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            print("Warning: Existing data file was corrupted or empty. Starting fresh.")
-            return []
-    return []
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
-def get_trade_signature(trade):
-    """Generate a unique ID/hash for a trade if an explicit ID isn't provided."""
-    if "id" in trade:
-        return str(trade["id"])
-    
-    # Hash unique fields (e.g. buyer, seller, items, timestamp)
-    trade_string = json.dumps(trade, sort_keys=True)
-    return hashlib.md5(trade_string.encode("utf-8")).hexdigest()
+jobs:
+  scrape-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-def fetch_trades():
-    """Fetch recent trades from the endpoint or page."""
-    try:
-        response = requests.get(TARGET_URL, headers=HEADERS, timeout=15)
-        response.raise_for_status()
-        
-        # Check if response is raw JSON (API endpoint)
-        if "application/json" in response.headers.get("Content-Type", ""):
-            data = response.json()
-            return data.get("trades", data) if isinstance(data, dict) else data
-        
-        # Fallback parsing placeholder if endpoint returns structured page payload
-        print("Page returned HTML/text. Ensure target URL points to API endpoint if applicable.")
-        return []
-    except Exception as e:
-        print(f"Error fetching trade data: {e}")
-        return []
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-def main():
-    existing_trades = load_existing_trades()
-    
-    # Track existing unique IDs/signatures
-    seen_ids = {get_trade_signature(t) for t in existing_trades}
-    
-    new_raw_trades = fetch_trades()
-    added_count = 0
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
 
-    for trade in new_raw_trades:
-        sig = get_trade_signature(trade)
-        if sig not in seen_ids:
-            seen_ids.add(sig)
-            existing_trades.append(trade)
-            added_count += 1
+      - name: Run Scraper
+        run: python scrape_trades.py
 
-    if added_count > 0:
-        os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
-        with open(DATA_FILE, "w", encoding="utf-8") as f:
-            json.dump(existing_trades, f, indent=2)
-        print(f"Success: Added {added_count} new trade(s). Total: {len(existing_trades)}")
-    else:
-        print("No new trades found.")
+      - name: Commit and Push Data Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/trades.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: Latest trade data" && git push)
 
-if __name__ == "__main__":
-    main()
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # Serves files from root directory. Change to './public' or './build' if needed.
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
