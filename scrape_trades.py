@@ -2,18 +2,18 @@ import json
 import os
 import hashlib
 import requests
+from bs4 import BeautifulSoup
 
 DATA_FILE = "data/trades.json"
 TARGET_URL = "https://inpvp.net/mineville/trades?mode=pvp"
 
-# Headers to mimic a real browser request
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-    "Accept": "application/json, text/plain, */*"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 }
 
 def load_existing_trades():
-    """Load existing trades from JSON file to prevent duplicates."""
+    """Load existing trades from JSON file."""
     if os.path.exists(DATA_FILE):
         try:
             with open(DATA_FILE, "r", encoding="utf-8") as f:
@@ -24,42 +24,61 @@ def load_existing_trades():
     return []
 
 def get_trade_signature(trade):
-    """Generate a unique ID/hash for a trade if an explicit ID isn't provided."""
-    if "id" in trade:
-        return str(trade["id"])
-    
-    # Hash unique fields (e.g. buyer, seller, items, timestamp)
+    """Generate a unique signature string to identify duplicate trades."""
     trade_string = json.dumps(trade, sort_keys=True)
     return hashlib.md5(trade_string.encode("utf-8")).hexdigest()
 
 def fetch_trades():
-    """Fetch recent trades from the endpoint or page."""
+    """Fetch trade data from web page or embedded Next.js JSON payload."""
     try:
         response = requests.get(TARGET_URL, headers=HEADERS, timeout=15)
         response.raise_for_status()
+
+        # Attempt 1: Check for embedded __NEXT_DATA__ script (common on modern web apps)
+        soup = BeautifulSoup(response.text, "html.parser")
+        next_data_script = soup.find("script", id="__NEXT_DATA__")
         
-        # Check if response is raw JSON (API endpoint)
-        if "application/json" in response.headers.get("Content-Type", ""):
-            data = response.json()
-            return data.get("trades", data) if isinstance(data, dict) else data
-        
-        # Fallback parsing placeholder if endpoint returns structured page payload
-        print("Page returned HTML/text. Ensure target URL points to API endpoint if applicable.")
-        return []
+        if next_data_script:
+            try:
+                payload = json.loads(next_data_script.string)
+                # Look for trades in pageProps
+                props = payload.get("props", {}).get("pageProps", {})
+                if "trades" in props:
+                    return props["trades"]
+            except Exception as parse_err:
+                print(f"Notice: Could not parse __NEXT_DATA__: {parse_err}")
+
+        # Attempt 2: HTML Scraping Fallback (table or list elements)
+        trades = []
+        rows = soup.find_all(["tr", "div"], class_=lambda c: c and "trade" in c.lower()) if soup else []
+
+        for row in rows:
+            text_content = row.get_text(strip=True)
+            if text_content:
+                trades.append({"raw_text": text_content})
+
+        if not trades:
+            # Basic fallback: capture list items or rows if specific classes aren't matched
+            all_rows = soup.find_all("tr")
+            for row in all_rows:
+                cols = [ele.text.strip() for ele in row.find_all(["td", "th"])]
+                if cols:
+                    trades.append({"columns": cols})
+
+        return trades
+
     except Exception as e:
-        print(f"Error fetching trade data: {e}")
+        print(f"Error fetching page data: {e}")
         return []
 
 def main():
     existing_trades = load_existing_trades()
-    
-    # Track existing unique IDs/signatures
     seen_ids = {get_trade_signature(t) for t in existing_trades}
     
-    new_raw_trades = fetch_trades()
+    scraped_trades = fetch_trades()
     added_count = 0
 
-    for trade in new_raw_trades:
+    for trade in scraped_trades:
         sig = get_trade_signature(trade)
         if sig not in seen_ids:
             seen_ids.add(sig)
@@ -70,7 +89,7 @@ def main():
         os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
         with open(DATA_FILE, "w", encoding="utf-8") as f:
             json.dump(existing_trades, f, indent=2)
-        print(f"Success: Added {added_count} new trade(s). Total: {len(existing_trades)}")
+        print(f"Success: Added {added_count} new trade(s). Total trades saved: {len(existing_trades)}")
     else:
         print("No new trades found.")
 
