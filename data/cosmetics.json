@@ -270,12 +270,6 @@
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/C16.webp"
   },
   {
-    "name": "OBTAINABLE",
-    "rarity": "Common",
-    "category": "Cosmetic",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/25.webp"
-  },
-  {
     "name": "Hacker",
     "rarity": "Common",
     "category": "Cosmetic",
@@ -293,12 +287,7 @@
     "category": "Cosmetic",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/19.webp"
   },
-  {
-    "name": "UNRELEASED",
-    "rarity": "Common",
-    "category": "Cosmetic",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/145.webp"
-  },
+  
   {
     "name": "Water",
     "rarity": "Common",
@@ -466,12 +455,6 @@
     "rarity": "Common",
     "category": "Cosmetic",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/C18.webp"
-  },
-  {
-    "name": "CUSTOM",
-    "rarity": "Common",
-    "category": "Cosmetic",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/365.png"
   },
   {
     "name": "White Allay",
