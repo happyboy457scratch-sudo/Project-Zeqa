@@ -3894,16 +3894,16 @@
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/158.webp"
   },
   {
-    "name": "Little Doge",
-    "rarity": "Common",
-    "category": "Cosmetic",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/73.webp"
-  },
-  {
     "name": "Turtle Costume",
     "rarity": "Common",
     "category": "Cosmetic",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/C31.webp"
+  },
+  {
+    "name": "Little Doge",
+    "rarity": "Common",
+    "category": "Cosmetic",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/73.webp"
   },
   {
     "name": "Nerd",
