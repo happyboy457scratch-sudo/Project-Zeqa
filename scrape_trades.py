@@ -1,6 +1,7 @@
 import json
 import os
 import hashlib
+import time
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
@@ -23,15 +24,20 @@ def get_trade_signature(trade):
 def fetch_rendered_trades():
     trades = []
     with sync_playwright() as p:
-        # Launch headless browser
         browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+        # Add a custom user agent so the headless browser isn't flagged
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        )
+        page = context.new_page()
         
-        print("Navigating to page and waiting for client-side JavaScript...")
-        page.goto(TARGET_URL, wait_until="networkidle", timeout=30000)
+        print("Navigating to page...")
+        # Load until initial DOM content is ready (prevents networkidle timeout)
+        page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=45000)
         
-        # Give extra time for interactive tables/components to render
-        page.wait_for_timeout(3000)
+        print("Waiting for trade data to render...")
+        # Give JS time to fetch and render the trade list
+        page.wait_for_timeout(5000)
         
         content = page.content()
         browser.close()
@@ -44,7 +50,7 @@ def fetch_rendered_trades():
         if text:
             trades.append({"details": text})
 
-    # Fallback to all table rows if specific class isn't found
+    # Fallback to standard table rows
     if not trades:
         for row in soup.find_all("tr"):
             cols = [col.get_text(strip=True) for col in row.find_all(["td", "th"])]
@@ -71,7 +77,7 @@ def main():
         os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
         with open(DATA_FILE, "w", encoding="utf-8") as f:
             json.dump(existing_trades, f, indent=2)
-        print(f"Success: Added {added_count} new trade(s). Total trades: {len(existing_trades)}")
+        print(f"Success: Added {added_count} new trade(s). Total trades stored: {len(existing_trades)}")
     else:
         print("No new trades found in this run.")
 
