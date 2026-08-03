@@ -1,7 +1,5 @@
 import os
 import json
-import time
-import sys
 from playwright.sync_api import sync_playwright
 
 def run_scraper():
@@ -17,22 +15,40 @@ def run_scraper():
         "partner": "Partner"
     }
 
+    # UI labels, filters, and non-cosmetic text to exclude
+    ignore_keywords = [
+        "search", "menu", "login", "home", "values", "discord", "twitter", 
+        "copyright", "nav", "filter", "sort", "item list", "my favorites",
+        "no favorites", "tags", "range", "shards", "coins", "settings",
+        "collection", "compare", "category", "rarity", "type"
+    ]
+
     cosmetics = {}
 
     def add_item(name, rarity_raw, category, img_url):
         if not name:
             return
         name_clean = str(name).strip()
-        if not name_clean or name_clean in cosmetics:
-            return
-        if any(ignore in name_clean.lower() for ignore in ["search", "menu", "login", "home", "values", "discord", "twitter", "copyright", "nav", "filter", "sort"]):
-            return
         
+        # Must be valid length and not already captured
+        if not name_clean or name_clean in cosmetics or len(name_clean) <= 2:
+            return
+            
+        name_lower = name_clean.lower()
+        
+        # Skip site headers, UI buttons, and filter labels
+        if any(ignore in name_lower for ignore in ignore_keywords):
+            return
+            
+        # Skip pure numbers or shard totals (e.g., "1,250,000")
+        if name_clean.replace(",", "").replace(" ", "").isdigit():
+            return
+
         rarity_str = str(rarity_raw).lower() if rarity_raw else "common"
         cosmetics[name_clean] = {
             "name": name_clean,
             "rarity": rarity_map.get(rarity_str, "Common"),
-            "category": str(category).strip() if category else "Cosmetic",
+            "category": str(category).strip() if category and str(category).strip().lower() not in ignore_keywords else "Cosmetic",
             "imageUrl": str(img_url).strip() if img_url else ""
         }
 
@@ -54,7 +70,7 @@ def run_scraper():
             
             page = context.new_page()
 
-            # Catch dynamic API responses
+            # 1. Listen for dynamic API data payloads
             def handle_response(response):
                 try:
                     content_type = response.headers.get("content-type", "")
@@ -82,74 +98,67 @@ def run_scraper():
             page.on("response", handle_response)
 
             print(f"Connecting to {url}...")
-            # Use domcontentloaded instead of networkidle to prevent timeout crashes
             page.goto(url, wait_until="domcontentloaded", timeout=45000)
             page.wait_for_timeout(4000)
 
-            print("Starting scroll loop...")
-            idle_scrolls = 0
-            max_idle_scrolls = 6
-            last_height = 0
+            # 2. Extract embedded script state if present
+            try:
+                scripts = page.query_selector_all("script")
+                for sc in scripts:
+                    txt = sc.inner_text().strip()
+                    if "rarity" in txt or "imageUrl" in txt:
+                        if txt.startswith("{") or txt.startswith("["):
+                            parsed = json.loads(txt)
+                            def recursive_script_scan(node):
+                                if isinstance(node, dict):
+                                    if "name" in node:
+                                        add_item(
+                                            node.get("name"),
+                                            node.get("rarity"),
+                                            node.get("category") or node.get("type"),
+                                            node.get("imageUrl") or node.get("image") or node.get("icon")
+                                        )
+                                    for v in node.values():
+                                        recursive_script_scan(v)
+                                elif isinstance(node, list):
+                                    for item in node:
+                                        recursive_script_scan(item)
+                            recursive_script_scan(parsed)
+            except Exception:
+                pass
 
-            for cycle in range(25):
-                prev_count = len(cosmetics)
+            # 3. Smooth scroll to collect item cards specifically
+            print("Scrolling page to collect items...")
+            for step in range(15):
+                page.mouse.wheel(0, 1500)
+                page.wait_for_timeout(1000)
 
-                try:
-                    # Scroll down to trigger infinite lazy loading
-                    page.mouse.wheel(0, 3000)
-                    page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-                except Exception as err:
-                    print(f"Scroll step warning: {err}")
+                # Focus specifically on elements likely containing cosmetics
+                cards = page.query_selector_all("[class*='item'], [class*='card'], [class*='cosmetic'], tr")
+                for el in cards:
+                    try:
+                        name_el = el.query_selector("h1, h2, h3, h4, h5, p, span")
+                        if name_el:
+                            name_text = name_el.inner_text().strip()
+                            rarity_el = el.query_selector("[class*='rarity'], [class*='badge']")
+                            cat_el = el.query_selector("[class*='category'], [class*='type']")
+                            img_el = el.query_selector("img")
 
-                page.wait_for_timeout(2000)
-
-                # Parse visible DOM elements
-                try:
-                    cards = page.query_selector_all("div, tr, li, article")
-                    for el in cards:
-                        try:
-                            name_el = el.query_selector("h1, h2, h3, h4, h5, p, span, td")
-                            if name_el:
-                                name_text = name_el.inner_text().strip()
-                                if name_text and 2 < len(name_text) < 45:
-                                    rarity_el = el.query_selector("[class*='rarity'], [class*='badge']")
-                                    cat_el = el.query_selector("[class*='category'], [class*='type']")
-                                    img_el = el.query_selector("img")
-
-                                    add_item(
-                                        name_text,
-                                        rarity_el.inner_text().strip() if rarity_el else "Common",
-                                        cat_el.inner_text().strip() if cat_el else "Cosmetic",
-                                        img_el.get_attribute("src") if img_el else ""
-                                    )
-                        except Exception:
-                            pass
-                except Exception:
-                    pass
-
-                current_count = len(cosmetics)
-                try:
-                    current_height = page.evaluate("document.body.scrollHeight")
-                except Exception:
-                    current_height = last_height
-
-                print(f"[Cycle {cycle + 1}] Captured: {current_count} items | Scroll Height: {current_height}px")
-
-                if current_count == prev_count and current_height == last_height:
-                    idle_scrolls += 1
-                    if idle_scrolls >= max_idle_scrolls:
-                        print("Reached bottom of page. Ending scroll loop.")
-                        break
-                else:
-                    idle_scrolls = 0
-                    last_height = current_height
+                            add_item(
+                                name_text,
+                                rarity_el.inner_text().strip() if rarity_el else "Common",
+                                cat_el.inner_text().strip() if cat_el else "Cosmetic",
+                                img_el.get_attribute("src") if img_el else ""
+                            )
+                    except Exception:
+                        pass
 
             browser.close()
 
     except Exception as e:
-        print(f"Scraper execution warning: {e}")
+        print(f"Scraper execution notice: {e}")
 
-    # Always ensure file is written even if browser execution hit an edge error
+    # Save output dataset cleanly
     os.makedirs("data", exist_ok=True)
     output_file = "data/cosmetics.json"
     final_list = list(cosmetics.values())
@@ -157,7 +166,7 @@ def run_scraper():
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(final_list, f, indent=2)
 
-    print(f"Successfully finished! Saved {len(final_list)} items to {output_file}.")
+    print(f"Completed clean scrape! Saved {len(final_list)} valid cosmetics to {output_file}.")
 
 if __name__ == "__main__":
     run_scraper()
