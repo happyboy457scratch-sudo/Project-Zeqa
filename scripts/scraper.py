@@ -15,53 +15,11 @@ def run_scraper():
         "partner": "Partner"
     }
 
-    # Only filter out actual UI system buttons & navigation links
-    exact_system_labels = {
-        "home", "value", "values", "compare", "collection", "settings",
-        "item list", "my favorites", "no favorites yet.", "tags",
-        "shard value range", "existing items range", "primary color",
-        "subcategory", "type", "rarity", "search"
-    }
-
-    cosmetics = {}
-
-    def add_item(name, rarity_raw, category, img_url):
-        if not name:
-            return
-        name_clean = str(name).strip()
-        
-        if not name_clean or name_clean in cosmetics:
-            return
-            
-        name_lower = name_clean.lower()
-        
-        # Skip exact UI section headers and system tabs
-        if name_lower in exact_system_labels:
-            return
-            
-        # Ignore raw unit prices like "0 coins" or "0 shards" if captured as titles
-        if name_lower.endswith("coins") or name_lower.endswith("shards"):
-            # Only ignore if it starts with a number (e.g., "0 coins", "500,000 shards")
-            if name_clean.split()[0].replace(",", "").isdigit():
-                return
-
-        rarity_str = str(rarity_raw).lower() if rarity_raw else "common"
-        cosmetics[name_clean] = {
-            "name": name_clean,
-            "rarity": rarity_map.get(rarity_str, "Common"),
-            "category": str(category).strip() if category and str(category).strip().lower() not in exact_system_labels else "Cosmetic",
-            "imageUrl": str(img_url).strip() if img_url else ""
-        }
-
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch(
                 headless=True,
-                args=[
-                    "--disable-blink-features=AutomationControlled",
-                    "--no-sandbox",
-                    "--disable-setuid-sandbox"
-                ]
+                args=["--disable-blink-features=AutomationControlled", "--no-sandbox"]
             )
             
             context = browser.new_context(
@@ -71,70 +29,81 @@ def run_scraper():
             
             page = context.new_page()
 
-            # 1. Dynamic API Response Listener
-            def handle_response(response):
-                try:
-                    content_type = response.headers.get("content-type", "")
-                    if "json" in content_type or "api" in response.url:
-                        data = response.json()
-                        def recursive_find(obj):
-                            if isinstance(obj, dict):
-                                if "name" in obj or "itemName" in obj or "title" in obj:
-                                    name = obj.get("name") or obj.get("itemName") or obj.get("title")
-                                    add_item(
-                                        name,
-                                        obj.get("rarity"),
-                                        obj.get("category") or obj.get("type"),
-                                        obj.get("imageUrl") or obj.get("image") or obj.get("icon")
-                                    )
-                                for v in obj.values():
-                                    recursive_find(v)
-                            elif isinstance(obj, list):
-                                for item in obj:
-                                    recursive_find(item)
-                        recursive_find(data)
-                except Exception:
-                    pass
-
-            page.on("response", handle_response)
-
             print(f"Connecting to {url}...")
-            page.goto(url, wait_until="domcontentloaded", timeout=45000)
-            page.wait_for_timeout(4000)
+            page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            page.wait_for_timeout(3000)
 
-            # 2. Page Scroll Loop
-            print("Scrolling to load all items...")
-            for step in range(20):
-                page.mouse.wheel(0, 1000)
-                page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-                page.wait_for_timeout(800)
+            # Scroll down quickly to load lazily rendered elements
+            print("Scrolling page...")
+            for _ in range(5):
+                page.mouse.wheel(0, 2000)
+                page.wait_for_timeout(500)
 
-                # Extract content from item card elements
-                cards = page.query_selector_all("div, article, section")
-                for el in cards:
-                    try:
-                        name_el = el.query_selector("h1, h2, h3, h4, h5, p, span, div")
-                        if name_el:
-                            name_text = name_el.inner_text().strip()
-                            rarity_el = el.query_selector("[class*='rarity'], [class*='badge']")
-                            cat_el = el.query_selector("[class*='category'], [class*='type']")
-                            img_el = el.query_selector("img")
+            # Extract ALL data inside the browser context in one fast JavaScript call
+            print("Extracting items...")
+            raw_items = page.evaluate("""
+                () => {
+                    const systemLabels = new Set([
+                        "home", "value", "values", "compare", "collection", "settings",
+                        "item list", "my favorites", "no favorites yet.", "tags",
+                        "shard value range", "existing items range", "primary color",
+                        "subcategory", "type", "rarity", "search"
+                    ]);
 
-                            add_item(
-                                name_text,
-                                rarity_el.inner_text().strip() if rarity_el else "Common",
-                                cat_el.inner_text().strip() if cat_el else "Cosmetic",
-                                img_el.get_attribute("src") if img_el else ""
-                            )
-                    except Exception:
-                        pass
+                    const items = [];
+                    const cardElements = document.querySelectorAll("div, article, section");
+
+                    cardElements.forEach(el => {
+                        const titleEl = el.querySelector("h1, h2, h3, h4, h5, p, span");
+                        if (!titleEl) return;
+
+                        const name = titleEl.innerText ? titleEl.innerText.trim() : "";
+                        if (!name || name.length <= 1) return;
+
+                        const lowerName = name.toLowerCase();
+                        if (systemLabels.has(lowerName)) return;
+
+                        // Skip price strings like "0 coins" or "500,000 shards"
+                        if ((lowerName.endsWith("coins") || lowerName.endsWith("shards")) && !isNaN(parseInt(name.split(" ")[0].replace(/,/g, "")))) {
+                            return;
+                        }
+
+                        const rarityEl = el.querySelector("[class*='rarity'], [class*='badge']");
+                        const catEl = el.querySelector("[class*='category'], [class*='type']");
+                        const imgEl = el.querySelector("img");
+
+                        items.push({
+                            name: name,
+                            rarity: rarityEl ? rarityEl.innerText.trim() : "Common",
+                            category: catEl ? catEl.innerText.trim() : "Cosmetic",
+                            imageUrl: imgEl ? imgEl.src : ""
+                        });
+                    });
+
+                    return items;
+                }
+            """)
 
             browser.close()
 
-    except Exception as e:
-        print(f"Scraper execution notice: {e}")
+            # Deduplicate by name
+            cosmetics = {}
+            for item in raw_items:
+                name = item["name"]
+                if name not in cosmetics:
+                    rarity_raw = str(item.get("rarity", "Common")).lower()
+                    cosmetics[name] = {
+                        "name": name,
+                        "rarity": rarity_map.get(rarity_raw, "Common"),
+                        "category": item.get("category", "Cosmetic"),
+                        "imageUrl": item.get("imageUrl", "")
+                    }
 
-    # Write output to JSON
+    except Exception as e:
+        print(f"Scraper notice: {e}")
+        cosmetics = {}
+
+    # Save to JSON
     os.makedirs("data", exist_ok=True)
     output_file = "data/cosmetics.json"
     final_list = list(cosmetics.values())
@@ -142,7 +111,7 @@ def run_scraper():
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(final_list, f, indent=2)
 
-    print(f"Done! Cleanly saved {len(final_list)} cosmetics to {output_file}.")
+    print(f"Done! Cleanly saved {len(final_list)} items to {output_file}.")
 
 if __name__ == "__main__":
     run_scraper()
