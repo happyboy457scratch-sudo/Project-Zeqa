@@ -35,7 +35,7 @@ def run_scraper():
         
         page = context.new_page()
 
-        # 1. Listen for dynamic API network responses
+        # 1. Catch dynamic API network requests
         def handle_response(response):
             nonlocal cosmetics
             try:
@@ -52,21 +52,16 @@ def run_scraper():
                                 break
 
                     if items:
-                        print(f"[API Intercept] Caught {len(items)} items from: {response.url}")
-                        for idx, item in enumerate(items, 1):
+                        print(f"[API Intercept] Found {len(items)} items from {response.url}")
+                        for item in items:
                             if isinstance(item, dict):
                                 name = item.get("name") or item.get("title") or item.get("itemName")
                                 if name:
                                     rarity_raw = str(item.get("rarity", "Common")).lower()
                                     cosmetics.append({
-                                        "id": item.get("id", idx),
                                         "name": str(name).strip(),
-                                        "category": item.get("category", "Items"),
                                         "rarity": rarity_map.get(rarity_raw, "Common"),
-                                        "value": item.get("value", item.get("price", 10000)),
-                                        "demand": item.get("demand", 5),
-                                        "salesExistingRatio": item.get("salesExistingRatio", 50),
-                                        "priceHistory": item.get("priceHistory", [8000, 8500, 9000, 9500, 10000]),
+                                        "category": item.get("category") or item.get("type") or "Cosmetic",
                                         "imageUrl": item.get("imageUrl") or item.get("image") or item.get("icon") or ""
                                     })
             except Exception:
@@ -78,17 +73,16 @@ def run_scraper():
         res = page.goto(url, wait_until="domcontentloaded", timeout=60000)
         print(f"Page Response Code: {res.status if res else 'Unknown'}")
         
-        # Give full JavaScript framework time to initialize
-        page.wait_for_timeout(6000)
+        page.wait_for_timeout(5000)
 
-        # Scroll down to force image and list hydration
+        # Scroll to trigger page element loading
         for _ in range(5):
             page.evaluate("window.scrollBy(0, 800)")
             page.wait_for_timeout(1000)
 
-        # 2. Check embedded script tags (Next.js / React hydration payloads)
+        # 2. Check Next.js embedded data scripts
         if not cosmetics:
-            print("Checking page script tags for embedded data...")
+            print("Checking embedded page scripts...")
             next_script = page.query_selector("script#__NEXT_DATA__")
             if next_script:
                 try:
@@ -96,50 +90,44 @@ def run_scraper():
                     page_props = raw_data.get("props", {}).get("pageProps", {})
                     items = page_props.get("values") or page_props.get("items") or page_props.get("cosmetics") or []
                     print(f"[Script Payload] Found {len(items)} items inside __NEXT_DATA__")
-                    for idx, item in enumerate(items, 1):
+                    for item in items:
                         if isinstance(item, dict) and "name" in item:
                             rarity_raw = str(item.get("rarity", "Common")).lower()
                             cosmetics.append({
-                                "id": item.get("id", idx),
-                                "name": item["name"],
-                                "category": item.get("category", "Items"),
+                                "name": str(item["name"]).strip(),
                                 "rarity": rarity_map.get(rarity_raw, "Common"),
-                                "value": item.get("value", 10000),
-                                "demand": item.get("demand", 5),
-                                "salesExistingRatio": item.get("salesExistingRatio", 50),
-                                "priceHistory": item.get("priceHistory", [8000, 8500, 9000, 9500, 10000]),
+                                "category": item.get("category") or item.get("type") or "Cosmetic",
                                 "imageUrl": item.get("imageUrl") or item.get("image") or ""
                             })
                 except Exception as e:
                     print(f"Error parsing script tag: {e}")
 
-        # 3. Fallback: Parse rendered DOM cards
+        # 3. Fallback: Direct DOM element parsing
         if not cosmetics:
             print("Parsing rendered page elements...")
-            cards = page.query_selector_all("div, tr, li, article")
+            cards = page.query_selector_all("div[class*='item'], div[class*='card'], tr, div[class*='Value']")
             seen_names = set()
             
-            for idx, el in enumerate(cards, 1):
+            for el in cards:
                 try:
-                    title_el = el.query_selector("h1, h2, h3, h4, h5, p, span, td")
+                    name_el = el.query_selector("h1, h2, h3, h4, h5, p, span, td")
+                    rarity_el = el.query_selector("[class*='rarity'], [class*='badge']")
+                    category_el = el.query_selector("[class*='category'], [class*='type']")
                     img_el = el.query_selector("img")
                     
-                    if title_el:
-                        name = title_el.inner_text().strip()
-                        # Ignore general UI text
+                    if name_el:
+                        name = name_el.inner_text().strip()
                         if name and 2 < len(name) < 45 and name not in seen_names:
                             if not any(ignore in name.lower() for ignore in ["search", "menu", "login", "home", "values", "discord", "twitter", "copyright", "nav"]):
                                 seen_names.add(name)
+                                rarity_str = rarity_el.inner_text().strip().lower() if rarity_el else "common"
+                                cat_str = category_el.inner_text().strip() if category_el else "Cosmetic"
                                 img_url = img_el.get_attribute("src") if img_el else ""
+
                                 cosmetics.append({
-                                    "id": len(cosmetics) + 1,
                                     "name": name,
-                                    "category": "Items",
-                                    "rarity": "Common",
-                                    "value": 10000,
-                                    "demand": 5,
-                                    "salesExistingRatio": 50,
-                                    "priceHistory": [8000, 8500, 9000, 9500, 10000],
+                                    "rarity": rarity_map.get(rarity_str, "Common"),
+                                    "category": cat_str,
                                     "imageUrl": img_url or ""
                                 })
                 except Exception:
@@ -147,7 +135,7 @@ def run_scraper():
 
         browser.close()
 
-        # Save outputs
+        # Save deduplicated outputs
         os.makedirs("data", exist_ok=True)
         output_file = "data/cosmetics.json"
 
@@ -157,7 +145,7 @@ def run_scraper():
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(final_list, f, indent=2)
 
-        print(f"Scrape completed! Saved {len(final_list)} cosmetics to {output_file}.")
+        print(f"Saved {len(final_list)} items with clean schema to {output_file}!")
 
 if __name__ == "__main__":
     run_scraper()
