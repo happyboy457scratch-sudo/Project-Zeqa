@@ -4,7 +4,16 @@ from playwright.sync_api import sync_playwright
 
 def run_scraper():
     url = "https://milkyclan.com/values"
+    output_file = "data/cosmetics.json"
     
+    # 1. ALWAYS DELETE THE OLD FILE IF IT EXISTS TO WIPE GLITCHED DATA
+    if os.path.exists(output_file):
+        try:
+            os.remove(output_file)
+            print(f"Deleted old {output_file} to clear previous data.")
+        except Exception as e:
+            print(f"Error removing old file: {e}")
+
     rarity_map = {
         "common": "Common",
         "rare": "Rare",
@@ -14,6 +23,8 @@ def run_scraper():
         "exotic": "Exotic",
         "partner": "Partner"
     }
+
+    cosmetics = {}
 
     try:
         with sync_playwright() as p:
@@ -33,13 +44,11 @@ def run_scraper():
             page.goto(url, wait_until="domcontentloaded", timeout=30000)
             page.wait_for_timeout(3000)
 
-            # Scroll down quickly to load lazily rendered elements
             print("Scrolling page...")
             for _ in range(5):
                 page.mouse.wheel(0, 2000)
                 page.wait_for_timeout(500)
 
-            # Extract ALL data inside the browser context in one fast JavaScript call
             print("Extracting items...")
             raw_items = page.evaluate("""
                 () => {
@@ -63,7 +72,6 @@ def run_scraper():
                         const lowerName = name.toLowerCase();
                         if (systemLabels.has(lowerName)) return;
 
-                        // Skip price strings like "0 coins" or "500,000 shards"
                         if ((lowerName.endsWith("coins") || lowerName.endsWith("shards")) && !isNaN(parseInt(name.split(" ")[0].replace(/,/g, "")))) {
                             return;
                         }
@@ -86,8 +94,7 @@ def run_scraper():
 
             browser.close()
 
-            # Deduplicate by name
-            cosmetics = {}
+            # Deduplicate items in memory
             for item in raw_items:
                 name = item["name"]
                 if name not in cosmetics:
@@ -103,15 +110,14 @@ def run_scraper():
         print(f"Scraper notice: {e}")
         cosmetics = {}
 
-    # Save to JSON
+    # 2. WRITE FRESH CLEAN DATA
     os.makedirs("data", exist_ok=True)
-    output_file = "data/cosmetics.json"
     final_list = list(cosmetics.values())
 
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(final_list, f, indent=2)
 
-    print(f"Done! Cleanly saved {len(final_list)} items to {output_file}.")
+    print(f"Done! Cleanly replaced file and saved {len(final_list)} items to {output_file}.")
 
 if __name__ == "__main__":
     run_scraper()
