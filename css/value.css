@@ -1,147 +1,77 @@
-/* ==========================================================================
-   ZeqaValues - Value Page Stylesheet
-   Filter controls, category pills, custom selects, and grid layout
-   ========================================================================== */
-
-.zv-value-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 24px;
-}
-
-/* Page Header */
-.zv-value-header {
-  margin-bottom: 24px;
-}
-
-.zv-value-title {
-  font-size: 28px;
-  font-weight: 700;
-  margin: 0 0 8px 0;
-  color: #ffffff;
-  letter-spacing: -0.5px;
-}
-
-.zv-value-subtitle {
-  color: #aaaaaa;
-  font-size: 14px;
+* {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
 }
 
-/* Controls Bar */
-.zv-controls-bar {
-  background: #181818;
-  border: 1px solid #282828;
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 28px;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #0f172a;
+  color: #f8fafc;
+  padding: 20px;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+}
+
+header {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 16px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #38bdf8;
+  margin-bottom: 6px;
+}
+
+.status-bar {
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
 }
 
-.zv-controls-top {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.zv-search-box {
-  flex: 1;
-  min-width: 260px;
-  position: relative;
-}
-
-.zv-search-box input {
-  width: 100%;
-  background: #111111;
-  border: 1px solid #333333;
+.trade-card {
+  background-color: #1e293b;
+  border: 1px solid #334155;
   border-radius: 8px;
-  padding: 12px 16px;
-  color: #ffffff;
-  font-size: 14px;
-  outline: none;
-  box-sizing: border-box;
-  transition: border-color 0.2s ease;
+  padding: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.zv-search-box input:focus {
-  border-color: #5EF2B6;
+.item-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #facc15;
+  margin-bottom: 8px;
 }
 
-.zv-sort-select {
-  background: #111111;
-  border: 1px solid #333333;
-  border-radius: 8px;
-  padding: 0 16px;
-  color: #ffffff;
-  font-size: 14px;
-  outline: none;
-  cursor: pointer;
-  min-width: 200px;
-  transition: border-color 0.2s ease;
+.shard-amount {
+  font-size: 1rem;
+  color: #38bdf8;
+  margin-bottom: 8px;
 }
 
-.zv-sort-select:focus {
-  border-color: #5EF2B6;
+.raw-text {
+  font-size: 0.75rem;
+  color: #64748b;
+  word-break: break-all;
 }
 
-/* Category Filter Pills */
-.zv-categories-wrap {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-}
-
-.zv-categories-wrap::-webkit-scrollbar {
-  height: 4px;
-}
-
-.zv-category-pill {
-  background: #111111;
-  border: 1px solid #2a2a2a;
-  color: #aaaaaa;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-}
-
-.zv-category-pill:hover {
-  border-color: #444444;
-  color: #ffffff;
-}
-
-.zv-category-pill.active {
-  background: rgba(94, 242, 182, 0.12);
-  border-color: #5EF2B6;
-  color: #5EF2B6;
-}
-
-/* Grid & Empty States */
-.zv-catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 18px;
-}
-
-.zv-empty-state {
-  grid-column: 1 / -1;
+.empty-state {
   text-align: center;
-  padding: 60px 20px;
-  background: #141414;
-  border: 1px dashed #2a2a2a;
-  border-radius: 14px;
-  color: #aaaaaa;
-}
-
-.zv-empty-state-title {
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 6px;
+  padding: 40px;
+  color: #94a3b8;
+  background-color: #1e293b;
+  border-radius: 8px;
 }
