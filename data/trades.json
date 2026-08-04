@@ -2,14 +2,14 @@
   {
     "item": "Cat Mask",
     "quantity": 1,
-    "shards": "5k",
+    "shards": "5000",
     "total_shards": "5000",
     "raw_trade": "Cat Mask \u2192 5.0k"
   },
   {
     "item": "Heart",
     "quantity": 1,
-    "shards": "3k",
+    "shards": "3000",
     "total_shards": "3000",
     "raw_trade": "3.0k \u2192 Heart"
   },
@@ -17,28 +17,28 @@
     "item": "Sweet Headband",
     "quantity": 8,
     "shards": "2000",
-    "total_shards": "16k",
+    "total_shards": "16000",
     "raw_trade": "16.0k \u2192 Sweet Headband x8"
   },
   {
     "item": "Sweet Headband",
     "quantity": 8,
     "shards": "2000",
-    "total_shards": "16k",
+    "total_shards": "16000",
     "raw_trade": "Sweet Headband x8 \u2192 16.0k"
   },
   {
     "item": "Sweet Headband",
     "quantity": 1,
-    "shards": "2k",
-    "total_shards": "2k",
+    "shards": "2000",
+    "total_shards": "2000",
     "raw_trade": "Sweet Headband \u2192 2.0k"
   },
   {
     "item": "Valentines Headband",
     "quantity": 1,
-    "shards": "10k",
-    "total_shards": "10k",
+    "shards": "10000",
+    "total_shards": "10000",
     "raw_trade": "Valentines Headband \u2192 10.0k"
   },
   {
