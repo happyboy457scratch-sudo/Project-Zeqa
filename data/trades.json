@@ -20,11 +20,6 @@
     "raw_trade": "Sweet Headband x8 \u2192 16.0k"
   },
   {
-    "item": "7 # x3",
-    "price": "1.0k",
-    "raw_trade": "7 # x3 \u2192 1.0k"
-  },
-  {
     "item": "Sweet Headband",
     "price": "2.0k",
     "raw_trade": "Sweet Headband \u2192 2.0k"
@@ -43,10 +38,6 @@
     "item": "Bonehead Costume",
     "price": "10.0k",
     "raw_trade": "10.0k \u2192 Bonehead Costume"
-  },
-  {
-    "item": "\u2014",
-    "price": "2",
-    "raw_trade": "\u2014 \u2192 2"
   }
+
 ]
