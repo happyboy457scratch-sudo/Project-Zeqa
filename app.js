@@ -1,13 +1,16 @@
 /**
- * ZeqaValues - Complete Standalone Single-File Engine
+ * ZeqaValues - Complete Standalone Single-File Engine & Trade Tracker Integration
  * Self-contained Single Page Application (SPA) for Mineville PvP Cosmetics.
  */
 
 /* ==========================================================================
-   1. GLOBAL STATE & LOCAL STORAGE HANDLERS
+   1. GLOBAL STATE, LOCAL STORAGE & DATA PROCESSING
    ========================================================================== */
 
 let cosmeticsData = [];
+let tradesData = [];
+let tradeStatsMap = {}; // Item key -> { avgValue, totalTradeCount, recentTrades7DaysCount, trades }
+
 let currentPage = localStorage.getItem('lastPage') || 'home';
 
 // Filter & Sort state for Value Page
@@ -25,21 +28,103 @@ let collectionActiveTab = 'inventory';
 
 const app = document.getElementById('app');
 
+// Helper to normalize item names for clean cross-file matching
+function cleanName(str) {
+  return str ? str.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
+}
+
 async function loadData() {
   try {
-    const res = await fetch('./data/cosmetics.json');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    cosmeticsData = await res.json();
+    const [cosmeticsRes, tradesRes] = await Promise.all([
+      fetch('./data/cosmetics.json?t=' + Date.now()),
+      fetch('./data/trades.json?t=' + Date.now()).catch(() => null)
+    ]);
+
+    if (!cosmeticsRes.ok) throw new Error(`HTTP ${cosmeticsRes.status}`);
+    cosmeticsData = await cosmeticsRes.json();
+
+    if (tradesRes && tradesRes.ok) {
+      tradesData = await tradesRes.json();
+      processTradeStats();
+    }
   } catch (err) {
-    console.warn('Could not fetch cosmetics.json, utilizing fallback dataset:', err);
-    cosmeticsData = [
-      { id: 1, name: 'Dragon Cape', category: 'Capes', rarity: 'Legendary', value: 25000, demand: 9, salesExistingRatio: 85, imageUrl: '' },
-      { id: 2, name: 'Ancient Relic', category: 'Artifacts', rarity: 'Mythic', value: 42000, demand: 10, salesExistingRatio: 92, imageUrl: '' },
-      { id: 3, name: 'Fireball Projectile', category: 'Projectiles', rarity: 'Rare', value: 8500, demand: 6, salesExistingRatio: 45, imageUrl: '' },
-      { id: 4, name: 'Golden Key', category: 'Items', rarity: 'Epic', value: 16000, demand: 8, salesExistingRatio: 70, imageUrl: '' }
-    ];
+    console.warn('Could not fetch external data, utilizing fallback dataset:', err);
+    if (cosmeticsData.length === 0) {
+      cosmeticsData = [
+        { id: 1, name: 'Dragon Cape', category: 'Capes', rarity: 'Legendary', value: 25000, demand: 9, salesExistingRatio: 85, imageUrl: '' },
+        { id: 2, name: 'Ancient Relic', category: 'Artifacts', rarity: 'Mythic', value: 42000, demand: 10, salesExistingRatio: 92, imageUrl: '' },
+        { id: 3, name: 'Fireball Projectile', category: 'Projectiles', rarity: 'Rare', value: 8500, demand: 6, salesExistingRatio: 45, imageUrl: '' },
+        { id: 4, name: 'Golden Key', category: 'Items', rarity: 'Epic', value: 16000, demand: 8, salesExistingRatio: 70, imageUrl: '' }
+      ];
+    }
   }
   renderApp();
+}
+
+/**
+ * Calculates trade statistics per item from trades.json
+ */
+function processTradeStats() {
+  if (!Array.isArray(tradesData) || tradesData.length === 0) return;
+
+  const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+  const groupedTrades = {};
+
+  tradesData.forEach(trade => {
+    if (!trade.item || trade.item.startsWith('—')) return;
+
+    const cleanedTradeTitle = cleanName(trade.item);
+    const matchedCosmetic = cosmeticsData.find(c => {
+      const cName = cleanName(c.name);
+      return cName.length > 2 && cleanedTradeTitle.includes(cName);
+    });
+
+    if (!matchedCosmetic) return;
+
+    const itemKey = cleanName(matchedCosmetic.name);
+    if (!groupedTrades[itemKey]) groupedTrades[itemKey] = [];
+
+    const shardsPaid = parseInt(trade.shards, 10) || 0;
+    const qty = parseInt(trade.quantity, 10) || 1;
+    const unitPrice = qty > 0 ? Math.round(shardsPaid / qty) : shardsPaid;
+    const tradeTimestamp = trade.timestamp ? new Date(trade.timestamp).getTime() : Date.now();
+
+    groupedTrades[itemKey].push({
+      rawText: trade.raw_trade || `${trade.item} -> ${trade.shards}`,
+      shardsPaid: shardsPaid,
+      unitPrice: unitPrice,
+      qty: qty,
+      timestamp: tradeTimestamp
+    });
+  });
+
+  Object.keys(groupedTrades).forEach(itemKey => {
+    const trades = groupedTrades[itemKey];
+    const totalShards = trades.reduce((sum, t) => sum + t.unitPrice, 0);
+    const avgValue = Math.round(totalShards / trades.length);
+
+    const recentTrades7Days = trades
+      .filter(t => t.timestamp >= sevenDaysAgo)
+      .sort((a, b) => b.timestamp - a.timestamp);
+
+    const displayTrades = recentTrades7Days.length > 0 
+      ? recentTrades7Days 
+      : [...trades].sort((a, b) => b.timestamp - a.timestamp);
+
+    tradeStatsMap[itemKey] = {
+      avgValue: avgValue,
+      totalTradeCount: trades.length,
+      recentTrades7DaysCount: recentTrades7Days.length,
+      trades: displayTrades
+    };
+  });
+}
+
+function getItemCalculatedValue(item) {
+  const key = cleanName(item.name);
+  const stats = tradeStatsMap[key];
+  if (stats && stats.avgValue > 0) return stats.avgValue;
+  return item.value || item.shards || 0;
 }
 
 function getInventory() {
@@ -78,19 +163,20 @@ function getRarityBadgeColor(rarity = '') {
 }
 
 function renderItemCardHtml(item) {
-  const imgUrl = item.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+  const imgUrl = item.imageUrl || item.image || 'https://via.placeholder.com/150?text=No+Image';
   const badgeBg = getRarityBadgeColor(item.rarity);
-  const valDisplay = item.value ? `${item.value.toLocaleString()} coins` : 'Valued';
+  const calculatedVal = getItemCalculatedValue(item);
+  const valDisplay = calculatedVal > 0 ? `${calculatedVal.toLocaleString()} shards` : 'Unlisted';
 
   return `
     <div class="item-card" data-id="${item.id || item.name}" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s;">
       <div style="width: 100%; height: 120px; background: #0d1117; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; overflow: hidden;">
-        <img src="${imgUrl}" alt="${item.name}" loading="lazy" style="max-width: 85%; max-height: 85%; object-fit: contain;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
+        <img src="${imgUrl}" alt="${escapeHtml(item.name)}" loading="lazy" style="max-width: 85%; max-height: 85%; object-fit: contain;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
       </div>
-      <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 15px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">${item.name}</h3>
+      <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 15px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">${escapeHtml(item.name)}</h3>
       <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 8px;">
-        <span style="background: ${badgeBg}; color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase;">${item.rarity || 'Common'}</span>
-        <span style="color: #8b949e; font-size: 11px;">${item.category || 'Cosmetic'}</span>
+        <span style="background: ${badgeBg}; color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase;">${escapeHtml(item.rarity || 'Common')}</span>
+        <span style="color: #8b949e; font-size: 11px;">${escapeHtml(item.category || item.type || 'Cosmetic')}</span>
       </div>
       <div style="color: #5EF2B6; font-weight: 700; font-size: 13px;">${valDisplay}</div>
     </div>
@@ -111,7 +197,7 @@ function openItemModal(item) {
   const modalRoot = document.getElementById('zv-modal-root');
   if (!modalRoot) return;
 
-  const imgUrl = item.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+  const imgUrl = item.imageUrl || item.image || 'https://via.placeholder.com/150?text=No+Image';
   const badgeBg = getRarityBadgeColor(item.rarity);
   const inv = getInventory();
   const wl = getWishlist();
@@ -119,22 +205,62 @@ function openItemModal(item) {
   const isWishlisted = wl.includes(String(itemId));
   const currentQty = inv[itemId] || 0;
 
+  const calculatedVal = getItemCalculatedValue(item);
+  const valDisplay = calculatedVal > 0 ? `${calculatedVal.toLocaleString()} shards` : 'Unlisted';
+
+  // Recent Trades HTML Generator
+  const key = cleanName(item.name);
+  const stats = tradeStatsMap[key];
+  let tradesHtml = '';
+
+  if (stats && stats.trades.length > 0) {
+    const visibleTrades = stats.trades.slice(0, 3);
+    const hasMore = stats.trades.length > 3 || stats.recentTrades7DaysCount > 3;
+
+    tradesHtml = `
+      <div style="margin-top: 16px; text-align: left; width: 100%; border-top: 1px solid #30363d; padding-top: 12px;">
+        <div style="font-size: 11px; font-weight: 700; color: #8b949e; margin-bottom: 8px; text-transform: uppercase;">
+          Recent Trades (${stats.recentTrades7DaysCount} in last 7 days)
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          ${visibleTrades.map(t => `
+            <div style="background: #0d1117; padding: 6px 10px; border-radius: 6px; font-size: 12px; color: #c9d1d9; border: 1px solid #21262d;">
+              <strong style="color: #5EF2B6;">${t.shardsPaid.toLocaleString()} Shards</strong> — <span style="color: #8b949e;">${escapeHtml(t.rawText)}</span>
+            </div>
+          `).join('')}
+        </div>
+        ${hasMore ? `
+          <a href="trades.html?search=${encodeURIComponent(item.name)}" 
+             style="display: block; margin-top: 10px; font-size: 12px; color: #38bdf8; text-decoration: none; font-weight: 600; text-align: center;">
+            Read More (${stats.trades.length - 3} more trades) →
+          </a>
+        ` : ''}
+      </div>
+    `;
+  } else {
+    tradesHtml = `
+      <div style="margin-top: 16px; font-size: 12px; color: #6e7681; border-top: 1px solid #30363d; padding-top: 12px;">
+        No recent recorded trades in the last 7 days.
+      </div>
+    `;
+  }
+
   modalRoot.innerHTML = `
     <div id="zv-modal-backdrop" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center;">
-      <div style="background: #161b22; border: 1px solid #30363d; border-radius: 14px; padding: 24px; max-width: 400px; width: 90%; text-align: center; position: relative;">
+      <div style="background: #161b22; border: 1px solid #30363d; border-radius: 14px; padding: 24px; max-width: 420px; width: 90%; text-align: center; position: relative;">
         <button id="zv-modal-close" style="position: absolute; top: 12px; right: 16px; background: none; border: none; color: #8b949e; font-size: 20px; cursor: pointer;">✕</button>
-        <div style="width: 100%; height: 160px; background: #0d1117; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-          <img src="${imgUrl}" alt="${item.name}" style="max-width: 85%; max-height: 85%; object-fit: contain;">
+        <div style="width: 100%; height: 140px; background: #0d1117; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+          <img src="${imgUrl}" alt="${escapeHtml(item.name)}" style="max-width: 85%; max-height: 85%; object-fit: contain;">
         </div>
-        <h2 style="color: #fff; margin: 0 0 6px 0;">${item.name}</h2>
+        <h2 style="color: #fff; margin: 0 0 6px 0;">${escapeHtml(item.name)}</h2>
         <div style="margin-bottom: 12px;">
-          <span style="background: ${badgeBg}; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">${item.rarity || 'Common'}</span>
-          <span style="color: #8b949e; font-size: 12px; margin-left: 8px;">${item.category || 'Cosmetic'}</span>
+          <span style="background: ${badgeBg}; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">${escapeHtml(item.rarity || 'Common')}</span>
+          <span style="color: #8b949e; font-size: 12px; margin-left: 8px;">${escapeHtml(item.category || item.type || 'Cosmetic')}</span>
         </div>
-        <div style="color: #5EF2B6; font-size: 18px; font-weight: 800; margin-bottom: 20px;">
-          ${item.value ? `${item.value.toLocaleString()} coins` : 'Valued Cosmetic'}
+        <div style="color: #5EF2B6; font-size: 18px; font-weight: 800; margin-bottom: 16px;">
+          ${valDisplay}
         </div>
-        <div style="display: flex; gap: 10px;">
+        <div style="display: flex; gap: 10px; margin-bottom: 8px;">
           <button id="zv-modal-inv-btn" style="flex: 1; background: #21262d; border: 1px solid #30363d; color: #fff; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;">
             Add to Inv (${currentQty})
           </button>
@@ -142,6 +268,8 @@ function openItemModal(item) {
             ${isWishlisted ? 'Wishlisted' : '+ Wishlist'}
           </button>
         </div>
+
+        ${tradesHtml}
       </div>
     </div>
   `;
@@ -196,7 +324,7 @@ function renderApp() {
         <a href="trades.html" style="color: #38bdf8; font-weight: 600; text-decoration: none; padding: 4px 10px; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; background: rgba(56, 189, 248, 0.1);">Trade Tracker ↗</a>
       </nav>
       <div style="font-size: 13px; color: #5EF2B6; font-weight: bold; background: rgba(94,242,182,0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(94,242,182,0.2);">
-        ${activeUser}
+        ${escapeHtml(activeUser)}
       </div>
     </div>
     <main id="page-content" style="padding-bottom: 60px;"></main>
@@ -281,8 +409,8 @@ function renderLogin() {
    ========================================================================== */
 
 function renderHomePage(container) {
-  const totalValue = cosmeticsData.reduce((acc, i) => acc + (i.value || 0), 0);
-  const highestItem = [...cosmeticsData].sort((a, b) => (b.value || 0) - (a.value || 0))[0];
+  const totalValue = cosmeticsData.reduce((acc, i) => acc + getItemCalculatedValue(i), 0);
+  const highestItem = [...cosmeticsData].sort((a, b) => getItemCalculatedValue(b) - getItemCalculatedValue(a))[0];
   const mostTraded = [...cosmeticsData].sort((a, b) => (b.salesExistingRatio || 0) - (a.salesExistingRatio || 0))[0];
 
   container.innerHTML = `
@@ -301,15 +429,15 @@ function renderHomePage(container) {
         </div>
         <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
           <div style="font-size: 12px; color: #aaa;">Highest Value</div>
-          <div style="font-size: 18px; font-weight: 700; color: #5EF2B6; margin-top: 4px;">${highestItem ? highestItem.name : 'N/A'}</div>
+          <div style="font-size: 18px; font-weight: 700; color: #5EF2B6; margin-top: 4px;">${highestItem ? escapeHtml(highestItem.name) : 'N/A'}</div>
         </div>
         <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
           <div style="font-size: 12px; color: #aaa;">Most Traded</div>
-          <div style="font-size: 18px; font-weight: 700; color: #fff; margin-top: 4px;">${mostTraded ? mostTraded.name : 'N/A'}</div>
+          <div style="font-size: 18px; font-weight: 700; color: #fff; margin-top: 4px;">${mostTraded ? escapeHtml(mostTraded.name) : 'N/A'}</div>
         </div>
         <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
           <div style="font-size: 12px; color: #aaa;">Market Capitalization</div>
-          <div style="font-size: 18px; font-weight: 700; color: #5EF2B6; margin-top: 4px;">${totalValue.toLocaleString()} coins</div>
+          <div style="font-size: 18px; font-weight: 700; color: #5EF2B6; margin-top: 4px;">${totalValue.toLocaleString()} shards</div>
         </div>
       </div>
 
@@ -353,7 +481,7 @@ function renderValuePage(container) {
 
       <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 14px;">
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <input type="text" id="zv-search-field" placeholder="Search cosmetics..." value="${valueSearchQuery}" style="flex: 1; min-width: 200px; padding: 10px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff;">
+          <input type="text" id="zv-search-field" placeholder="Search cosmetics..." value="${escapeHtml(valueSearchQuery)}" style="flex: 1; min-width: 200px; padding: 10px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff;">
           <select id="zv-sort-field" style="padding: 10px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff;">
             <option value="value-desc" ${valueCurrentSort === 'value-desc' ? 'selected' : ''}>Highest Value</option>
             <option value="value-asc" ${valueCurrentSort === 'value-asc' ? 'selected' : ''}>Lowest Value</option>
@@ -415,13 +543,15 @@ function renderValueGridItemsHtml() {
   }
 
   if (valueCurrentCategory !== 'All') {
-    filtered = filtered.filter(item => (item.category || '').toLowerCase() === valueCurrentCategory.toLowerCase());
+    filtered = filtered.filter(item => (item.category || item.type || '').toLowerCase() === valueCurrentCategory.toLowerCase());
   }
 
   filtered.sort((a, b) => {
+    const valA = getItemCalculatedValue(a);
+    const valB = getItemCalculatedValue(b);
     switch (valueCurrentSort) {
-      case 'value-desc': return (b.value || 0) - (a.value || 0);
-      case 'value-asc': return (a.value || 0) - (b.value || 0);
+      case 'value-desc': return valB - valA;
+      case 'value-asc': return valA - valB;
       case 'demand-desc': return (b.demand || 0) - (a.demand || 0);
       case 'demand-asc': return (a.demand || 0) - (b.demand || 0);
       case 'name-asc': return a.name.localeCompare(b.name);
@@ -445,8 +575,8 @@ function renderComparePage(container) {
   if (compareLeftItems.length === 0 && cosmeticsData[0]) compareLeftItems = [cosmeticsData[0]];
   if (compareRightItems.length === 0 && cosmeticsData[1]) compareRightItems = [cosmeticsData[1]];
 
-  const leftTotal = compareLeftItems.reduce((acc, i) => acc + (i.value || 0), 0);
-  const rightTotal = compareRightItems.reduce((acc, i) => acc + (i.value || 0), 0);
+  const leftTotal = compareLeftItems.reduce((acc, i) => acc + getItemCalculatedValue(i), 0);
+  const rightTotal = compareRightItems.reduce((acc, i) => acc + getItemCalculatedValue(i), 0);
   const diff = leftTotal - rightTotal;
   const maxTotal = Math.max(leftTotal, rightTotal, 1);
   const pctDiff = Math.round((Math.abs(diff) / maxTotal) * 100);
@@ -455,7 +585,7 @@ function renderComparePage(container) {
   let badgeBg = '#27ae60';
   if (pctDiff > 5) {
     if (leftTotal > rightTotal) {
-      outcomeLabel = 'Win for happyboy457';
+      outcomeLabel = 'Win for You';
       badgeBg = '#27ae60';
     } else {
       outcomeLabel = 'Win for Trader';
@@ -471,21 +601,21 @@ function renderComparePage(container) {
       <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: center;">
         <span style="background: ${badgeBg}; color: #fff; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 14px; display: inline-block;">${outcomeLabel}</span>
         <div style="color: #aaa; font-size: 13px; margin-top: 8px;">
-          Difference: <strong style="color: #5EF2B6;">${Math.abs(diff).toLocaleString()} coins</strong> (${pctDiff}% variation)
+          Difference: <strong style="color: #5EF2B6;">${Math.abs(diff).toLocaleString()} shards</strong> (${pctDiff}% variation)
         </div>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
         <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h3 style="margin: 0; color: #fff;">happyboy457's Offer</h3>
+            <h3 style="margin: 0; color: #fff;">Your Offer</h3>
             <button id="zv-clear-left" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 12px;">Clear</button>
           </div>
           <div style="min-height: 180px;">${renderCompareSlotsHtml(compareLeftItems, 'left')}</div>
           <button id="zv-add-left" style="width: 100%; margin-top: 12px; background: #0d1117; border: 1px dashed #30363d; color: #5EF2B6; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;">+ Add Cosmetic</button>
           <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #282e38; display: flex; justify-content: space-between; font-weight: 700;">
             <span style="color: #aaa;">Total Value:</span>
-            <span style="color: #5EF2B6;">${leftTotal.toLocaleString()} coins</span>
+            <span style="color: #5EF2B6;">${leftTotal.toLocaleString()} shards</span>
           </div>
         </div>
 
@@ -498,7 +628,7 @@ function renderComparePage(container) {
           <button id="zv-add-right" style="width: 100%; margin-top: 12px; background: #0d1117; border: 1px dashed #30363d; color: #5EF2B6; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;">+ Add Cosmetic</button>
           <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #282e38; display: flex; justify-content: space-between; font-weight: 700;">
             <span style="color: #aaa;">Total Value:</span>
-            <span style="color: #5EF2B6;">${rightTotal.toLocaleString()} coins</span>
+            <span style="color: #5EF2B6;">${rightTotal.toLocaleString()} shards</span>
           </div>
         </div>
       </div>
@@ -557,14 +687,15 @@ function renderComparePage(container) {
 function renderCompareSlotsHtml(items, side) {
   if (items.length === 0) return `<div style="text-align: center; color: #666; padding-top: 60px; font-size: 13px;">No items added.</div>`;
   return items.map((item, index) => {
-    const imgUrl = item.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+    const imgUrl = item.imageUrl || item.image || 'https://via.placeholder.com/150?text=No+Image';
+    const val = getItemCalculatedValue(item);
     return `
       <div style="background: #0d1117; border: 1px solid #21262d; border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <img src="${imgUrl}" style="width: 32px; height: 32px; object-fit: contain; border-radius: 4px; background: #161b22;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
           <div>
-            <div style="color: #fff; font-weight: 600; font-size: 13px;">${item.name}</div>
-            <div style="color: #5EF2B6; font-size: 11px;">${(item.value || 0).toLocaleString()} coins</div>
+            <div style="color: #fff; font-weight: 600; font-size: 13px;">${escapeHtml(item.name)}</div>
+            <div style="color: #5EF2B6; font-size: 11px;">${val.toLocaleString()} shards</div>
           </div>
         </div>
         <button class="zv-slot-remove-btn" data-side="${side}" data-index="${index}" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px;">✕</button>
@@ -580,15 +711,16 @@ function renderPickerItemsHtml(query) {
   if (filtered.length === 0) return `<div style="text-align: center; color: #888; padding: 20px;">No items found.</div>`;
 
   return filtered.map(i => {
-    const imgUrl = i.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+    const imgUrl = i.imageUrl || i.image || 'https://via.placeholder.com/150?text=No+Image';
     const itemKey = i.id || i.name;
+    const val = getItemCalculatedValue(i);
     return `
       <div class="zv-picker-item" data-id="${itemKey}" style="padding: 8px; border-bottom: 1px solid #21262d; display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <img src="${imgUrl}" style="width: 28px; height: 28px; object-fit: contain; background: #0d1117; border-radius: 4px;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
-          <span style="color: #fff; font-weight: 600; font-size: 13px;">${i.name}</span>
+          <span style="color: #fff; font-weight: 600; font-size: 13px;">${escapeHtml(i.name)}</span>
         </div>
-        <span style="color: #5EF2B6; font-weight: 700; font-size: 12px;">${(i.value || 0).toLocaleString()} coins</span>
+        <span style="color: #5EF2B6; font-weight: 700; font-size: 12px;">${val.toLocaleString()} shards</span>
       </div>
     `;
   }).join('');
@@ -623,10 +755,13 @@ function renderCollectionPage(container) {
   Object.entries(inv).forEach(([id, qty]) => {
     const item = cosmeticsData.find(i => String(i.id || i.name) === String(id));
     if (item) {
-      totalNetWorth += (item.value || 0) * qty;
+      totalNetWorth += getItemCalculatedValue(item) * qty;
       totalItemCount += qty;
     }
   });
+
+  const invItems = cosmeticsData.filter(i => (inv[i.id || i.name] || 0) > 0);
+  const wlItems = cosmeticsData.filter(i => wl.includes(String(i.id || i.name)));
 
   container.innerHTML = `
     <div style="max-width: 1000px; margin: 0 auto; padding: 24px;">
@@ -635,51 +770,37 @@ function renderCollectionPage(container) {
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
         <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
-          <div style="font-size: 12px; color: #aaa;">Portfolio Net Worth</div>
-          <div style="font-size: 20px; font-weight: 800; color: #5EF2B6; margin-top: 4px;">${totalNetWorth.toLocaleString()} coins</div>
+          <div style="font-size: 12px; color: #aaa;">Total Inventory Value</div>
+          <div style="font-size: 22px; font-weight: 800; color: #5EF2B6; margin-top: 4px;">${totalNetWorth.toLocaleString()} shards</div>
         </div>
         <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
-          <div style="font-size: 12px; color: #aaa;">Owned Items Count</div>
-          <div style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 4px;">${totalItemCount}</div>
+          <div style="font-size: 12px; color: #aaa;">Items Collected</div>
+          <div style="font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px;">${totalItemCount}</div>
+        </div>
+        <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
+          <div style="font-size: 12px; color: #aaa;">Wishlisted Items</div>
+          <div style="font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px;">${wlItems.length}</div>
         </div>
       </div>
 
-      <div style="display: flex; gap: 12px; margin-bottom: 20px;">
-        <button id="zv-tab-inv" style="padding: 8px 18px; border-radius: 8px; border: 1px solid #30363d; background: ${collectionActiveTab === 'inventory' ? '#5EF2B6' : '#14181f'}; color: ${collectionActiveTab === 'inventory' ? '#111' : '#aaa'}; font-weight: 700; cursor: pointer;">Inventory</button>
-        <button id="zv-tab-wl" style="padding: 8px 18px; border-radius: 8px; border: 1px solid #30363d; background: ${collectionActiveTab === 'wishlist' ? '#5EF2B6' : '#14181f'}; color: ${collectionActiveTab === 'wishlist' ? '#111' : '#aaa'}; font-weight: 700; cursor: pointer;">Wishlist (${wl.length})</button>
+      <div style="display: flex; gap: 12px; border-bottom: 1px solid #282e38; margin-bottom: 20px; padding-bottom: 8px;">
+        <button id="zv-tab-inv" style="background: none; border: none; color: ${collectionActiveTab === 'inventory' ? '#5EF2B6' : '#aaa'}; font-weight: 700; cursor: pointer; font-size: 15px;">Inventory (${invItems.length})</button>
+        <button id="zv-tab-wl" style="background: none; border: none; color: ${collectionActiveTab === 'wishlist' ? '#5EF2B6' : '#aaa'}; font-weight: 700; cursor: pointer; font-size: 15px;">Wishlist (${wlItems.length})</button>
       </div>
 
-      <div id="zv-collection-content">
-        ${collectionActiveTab === 'inventory' ? renderInventoryListHtml(inv) : renderWishlistListHtml(wl)}
+      <div id="zv-collection-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
+        ${collectionActiveTab === 'inventory' 
+          ? (invItems.length > 0 ? invItems.map(i => renderItemCardHtml(i)).join('') : '<div style="color: #888;">No items in inventory.</div>')
+          : (wlItems.length > 0 ? wlItems.map(i => renderItemCardHtml(i)).join('') : '<div style="color: #888;">No items wishlisted.</div>')
+        }
       </div>
     </div>
   `;
 
   container.querySelector('#zv-tab-inv').onclick = () => { collectionActiveTab = 'inventory'; renderCollectionPage(container); };
   container.querySelector('#zv-tab-wl').onclick = () => { collectionActiveTab = 'wishlist'; renderCollectionPage(container); };
-  bindCardClickEvents(container);
-}
 
-function renderInventoryListHtml(inv) {
-  const entries = Object.entries(inv).filter(([_, qty]) => qty > 0);
-  if (entries.length === 0) return `<div style="color: #888; text-align: center; padding: 40px; background: #14181f; border-radius: 12px;">Your inventory is empty. Click any cosmetic to add it to your portfolio.</div>`;
-
-  return `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
-    ${entries.map(([id, qty]) => {
-      const item = cosmeticsData.find(i => String(i.id || i.name) === String(id));
-      if (!item) return '';
-      return renderItemCardHtml({ ...item, name: `${item.name} (x${qty})` });
-    }).join('')}
-  </div>`;
-}
-
-function renderWishlistListHtml(wl) {
-  if (wl.length === 0) return `<div style="color: #888; text-align: center; padding: 40px; background: #14181f; border-radius: 12px;">Your wishlist is empty.</div>`;
-
-  const items = cosmeticsData.filter(i => wl.includes(String(i.id || i.name)));
-  return `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
-    ${items.map(item => renderItemCardHtml(item)).join('')}
-  </div>`;
+  bindCardClickEvents(container.querySelector('#zv-collection-grid'));
 }
 
 /* ==========================================================================
@@ -687,11 +808,19 @@ function renderWishlistListHtml(wl) {
    ========================================================================== */
 
 function renderSettingsPage(container) {
+  const activeUser = localStorage.getItem('zv_active_user') || 'happyboy457';
+
   container.innerHTML = `
     <div style="max-width: 600px; margin: 0 auto; padding: 24px;">
-      <h1 style="color: #fff; margin: 0 0 16px 0;">Settings</h1>
+      <h1 style="color: #fff; margin: 0 0 6px 0;">Settings</h1>
+      <p style="color: #aaa; margin: 0 0 24px 0; font-size: 14px;">Manage user session and application data.</p>
+
       <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 20px;">
-        <button id="zv-logout-btn" style="background: #e74c3c; border: none; color: #fff; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+        <div style="margin-bottom: 20px;">
+          <label style="color: #aaa; font-size: 12px; display: block; margin-bottom: 6px;">ACTIVE ACCOUNT</label>
+          <div style="color: #fff; font-weight: 700; font-size: 16px;">${escapeHtml(activeUser)}</div>
+        </div>
+        <button id="zv-logout-btn" style="background: #e74c3c; border: none; color: #fff; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer;">
           Log Out
         </button>
       </div>
@@ -704,8 +833,13 @@ function renderSettingsPage(container) {
   };
 }
 
-/* ==========================================================================
-   10. AUTO INITIALIZATION
-   ========================================================================== */
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 document.addEventListener('DOMContentLoaded', loadData);
