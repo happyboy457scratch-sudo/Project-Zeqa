@@ -1,32 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mineville Trade Tracker</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mineville Live Trade Tracker</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+
+    /* Top Navigation Bar */
+    .navbar {
+      background-color: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #f8fafc;
+    }
+
+    .nav-links a.active {
+      color: #38bdf8;
+      border-bottom: 2px solid #38bdf8;
+      padding-bottom: 4px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+
+    header {
+      margin-bottom: 24px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: #38bdf8;
+      margin-bottom: 6px;
+    }
+
+    .status-bar {
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .trade-card {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .item-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #facc15;
+      margin-bottom: 8px;
+    }
+
+    .shard-amount {
+      font-size: 1rem;
+      color: #38bdf8;
+      margin-bottom: 8px;
+    }
+
+    .raw-text {
+      font-size: 0.75rem;
+      color: #64748b;
+      word-break: break-all;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #94a3b8;
+      background-color: #1e293b;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
 
-  <header class="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="logo">Project Zeqa</a>
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="trades.html" class="active">Live Trade Tracker</a>
-      </nav>
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">Project Zeqa</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="trades.html" class="active">Live Trade Tracker</a>
     </div>
-  </header>
+  </nav>
 
-  <main class="content-container">
-    <div class="tracker-header">
+  <div class="container">
+    <header>
       <h1>Mineville Trade Tracker</h1>
-      <p id="last-updated">Loading trade data...</p>
-    </div>
-
-    <div id="trades-container">
+      <div class="status-bar">
+        Status: <span id="last-updated">Initializing...</span>
       </div>
-  </main>
+    </header>
+
+    <main id="trades-container">
+      <div class="empty-state">Loading trade data...</div>
+    </main>
+  </div>
 
   <script src="script.js"></script>
 </body>
