@@ -187,12 +187,13 @@ function renderApp() {
       <div style="font-weight: 800; font-size: 18px; color: #ffffff;">
         Zeqa<span style="color: #5EF2B6;">Values</span>
       </div>
-      <nav style="display: flex; gap: 18px;">
+      <nav style="display: flex; gap: 18px; align-items: center;">
         <a class="nav-btn ${currentPage === 'home' ? 'active' : ''}" data-page="home">Home</a>
         <a class="nav-btn ${currentPage === 'value' ? 'active' : ''}" data-page="value">Value</a>
         <a class="nav-btn ${currentPage === 'compare' ? 'active' : ''}" data-page="compare">Compare</a>
         <a class="nav-btn ${currentPage === 'collection' ? 'active' : ''}" data-page="collection">Collection</a>
         <a class="nav-btn ${currentPage === 'settings' ? 'active' : ''}" data-page="settings">Settings</a>
+        <a href="trades.html" style="color: #38bdf8; font-weight: 600; text-decoration: none; padding: 4px 10px; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; background: rgba(56, 189, 248, 0.1);">Trade Tracker ↗</a>
       </nav>
       <div style="font-size: 13px; color: #5EF2B6; font-weight: bold; background: rgba(94,242,182,0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(94,242,182,0.2);">
         ${activeUser}
@@ -638,122 +639,47 @@ function renderCollectionPage(container) {
           <div style="font-size: 20px; font-weight: 800; color: #5EF2B6; margin-top: 4px;">${totalNetWorth.toLocaleString()} coins</div>
         </div>
         <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
-          <div style="font-size: 12px; color: #aaa;">Total Owned Items</div>
-          <div style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 4px;">${totalItemCount} items</div>
-        </div>
-        <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
-          <div style="font-size: 12px; color: #aaa;">Wishlist Count</div>
-          <div style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 4px;">${wl.length} items</div>
+          <div style="font-size: 12px; color: #aaa;">Owned Items Count</div>
+          <div style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 4px;">${totalItemCount}</div>
         </div>
       </div>
 
-      <div style="display: flex; gap: 12px; margin-bottom: 20px; border-bottom: 1px solid #282e38; padding-bottom: 12px;">
-        <button id="zv-tab-inv" style="background: none; border: none; color: ${collectionActiveTab === 'inventory' ? '#5EF2B6' : '#aaa'}; font-weight: 700; font-size: 15px; cursor: pointer;">
-          Inventory (${Object.keys(inv).length})
-        </button>
-        <button id="zv-tab-wl" style="background: none; border: none; color: ${collectionActiveTab === 'wishlist' ? '#5EF2B6' : '#aaa'}; font-weight: 700; font-size: 15px; cursor: pointer;">
-          Wishlist (${wl.length})
-        </button>
+      <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+        <button id="zv-tab-inv" style="padding: 8px 18px; border-radius: 8px; border: 1px solid #30363d; background: ${collectionActiveTab === 'inventory' ? '#5EF2B6' : '#14181f'}; color: ${collectionActiveTab === 'inventory' ? '#111' : '#aaa'}; font-weight: 700; cursor: pointer;">Inventory</button>
+        <button id="zv-tab-wl" style="padding: 8px 18px; border-radius: 8px; border: 1px solid #30363d; background: ${collectionActiveTab === 'wishlist' ? '#5EF2B6' : '#14181f'}; color: ${collectionActiveTab === 'wishlist' ? '#111' : '#aaa'}; font-weight: 700; cursor: pointer;">Wishlist (${wl.length})</button>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
-        ${collectionActiveTab === 'inventory' ? renderCollectionInventoryHtml(inv) : renderCollectionWishlistHtml(wl)}
+      <div id="zv-collection-content">
+        ${collectionActiveTab === 'inventory' ? renderInventoryListHtml(inv) : renderWishlistListHtml(wl)}
       </div>
     </div>
   `;
 
   container.querySelector('#zv-tab-inv').onclick = () => { collectionActiveTab = 'inventory'; renderCollectionPage(container); };
   container.querySelector('#zv-tab-wl').onclick = () => { collectionActiveTab = 'wishlist'; renderCollectionPage(container); };
-
-  container.querySelectorAll('.zv-btn-plus').forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const id = btn.dataset.id;
-      const curInv = getInventory();
-      curInv[id] = (curInv[id] || 0) + 1;
-      saveInventory(curInv);
-      renderCollectionPage(container);
-    };
-  });
-
-  container.querySelectorAll('.zv-btn-minus').forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const id = btn.dataset.id;
-      const curInv = getInventory();
-      if (curInv[id] > 1) curInv[id] -= 1;
-      else delete curInv[id];
-      saveInventory(curInv);
-      renderCollectionPage(container);
-    };
-  });
-
-  container.querySelectorAll('.zv-wishlist-remove-btn').forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const id = btn.dataset.id;
-      let curWl = getWishlist().filter(val => String(val) !== String(id));
-      saveWishlist(curWl);
-      renderCollectionPage(container);
-    };
-  });
-
   bindCardClickEvents(container);
 }
 
-function renderCollectionInventoryHtml(inv) {
+function renderInventoryListHtml(inv) {
   const entries = Object.entries(inv).filter(([_, qty]) => qty > 0);
-  if (entries.length === 0) {
-    return `<div style="grid-column: 1 / -1; text-align: center; color: #888; padding: 40px;">Your collection is empty. Open items in the directory to add them!</div>`;
-  }
+  if (entries.length === 0) return `<div style="color: #888; text-align: center; padding: 40px; background: #14181f; border-radius: 12px;">Your inventory is empty. Click any cosmetic to add it to your portfolio.</div>`;
 
-  return entries.map(([id, qty]) => {
-    const item = cosmeticsData.find(i => String(i.id || i.name) === String(id));
-    if (!item) return '';
-    const imgUrl = item.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
-    const itemId = item.id || item.name;
-
-    return `
-      <div class="item-card" data-id="${itemId}" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; cursor: pointer;">
-        <div style="width: 100%; height: 100px; background: #0d1117; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-          <img src="${imgUrl}" style="max-width: 80%; max-height: 80%; object-fit: contain;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
-        </div>
-        <h3 style="margin: 0 0 4px 0; color: #fff; font-size: 14px; text-align: center;">${item.name}</h3>
-        <div style="font-size: 11px; color: #aaa; margin-bottom: 8px; text-align: center;">${item.category || 'Cosmetic'}</div>
-        <div style="font-size: 13px; font-weight: bold; color: #5EF2B6; margin-bottom: 10px; text-align: center;">${((item.value || 0) * qty).toLocaleString()} coins</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #0d1117; padding: 4px 8px; border-radius: 6px;">
-          <button class="zv-btn-minus" data-id="${itemId}" style="background: #21262d; border: none; color: #fff; width: 26px; height: 26px; border-radius: 4px; cursor: pointer;">-</button>
-          <span style="color: #fff; font-size: 12px; font-weight: bold;">Qty: ${qty}</span>
-          <button class="zv-btn-plus" data-id="${itemId}" style="background: #21262d; border: none; color: #fff; width: 26px; height: 26px; border-radius: 4px; cursor: pointer;">+</button>
-        </div>
-      </div>
-    `;
-  }).join('');
+  return `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
+    ${entries.map(([id, qty]) => {
+      const item = cosmeticsData.find(i => String(i.id || i.name) === String(id));
+      if (!item) return '';
+      return renderItemCardHtml({ ...item, name: `${item.name} (x${qty})` });
+    }).join('')}
+  </div>`;
 }
 
-function renderCollectionWishlistHtml(wl) {
-  if (wl.length === 0) {
-    return `<div style="grid-column: 1 / -1; text-align: center; color: #888; padding: 40px;">Your wishlist is empty.</div>`;
-  }
+function renderWishlistListHtml(wl) {
+  if (wl.length === 0) return `<div style="color: #888; text-align: center; padding: 40px; background: #14181f; border-radius: 12px;">Your wishlist is empty.</div>`;
 
-  return wl.map(id => {
-    const item = cosmeticsData.find(i => String(i.id || i.name) === String(id));
-    if (!item) return '';
-    const imgUrl = item.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
-    const itemId = item.id || item.name;
-
-    return `
-      <div class="item-card" data-id="${itemId}" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; cursor: pointer;">
-        <div style="width: 100%; height: 100px; background: #0d1117; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-          <img src="${imgUrl}" style="max-width: 80%; max-height: 80%; object-fit: contain;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
-        </div>
-        <h3 style="margin: 0 0 4px 0; color: #fff; font-size: 14px; text-align: center;">${item.name}</h3>
-        <div style="font-size: 11px; color: #aaa; margin-bottom: 8px; text-align: center;">${item.category || 'Cosmetic'}</div>
-        <div style="font-size: 13px; font-weight: bold; color: #5EF2B6; margin-bottom: 10px; text-align: center;">${(item.value || 0).toLocaleString()} coins</div>
-        <button class="zv-wishlist-remove-btn" data-id="${itemId}" style="width: 100%; background: rgba(231,76,60,0.15); border: 1px solid #e74c3c; color: #ff6b6b; padding: 6px; border-radius: 6px; font-size: 12px; cursor: pointer;">Remove Wishlist</button>
-      </div>
-    `;
-  }).join('');
+  const items = cosmeticsData.filter(i => wl.includes(String(i.id || i.name)));
+  return `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
+    ${items.map(item => renderItemCardHtml(item)).join('')}
+  </div>`;
 }
 
 /* ==========================================================================
@@ -761,41 +687,16 @@ function renderCollectionWishlistHtml(wl) {
    ========================================================================== */
 
 function renderSettingsPage(container) {
-  const activeUser = localStorage.getItem('zv_active_user') || 'happyboy457';
-
   container.innerHTML = `
     <div style="max-width: 600px; margin: 0 auto; padding: 24px;">
-      <h1 style="color: #fff; margin: 0 0 6px 0;">Settings</h1>
-      <p style="color: #aaa; margin: 0 0 24px 0; font-size: 14px;">Manage session and local storage preferences.</p>
-
-      <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 18px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <div style="color: #fff; font-weight: 600;">Active Account</div>
-          <div style="color: #aaa; font-size: 12px;">Signed in username</div>
-        </div>
-        <span style="color: #5EF2B6; font-weight: 700;">${activeUser}</span>
+      <h1 style="color: #fff; margin: 0 0 16px 0;">Settings</h1>
+      <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 20px;">
+        <button id="zv-logout-btn" style="background: #e74c3c; border: none; color: #fff; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+          Log Out
+        </button>
       </div>
-
-      <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 18px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <div style="color: #fff; font-weight: 600;">Clear Portfolio & Wishlist</div>
-          <div style="color: #aaa; font-size: 12px;">Reset stored inventory data</div>
-        </div>
-        <button id="zv-reset-storage" style="background: rgba(231,76,60,0.2); border: 1px solid #e74c3c; color: #ff6b6b; padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer;">Reset Data</button>
-      </div>
-
-      <button id="zv-logout-btn" style="width: 100%; margin-top: 12px; background: #21262d; border: 1px solid #30363d; color: #fff; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
-        Sign Out
-      </button>
     </div>
   `;
-
-  container.querySelector('#zv-reset-storage').onclick = () => {
-    localStorage.removeItem('zv_user_inventory');
-    localStorage.removeItem('zv_user_wishlist');
-    alert('Portfolio & Wishlist storage cleared!');
-    renderSettingsPage(container);
-  };
 
   container.querySelector('#zv-logout-btn').onclick = () => {
     sessionStorage.removeItem('loggedIn');
@@ -803,5 +704,8 @@ function renderSettingsPage(container) {
   };
 }
 
-/* Initialize app once script is parsed */
-loadData();
+/* ==========================================================================
+   10. AUTO INITIALIZATION
+   ========================================================================== */
+
+document.addEventListener('DOMContentLoaded', loadData);
