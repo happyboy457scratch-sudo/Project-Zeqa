@@ -9,6 +9,8 @@ from playwright.sync_api import sync_playwright
 DATA_FILE = "data/trades.json"
 TARGET_URL = "https://inpvp.net/mineville/trades?mode=pvp"
 
+MONTHS_REGEX = r'\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b'
+
 def load_existing_trades():
     """Load existing trades from data/trades.json."""
     if os.path.exists(DATA_FILE):
@@ -24,9 +26,20 @@ def get_trade_signature(trade):
     trade_string = json.dumps(trade, sort_keys=True)
     return hashlib.md5(trade_string.encode("utf-8")).hexdigest()
 
+def clean_raw_text(text):
+    """Strips out timestamps/dates like 'Jul 31', 'Jul 30', etc."""
+    # Removes patterns like 'Jul 31', 'Jul 30'
+    cleaned = re.sub(MONTHS_REGEX + r'\s+\d{1,2}', '', text, flags=re.IGNORECASE)
+    return cleaned.strip()
+
 def parse_shard_number(text):
-    """Converts shard strings ('16.0k', '500') into numeric float."""
+    """
+    Converts shard strings ('16.0k', '500') into float.
+    Ignores plain integers under 100 to avoid misinterpreting dates/quantities.
+    """
     clean_text = text.strip().lower()
+    
+    # Matches numbers with optional decimals and optional 'k'
     match = re.search(r'\b(\d+(?:\.\d+)?)(k)?\b', clean_text)
     if not match:
         return None
@@ -36,17 +49,22 @@ def parse_shard_number(text):
 
     if has_k:
         return number_part * 1000.0
+    
+    # Ignore standalone small numbers (< 100) without 'k' to filter out dates/player IDs
+    if number_part < 100:
+        return None
+
     return number_part
 
 def format_shard_value(val):
-    """Formats numeric shard values into readable strings (e.g. 2000 -> '2.0k')."""
+    """Formats numeric shard values into readable strings (e.g. 2000 -> '2k')."""
     if val >= 1000:
         k_val = val / 1000.0
         return f"{k_val:.1f}k" if k_val % 1 != 0 else f"{int(k_val)}k"
     return str(int(val))
 
 def extract_item_and_quantity(item_text):
-    """Detects multiplier patterns like 'x8' or '8x' and strips them out."""
+    """Detects multiplier patterns like 'x8' or '8x' and cleans the item title."""
     clean_item = item_text.strip()
     qty_match = re.search(r'(?:^|\s)(?:x\s*(\d+)|(\d+)\s*x)(?:\s+|$)', clean_item, re.IGNORECASE)
     
@@ -59,24 +77,27 @@ def extract_item_and_quantity(item_text):
     return clean_item, quantity
 
 def is_valid_item_name(name):
-    """Ensures the item name exists and isn't a placeholder symbol."""
+    """Ensures item name exists, isn't a symbol, and doesn't start with invalid characters."""
     if not name:
         return False
     clean = name.strip()
-    if not clean or clean in ["—", "-", "--"]:
+    if not clean or clean.startswith("—") or clean.startswith("-") or clean in ["—", "-", "--"]:
         return False
     return True
 
 def parse_single_item_trade(raw_text):
-    """Extracts item, quantity, total shards, and calculates unit shard price."""
+    """Parses a single row text into item, quantity, unit shards, and total shards."""
+    # Filter out multi-item trades
     if any(tag in raw_text for tag in ["+1 more", "+2 more", "+3 more", "+4 more"]):
         return None
 
     if "→" not in raw_text and "->" not in raw_text:
         return None
 
-    separator = "→" if "→" in raw_text else "->"
-    parts = raw_text.split(separator)
+    cleaned_text = clean_raw_text(raw_text)
+
+    separator = "→" if "→" in cleaned_text else "->"
+    parts = cleaned_text.split(separator)
     if len(parts) != 2:
         return None
 
@@ -88,6 +109,7 @@ def parse_single_item_trade(raw_text):
 
     parsed_trade = None
 
+    # Case 1: Shards → Item
     if left_numeric is not None and right_numeric is None:
         item_name, quantity = extract_item_and_quantity(right_side)
         total_shards = left_numeric
@@ -101,6 +123,7 @@ def parse_single_item_trade(raw_text):
             "raw_trade": raw_text
         }
 
+    # Case 2: Item → Shards
     elif right_numeric is not None and left_numeric is None:
         item_name, quantity = extract_item_and_quantity(left_side)
         total_shards = right_numeric
@@ -114,6 +137,7 @@ def parse_single_item_trade(raw_text):
             "raw_trade": raw_text
         }
 
+    # Strict check: drop if item name is invalid
     if not parsed_trade or not is_valid_item_name(parsed_trade.get("item")):
         return None
 
