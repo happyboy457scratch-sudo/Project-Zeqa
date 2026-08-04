@@ -28,13 +28,22 @@ def get_trade_signature(trade):
 def is_shard_value(text):
     """Checks if a string represents shards (e.g., '10.0k', '5.0k', '500', '16.0k')."""
     clean_text = text.strip().lower()
-    # Matches numbers, numbers with decimals, optional 'k' at the end
     return bool(re.match(r'^\d+(\.\d+)?k?$', clean_text))
+
+def is_valid_item_name(name):
+    """Ensures the item name exists, is not empty, and is not a placeholder symbol."""
+    if not name:
+        return False
+    clean = name.strip()
+    if not clean or clean in ["—", "-", "--"]:
+        return False
+    return True
 
 def parse_single_item_trade(raw_text):
     """
     Filters out multi-item trades (+1 more, etc.) and item-for-item swaps.
     Strictly captures: Shards -> Item  OR  Item -> Shards
+    Drops immediately if a valid item name is not present.
     """
     if any(tag in raw_text for tag in ["+1 more", "+2 more", "+3 more", "+4 more"]):
         return None
@@ -53,23 +62,29 @@ def parse_single_item_trade(raw_text):
     left_is_shards = is_shard_value(left_side)
     right_is_shards = is_shard_value(right_side)
 
-    # Case 1: Shards → Item (e.g., "16.0k → Sweet Headband x8")
+    parsed_trade = None
+
+    # Case 1: Shards → Item
     if left_is_shards and not right_is_shards:
-        return {
+        parsed_trade = {
             "item": right_side,
             "shards": left_side,
             "raw_trade": raw_text
         }
 
-    # Case 2: Item → Shards (e.g., "Cat Mask → 5.0k")
+    # Case 2: Item → Shards
     elif right_is_shards and not left_is_shards:
-        return {
+        parsed_trade = {
             "item": left_side,
             "shards": right_side,
             "raw_trade": raw_text
         }
 
-    return None
+    # Drop immediately if there is no trade or the item name is invalid/missing
+    if not parsed_trade or not is_valid_item_name(parsed_trade.get("item")):
+        return None
+
+    return parsed_trade
 
 def fetch_rendered_trades():
     """Launch headless browser, wait for page DOM, and gather rendered trades."""
