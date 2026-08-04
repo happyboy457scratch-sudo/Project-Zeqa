@@ -25,13 +25,54 @@ def get_trade_signature(trade):
     trade_string = json.dumps(trade, sort_keys=True)
     return hashlib.md5(trade_string.encode("utf-8")).hexdigest()
 
-def is_shard_value(text):
-    """Checks if a string represents shards (e.g., '10.0k', '5.0k', '500', '16.0k')."""
+def parse_shard_number(text):
+    """
+    Converts shard strings ('16.0k', '16k', '500', '3.5k') into a numeric float.
+    Returns float (e.g., 16000.0) or None if invalid.
+    """
     clean_text = text.strip().lower()
-    return bool(re.match(r'^\d+(\.\d+)?k?$', clean_text))
+    match = re.search(r'\b(\d+(?:\.\d+)?)(k)?\b', clean_text)
+    if not match:
+        return None
+    
+    number_part = float(match.group(1))
+    has_k = bool(match.group(2))
+
+    if has_k:
+        return number_part * 1000.0
+    return number_part
+
+def format_shard_value(val):
+    """
+    Formats numeric shard values into readable strings (e.g., 2000 -> '2.0k', 500 -> '500').
+    """
+    if val >= 1000:
+        k_val = val / 1000.0
+        # Format clean integer k values like 2.0k or decimal k values like 2.5k
+        return f"{k_val:.1f}k" if k_val % 1 != 0 else f"{int(k_val)}k"
+    return str(int(val))
+
+def extract_item_and_quantity(item_text):
+    """
+    Detects multiplier patterns like 'x8', '8x', 'x 3', or '3x' in the item name.
+    Returns clean item name and integer quantity (defaulting to 1).
+    """
+    clean_item = item_text.strip()
+    
+    # Matches 'x8', 'x 8', '8x', '8 x' at the end or start of item string
+    qty_match = re.search(r'(?:^|\s)(?:x\s*(\d+)|(\d+)\s*x)(?:\s+|$)', clean_item, re.IGNORECASE)
+    
+    quantity = 1
+    if qty_match:
+        qty_str = qty_match.group(1) or qty_match.group(2)
+        quantity = int(qty_str)
+        # Strip the quantity indicator out of the item title
+        clean_item = re.sub(r'(?:^|\s)(?:x\s*\d+|\d+\s*x)(?:\s+|$)', ' ', clean_item, flags=re.IGNORECASE).strip()
+
+    return clean_item, quantity
 
 def is_valid_item_name(name):
-    """Ensures the item name exists, is not empty, and is not a placeholder symbol."""
+    """Ensures the item name exists and isn't a placeholder symbol."""
     if not name:
         return False
     clean = name.strip()
@@ -41,9 +82,8 @@ def is_valid_item_name(name):
 
 def parse_single_item_trade(raw_text):
     """
-    Filters out multi-item trades (+1 more, etc.) and item-for-item swaps.
-    Strictly captures: Shards -> Item  OR  Item -> Shards
-    Drops immediately if a valid item name is not present.
+    Filters multi-item trade listings.
+    Extracts item, quantity, total shards, and calculates unit shard price.
     """
     if any(tag in raw_text for tag in ["+1 more", "+2 more", "+3 more", "+4 more"]):
         return None
@@ -59,28 +99,40 @@ def parse_single_item_trade(raw_text):
     left_side = parts[0].strip()
     right_side = parts[1].strip()
 
-    left_is_shards = is_shard_value(left_side)
-    right_is_shards = is_shard_value(right_side)
+    left_numeric = parse_shard_number(left_side)
+    right_numeric = parse_shard_number(right_side)
 
     parsed_trade = None
 
-    # Case 1: Shards → Item
-    if left_is_shards and not right_is_shards:
+    # Case 1: Shards → Item (e.g., "16.0k → Sweet Headband x8")
+    if left_numeric is not None and right_numeric is None:
+        item_name, quantity = extract_item_and_quantity(right_side)
+        total_shards = left_numeric
+        unit_shards = total_shards / quantity if quantity > 0 else total_shards
+        
         parsed_trade = {
-            "item": right_side,
-            "shards": left_side,
+            "item": item_name,
+            "quantity": quantity,
+            "shards": format_shard_value(unit_shards),
+            "total_shards": format_shard_value(total_shards),
             "raw_trade": raw_text
         }
 
-    # Case 2: Item → Shards
-    elif right_is_shards and not left_is_shards:
+    # Case 2: Item → Shards (e.g., "Sweet Headband x8 → 16.0k")
+    elif right_numeric is not None and left_numeric is None:
+        item_name, quantity = extract_item_and_quantity(left_side)
+        total_shards = right_numeric
+        unit_shards = total_shards / quantity if quantity > 0 else total_shards
+        
         parsed_trade = {
-            "item": left_side,
-            "shards": right_side,
+            "item": item_name,
+            "quantity": quantity,
+            "shards": format_shard_value(unit_shards),
+            "total_shards": format_shard_value(total_shards),
             "raw_trade": raw_text
         }
 
-    # Drop immediately if there is no trade or the item name is invalid/missing
+    # Drop immediately if valid item name is missing
     if not parsed_trade or not is_valid_item_name(parsed_trade.get("item")):
         return None
 
