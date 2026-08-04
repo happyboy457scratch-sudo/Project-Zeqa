@@ -6,7 +6,7 @@
     "total_shards": "5k",
     "raw_trade": "Cat Mask \u2192 5.0k"
   },
- {
+  {
     "item": "Heart",
     "quantity": 1,
     "shards": "3k",
@@ -47,5 +47,82 @@
     "shards": "500",
     "total_shards": "500",
     "raw_trade": "Sword Holster \u2192 500"
+  },
+  {
+    "item": "Chainmail Cat Mask",
+    "quantity": 1,
+    "shards": "5k",
+    "total_shards": "5k",
+    "raw_trade": "Aug 1 Chainmail Cat Mask \u2192 5.0k produckbot"
+  },
+  {
+    "item": "Heart Chainmail",
+    "quantity": 1,
+    "shards": "3k",
+    "total_shards": "3k",
+    "raw_trade": "Aug 1 MASTERHONEY01 3.0k \u2192 Heart Chainmail"
+  },
+  {
+    "item": "Sweet Headband Chainmail",
+    "quantity": 8,
+    "shards": "2k",
+    "total_shards": "16k",
+    "raw_trade": "Aug 1 lEgEnD AdaL 16.0k \u2192 Sweet Headband x8 Chainmail"
+  },
+  {
+    "item": "Chainmail Sweet Headband",
+    "quantity": 8,
+    "shards": "2k",
+    "total_shards": "16k",
+    "raw_trade": "Jul 31 Chainmail Sweet Headband x8 \u2192 16.0k lEgEnD AdaL"
+  },
+  {
+    "item": "Chainmail 7 #",
+    "quantity": 3,
+    "shards": "333",
+    "total_shards": "1k",
+    "raw_trade": "Jul 31 Chainmail 7 # x3 \u2192 1.0k lEgEnD AdaL"
+  },
+  {
+    "item": "7 #",
+    "quantity": 3,
+    "shards": "333",
+    "total_shards": "1k",
+    "raw_trade": "7 # x3 \u2192 1.0k"
+  },
+  {
+    "item": "Chainmail Sweet Headband",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Jul 30 Chainmail Sweet Headband \u2192 2.0k lEgEnD AdaL"
+  },
+  {
+    "item": "Chainmail Valentines Headband",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "Jul 30 Chainmail Valentines Headband \u2192 10.0k FBI3730"
+  },
+  {
+    "item": "Chainmail Sword Holster",
+    "quantity": 1,
+    "shards": "500",
+    "total_shards": "500",
+    "raw_trade": "Jul 30 Chainmail Sword Holster \u2192 500 threesilver0125"
+  },
+  {
+    "item": "Bonehead Costume Chainmail",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "Jul 29 YORealZynx 10.0k \u2192 Bonehead Costume Chainmail"
+  },
+  {
+    "item": "Bonehead Costume",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "10.0k \u2192 Bonehead Costume"
   }
 ]
