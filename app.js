@@ -33,6 +33,26 @@ function cleanName(str) {
   return str ? str.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
 }
 
+// Helper to convert shorthand values like '10k', '1.5k', '2m' into numbers
+function parseShards(val) {
+  if (typeof val === 'number') return val;
+  if (!val) return 0;
+
+  let str = String(val).trim().toLowerCase().replace(/,/g, '');
+
+  let multiplier = 1;
+  if (str.endsWith('k')) {
+    multiplier = 1000;
+    str = str.slice(0, -1);
+  } else if (str.endsWith('m')) {
+    multiplier = 1000000;
+    str = str.slice(0, -1);
+  }
+
+  const num = parseFloat(str);
+  return isNaN(num) ? 0 : Math.round(num * multiplier);
+}
+
 async function loadData() {
   try {
     const [cosmeticsRes, tradesRes] = await Promise.all([
@@ -84,7 +104,7 @@ function processTradeStats() {
     const itemKey = cleanName(matchedCosmetic.name);
     if (!groupedTrades[itemKey]) groupedTrades[itemKey] = [];
 
-    const shardsPaid = parseInt(trade.shards, 10) || 0;
+    const shardsPaid = parseShards(trade.shards);
     const qty = parseInt(trade.quantity, 10) || 1;
     const unitPrice = qty > 0 ? Math.round(shardsPaid / qty) : shardsPaid;
     const tradeTimestamp = trade.timestamp ? new Date(trade.timestamp).getTime() : Date.now();
@@ -124,7 +144,7 @@ function getItemCalculatedValue(item) {
   const key = cleanName(item.name);
   const stats = tradeStatsMap[key];
   if (stats && stats.avgValue > 0) return stats.avgValue;
-  return item.value || item.shards || 0;
+  return parseShards(item.value || item.shards);
 }
 
 function getInventory() {
