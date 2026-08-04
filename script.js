@@ -1,28 +1,47 @@
 /**
- * ZeqaValues - Live Trade Tracker & Shard Value Integration
+ * ZeqaValues - Live Trade Tracker & Shard Value Integration Bridge
  */
 
-let cosmeticsMap = {};
+let cosmeticsList = [];
 
-// Helper: Normalize item names for clean lookup matching
-function normalizeName(str) {
+// Clean up strings for lower-case matching
+function cleanString(str) {
   return str ? str.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
 }
 
-// 1. Fetch Shard Database
+// 1. Fetch Cosmetics/Value Database
 async function loadCosmeticsData() {
   try {
-    const res = await fetch('./data/cosmetics.json');
+    // Relative path safe for sub-directory deployments
+    const res = await fetch('data/cosmetics.json?t=' + Date.now());
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    
-    data.forEach(item => {
-      const key = normalizeName(item.name);
-      cosmeticsMap[key] = item;
-    });
+    cosmeticsList = await res.json();
+    console.log(`Loaded ${cosmeticsList.length} cosmetic reference values.`);
   } catch (err) {
     console.warn('Could not fetch cosmetics.json for shard matching:', err);
   }
+}
+
+// Helper: Match traded item string to cosmetics database using fuzzy search
+function findMatchingCosmetic(tradeItemName) {
+  if (!tradeItemName || cosmeticsList.length === 0) return null;
+
+  const cleanedTradeName = cleanString(tradeItemName);
+
+  // 1. Try exact normalized match first
+  let match = cosmeticsList.find(c => cleanString(c.name) === cleanedTradeName);
+  if (match) return match;
+
+  // 2. Try substring matching (e.g. if scraped title contains "Sweet Headband")
+  // Sort by name length descending so longer/more specific names match first
+  const sortedCosmetics = [...cosmeticsList].sort((a, b) => b.name.length - a.name.length);
+  
+  match = sortedCosmetics.find(c => {
+    const cleanedCosmeticName = cleanString(c.name);
+    return cleanedCosmeticName.length > 2 && cleanedTradeName.includes(cleanedCosmeticName);
+  });
+
+  return match || null;
 }
 
 // 2. Load Trades and Calculate Shard Difference
@@ -31,10 +50,11 @@ async function loadTradeData() {
   const statusLabel = document.getElementById('last-updated');
 
   try {
-    const response = await fetch('./data/trades.json?t=' + Date.now());
+    const response = await fetch('data/trades.json?t=' + Date.now());
     if (!response.ok) throw new Error(`HTTP status: ${response.status}`);
 
     const rawTrades = await response.json();
+    if (!container) return;
     container.innerHTML = '';
 
     const trades = Array.isArray(rawTrades) 
@@ -58,8 +78,8 @@ async function loadTradeData() {
       const qtyBadge = qty > 1 ? ` (x${qty})` : '';
 
       // Match item with cosmetic shard value database
-      const matchedItem = cosmeticsMap[normalizeName(trade.item)];
-      const shardValPerUnit = matchedItem ? (matchedItem.value || 0) : 0;
+      const matchedItem = findMatchingCosmetic(trade.item);
+      const shardValPerUnit = matchedItem ? (matchedItem.value || matchedItem.shards || 0) : 0;
       const totalEstimatedShards = shardValPerUnit * qty;
       const shardsPaid = parseInt(trade.shards, 10) || 0;
 
