@@ -12,10 +12,9 @@ async function loadTradeData() {
 
     const rawTrades = await response.json();
 
-    // Clear loading state
     container.innerHTML = '';
 
-    // Filter out any entries missing item names or showing placeholders like '—'
+    // Filter out entries without valid item names
     const trades = Array.isArray(rawTrades) 
       ? rawTrades.filter(t => t.item && t.item.trim() !== '' && t.item.trim() !== '—' && t.item.trim() !== '-')
       : [];
@@ -26,18 +25,20 @@ async function loadTradeData() {
       return;
     }
 
-    // Build grid container
     const grid = document.createElement('div');
     grid.className = 'grid';
 
-    // Render cards
     trades.forEach(trade => {
       const card = document.createElement('div');
       card.className = 'trade-card';
 
+      // Parse unit shard value or fallback to total division
+      const shardDisplay = computeUnitShards(trade);
+      const qtyBadge = trade.quantity && trade.quantity > 1 ? ` (x${trade.quantity})` : '';
+
       card.innerHTML = `
-        <div class="item-title">${escapeHtml(trade.item)}</div>
-        <div class="shard-amount">Shards: <strong>${escapeHtml(trade.shards || 'N/A')}</strong></div>
+        <div class="item-title">${escapeHtml(trade.item)}${escapeHtml(qtyBadge)}</div>
+        <div class="shard-amount">Shards: <strong>${escapeHtml(shardDisplay)}</strong></div>
         <div class="raw-text">${escapeHtml(trade.raw_trade || '')}</div>
       `;
 
@@ -57,6 +58,30 @@ async function loadTradeData() {
   }
 }
 
+// Client-side fallback to calculate per-unit shard price for existing entries
+function computeUnitShards(trade) {
+  if (trade.shards && trade.shards !== 'N/A') {
+    return trade.shards;
+  }
+
+  const raw = trade.raw_trade || '';
+  const matchShard = raw.match(/\b(\d+(?:\.\d+)?)(k)?\b/i);
+  if (!matchShard) return 'N/A';
+
+  let totalVal = parseFloat(matchShard[1]);
+  if (matchShard[2]) totalVal *= 1000;
+
+  const matchQty = raw.match(/(?:x\s*(\d+)|(\d+)\s*x)/i);
+  const qty = matchQty ? parseInt(matchQty[1] || matchQty[2], 10) : 1;
+
+  const unitVal = totalVal / qty;
+  if (unitVal >= 1000) {
+    const kVal = unitVal / 1000;
+    return kVal % 1 === 0 ? `${kVal}k` : `${kVal.toFixed(1)}k`;
+  }
+  return String(Math.round(unitVal));
+}
+
 // Sanitize strings
 function escapeHtml(str) {
   return String(str)
@@ -67,6 +92,6 @@ function escapeHtml(str) {
     .replace(/'/g, "&#039;");
 }
 
-// Auto load and interval refresh
+// Auto load on page ready & refresh every 30s
 document.addEventListener('DOMContentLoaded', loadTradeData);
 setInterval(loadTradeData, 30000);
