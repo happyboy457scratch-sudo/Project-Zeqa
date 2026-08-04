@@ -1,10 +1,10 @@
 /**
- * ZeqaValues - Live Trade Tracker & Shard Value Integration Bridge
+ * ZeqaValues - Live Trade Tracker & Smart Shard Integration
  */
 
 let cosmeticsList = [];
 
-// Clean up strings for lower-case matching
+// Helper: Normalize strings for fuzzy comparison
 function cleanString(str) {
   return str ? str.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
 }
@@ -12,7 +12,6 @@ function cleanString(str) {
 // 1. Fetch Cosmetics/Value Database
 async function loadCosmeticsData() {
   try {
-    // Relative path safe for sub-directory deployments
     const res = await fetch('data/cosmetics.json?t=' + Date.now());
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     cosmeticsList = await res.json();
@@ -22,29 +21,35 @@ async function loadCosmeticsData() {
   }
 }
 
-// Helper: Match traded item string to cosmetics database using fuzzy search
-function findMatchingCosmetic(tradeItemName) {
-  if (!tradeItemName || cosmeticsList.length === 0) return null;
+/**
+ * SMART MATCHING & CLEANUP
+ * If scraped text is "Chainmail Sweet Headband (x8)", it strips out "Chainmail",
+ * numbers, and extra text, returning just the matched cosmetic object and its clean name.
+ */
+function findBestCosmeticMatch(scrapedTitle) {
+  if (!scrapedTitle || cosmeticsList.length === 0) return null;
 
-  const cleanedTradeName = cleanString(tradeItemName);
+  const cleanedTitle = cleanString(scrapedTitle);
 
-  // 1. Try exact normalized match first
-  let match = cosmeticsList.find(c => cleanString(c.name) === cleanedTradeName);
-  if (match) return match;
-
-  // 2. Try substring matching (e.g. if scraped title contains "Sweet Headband")
-  // Sort by name length descending so longer/more specific names match first
+  // Sort cosmetics by longest name first so "Sweet Headband" takes priority over just "Headband"
   const sortedCosmetics = [...cosmeticsList].sort((a, b) => b.name.length - a.name.length);
-  
-  match = sortedCosmetics.find(c => {
-    const cleanedCosmeticName = cleanString(c.name);
-    return cleanedCosmeticName.length > 2 && cleanedTradeName.includes(cleanedCosmeticName);
-  });
 
-  return match || null;
+  for (const item of sortedCosmetics) {
+    const cleanedItemName = cleanString(item.name);
+    
+    // Check if the scraped glitch title contains this valid cosmetic
+    if (cleanedItemName.length > 2 && cleanedTitle.includes(cleanedItemName)) {
+      return {
+        matchedItem: item,
+        cleanName: item.name // Returns the exact clean name from cosmetics.json
+      };
+    }
+  }
+
+  return null;
 }
 
-// 2. Load Trades and Calculate Shard Difference
+// 2. Load Trades and Render Cards
 async function loadTradeData() {
   const container = document.getElementById('trades-container');
   const statusLabel = document.getElementById('last-updated');
@@ -77,8 +82,13 @@ async function loadTradeData() {
       const qty = trade.quantity || 1;
       const qtyBadge = qty > 1 ? ` (x${qty})` : '';
 
-      // Match item with cosmetic shard value database
-      const matchedItem = findMatchingCosmetic(trade.item);
+      // Run smart match cleanup
+      const matchResult = findBestCosmeticMatch(trade.item);
+      
+      // If glitched (e.g., "Chainmail Sweet Headband"), use the cleaned name ("Sweet Headband")
+      const displayItemName = matchResult ? matchResult.cleanName : trade.item;
+      const matchedItem = matchResult ? matchResult.matchedItem : null;
+
       const shardValPerUnit = matchedItem ? (matchedItem.value || matchedItem.shards || 0) : 0;
       const totalEstimatedShards = shardValPerUnit * qty;
       const shardsPaid = parseInt(trade.shards, 10) || 0;
@@ -106,7 +116,7 @@ async function loadTradeData() {
 
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
-          <div class="item-title" style="margin: 0;">${escapeHtml(trade.item)}${escapeHtml(qtyBadge)}</div>
+          <div class="item-title" style="margin: 0;">${escapeHtml(displayItemName)}${escapeHtml(qtyBadge)}</div>
           ${evalBadgeHtml}
         </div>
         ${valDisplay}
