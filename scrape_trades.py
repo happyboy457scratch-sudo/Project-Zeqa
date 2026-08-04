@@ -26,10 +26,7 @@ def get_trade_signature(trade):
     return hashlib.md5(trade_string.encode("utf-8")).hexdigest()
 
 def parse_shard_number(text):
-    """
-    Converts shard strings ('16.0k', '16k', '500', '3.5k') into a numeric float.
-    Returns float (e.g., 16000.0) or None if invalid.
-    """
+    """Converts shard strings ('16.0k', '500') into numeric float."""
     clean_text = text.strip().lower()
     match = re.search(r'\b(\d+(?:\.\d+)?)(k)?\b', clean_text)
     if not match:
@@ -43,30 +40,21 @@ def parse_shard_number(text):
     return number_part
 
 def format_shard_value(val):
-    """
-    Formats numeric shard values into readable strings (e.g., 2000 -> '2.0k', 500 -> '500').
-    """
+    """Formats numeric shard values into readable strings (e.g. 2000 -> '2.0k')."""
     if val >= 1000:
         k_val = val / 1000.0
-        # Format clean integer k values like 2.0k or decimal k values like 2.5k
         return f"{k_val:.1f}k" if k_val % 1 != 0 else f"{int(k_val)}k"
     return str(int(val))
 
 def extract_item_and_quantity(item_text):
-    """
-    Detects multiplier patterns like 'x8', '8x', 'x 3', or '3x' in the item name.
-    Returns clean item name and integer quantity (defaulting to 1).
-    """
+    """Detects multiplier patterns like 'x8' or '8x' and strips them out."""
     clean_item = item_text.strip()
-    
-    # Matches 'x8', 'x 8', '8x', '8 x' at the end or start of item string
     qty_match = re.search(r'(?:^|\s)(?:x\s*(\d+)|(\d+)\s*x)(?:\s+|$)', clean_item, re.IGNORECASE)
     
     quantity = 1
     if qty_match:
         qty_str = qty_match.group(1) or qty_match.group(2)
         quantity = int(qty_str)
-        # Strip the quantity indicator out of the item title
         clean_item = re.sub(r'(?:^|\s)(?:x\s*\d+|\d+\s*x)(?:\s+|$)', ' ', clean_item, flags=re.IGNORECASE).strip()
 
     return clean_item, quantity
@@ -81,10 +69,7 @@ def is_valid_item_name(name):
     return True
 
 def parse_single_item_trade(raw_text):
-    """
-    Filters multi-item trade listings.
-    Extracts item, quantity, total shards, and calculates unit shard price.
-    """
+    """Extracts item, quantity, total shards, and calculates unit shard price."""
     if any(tag in raw_text for tag in ["+1 more", "+2 more", "+3 more", "+4 more"]):
         return None
 
@@ -104,7 +89,6 @@ def parse_single_item_trade(raw_text):
 
     parsed_trade = None
 
-    # Case 1: Shards → Item (e.g., "16.0k → Sweet Headband x8")
     if left_numeric is not None and right_numeric is None:
         item_name, quantity = extract_item_and_quantity(right_side)
         total_shards = left_numeric
@@ -118,7 +102,6 @@ def parse_single_item_trade(raw_text):
             "raw_trade": raw_text
         }
 
-    # Case 2: Item → Shards (e.g., "Sweet Headband x8 → 16.0k")
     elif right_numeric is not None and left_numeric is None:
         item_name, quantity = extract_item_and_quantity(left_side)
         total_shards = right_numeric
@@ -132,14 +115,13 @@ def parse_single_item_trade(raw_text):
             "raw_trade": raw_text
         }
 
-    # Drop immediately if valid item name is missing
     if not parsed_trade or not is_valid_item_name(parsed_trade.get("item")):
         return None
 
     return parsed_trade
 
 def fetch_rendered_trades():
-    """Launch headless browser, wait for page DOM, and gather rendered trades."""
+    """Launch headless browser, wait for DOM, and gather trades."""
     trades = []
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -171,17 +153,17 @@ def fetch_rendered_trades():
     return trades
 
 def push_changes_to_github():
-    """Commit data/trades.json and push directly to GitHub using Replit secrets."""
+    """Commit data/trades.json and push using GitHub Action runner token."""
     try:
         github_token = os.getenv("GITHUB_TOKEN")
-        github_user = os.getenv("GITHUB_USERNAME")
-        github_repo = os.getenv("GITHUB_REPO")
+        github_user = os.getenv("GITHUB_USERNAME", "happyboy457scratch-sudo")
+        github_repo = os.getenv("GITHUB_REPO", "Project-Zeqa")
 
-        if not all([github_token, github_user, github_repo]):
-            print("Missing GitHub secrets in Replit environment. Skipping git push.")
+        if not github_token:
+            print("Missing GITHUB_TOKEN environment variable. Skipping git push.")
             return
 
-        remote_url = f"https://{github_user}:{github_token}@github.com/{github_user}/{github_repo}.git"
+        remote_url = f"https://x-access-token:{github_token}@github.com/{github_user}/{github_repo}.git"
 
         repo = git.Repo(os.getcwd())
         repo.git.add(DATA_FILE)
