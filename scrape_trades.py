@@ -5,7 +5,6 @@ import re
 from datetime import datetime
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
-import git
 
 DATA_FILE = "data/trades.json"
 TARGET_URL = "https://inpvp.net/mineville/trades?mode=pvp"
@@ -152,35 +151,6 @@ def fetch_rendered_trades():
 
     return trades
 
-def push_changes_to_github():
-    """Commit data/trades.json and push using GitHub Action runner token."""
-    try:
-        github_token = os.getenv("GITHUB_TOKEN")
-        github_user = os.getenv("GITHUB_USERNAME", "happyboy457scratch-sudo")
-        github_repo = os.getenv("GITHUB_REPO", "Project-Zeqa")
-
-        if not github_token:
-            print("Missing GITHUB_TOKEN environment variable. Skipping git push.")
-            return
-
-        remote_url = f"https://x-access-token:{github_token}@github.com/{github_user}/{github_repo}.git"
-
-        repo = git.Repo(os.getcwd())
-        repo.git.add(DATA_FILE)
-        
-        if repo.is_dirty(path=DATA_FILE):
-            commit_msg = f"Auto-update: Latest trade data ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')})"
-            repo.index.commit(commit_msg)
-            
-            origin = repo.remote(name='origin')
-            origin.set_url(remote_url)
-            origin.push()
-            print("Successfully pushed new trade data to GitHub!")
-        else:
-            print("No new changes detected in trades file.")
-    except Exception as e:
-        print(f"Git push notice: {e}")
-
 def run_scraper():
     """Run a single scrape execution."""
     existing_trades = load_existing_trades()
@@ -201,7 +171,6 @@ def run_scraper():
         with open(DATA_FILE, "w", encoding="utf-8") as f:
             json.dump(existing_trades, f, indent=2)
         print(f"Success: Added {added_count} new trade(s). Total trades logged: {len(existing_trades)}")
-        push_changes_to_github()
     else:
         print("No new single-item trades found during this cycle.")
 
