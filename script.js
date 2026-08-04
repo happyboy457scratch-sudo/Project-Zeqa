@@ -3,35 +3,40 @@ async function loadTradeData() {
   const statusLabel = document.getElementById('last-updated');
 
   try {
-    // Fetch trades.json with timestamp to prevent caching
+    // Fetch trades.json with timestamp to prevent browser caching
     const response = await fetch('./data/trades.json?t=' + Date.now());
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const trades = await response.json();
+    const rawTrades = await response.json();
 
     // Clear loading state
     container.innerHTML = '';
 
-    if (!Array.isArray(trades) || trades.length === 0) {
+    // Filter out any entries missing item names or showing placeholders like '—'
+    const trades = Array.isArray(rawTrades) 
+      ? rawTrades.filter(t => t.item && t.item.trim() !== '' && t.item.trim() !== '—' && t.item.trim() !== '-')
+      : [];
+
+    if (trades.length === 0) {
       container.innerHTML = '<div class="empty-state">No single-item trades recorded yet.</div>';
-      if (statusLabel) statusLabel.textContent = 'Updated (No records found)';
+      if (statusLabel) statusLabel.textContent = 'Updated (No valid records found)';
       return;
     }
 
-    // Build container grid
+    // Build grid container
     const grid = document.createElement('div');
     grid.className = 'grid';
 
-    // Render each trade card
+    // Render cards
     trades.forEach(trade => {
       const card = document.createElement('div');
       card.className = 'trade-card';
 
       card.innerHTML = `
-        <div class="item-title">${escapeHtml(trade.item || 'Unknown Item')}</div>
+        <div class="item-title">${escapeHtml(trade.item)}</div>
         <div class="shard-amount">Shards: <strong>${escapeHtml(trade.shards || 'N/A')}</strong></div>
         <div class="raw-text">${escapeHtml(trade.raw_trade || '')}</div>
       `;
@@ -52,7 +57,7 @@ async function loadTradeData() {
   }
 }
 
-// Sanitize output strings
+// Sanitize strings
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, "&amp;")
@@ -62,6 +67,6 @@ function escapeHtml(str) {
     .replace(/'/g, "&#039;");
 }
 
-// Automatically run on load and repeat every 30 seconds
+// Auto load and interval refresh
 document.addEventListener('DOMContentLoaded', loadTradeData);
 setInterval(loadTradeData, 30000);
