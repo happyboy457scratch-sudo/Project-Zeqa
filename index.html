@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mineville Live Trade Tracker</title>
+  <title>Project Zeqa - Home</title>
   <style>
     * {
       box-sizing: border-box;
@@ -17,7 +17,6 @@
       color: #f8fafc;
     }
 
-    /* Navbar */
     .navbar {
       background-color: #1e293b;
       border-bottom: 1px solid #334155;
@@ -63,65 +62,19 @@
     .container {
       max-width: 800px;
       margin: 0 auto;
-      padding: 24px 20px;
-    }
-
-    header {
-      margin-bottom: 24px;
-      border-bottom: 1px solid #1e293b;
-      padding-bottom: 16px;
+      padding: 48px 20px;
+      text-align: center;
     }
 
     h1 {
-      font-size: 1.8rem;
-      color: #38bdf8;
-      margin-bottom: 6px;
-    }
-
-    .status-bar {
-      font-size: 0.9rem;
-      color: #94a3b8;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
-    }
-
-    .trade-card {
-      background-color: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    .item-title {
-      font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 2.2rem;
       color: #facc15;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
-    .shard-amount {
-      font-size: 1rem;
-      color: #38bdf8;
-      margin-bottom: 8px;
-    }
-
-    .raw-text {
-      font-size: 0.75rem;
-      color: #64748b;
-      word-break: break-all;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px;
+    p {
       color: #94a3b8;
-      background-color: #1e293b;
-      border-radius: 8px;
+      font-size: 1.1rem;
     }
   </style>
 </head>
@@ -130,24 +83,15 @@
   <nav class="navbar">
     <a href="index.html" class="nav-logo">Project Zeqa</a>
     <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="trades.html" class="active">Live Trade Tracker</a>
+      <a href="index.html" class="active">Home</a>
+      <a href="trades.html">Live Trade Tracker</a>
     </div>
   </nav>
 
   <div class="container">
-    <header>
-      <h1>Mineville Trade Tracker</h1>
-      <div class="status-bar">
-        Status: <span id="last-updated">Initializing...</span>
-      </div>
-    </header>
-
-    <main id="trades-container">
-      <div class="empty-state">Loading trade data...</div>
-    </main>
+    <h1>Welcome to Project Zeqa</h1>
+    <p>Use the navigation bar above to view the Live Trade Tracker.</p>
   </div>
 
-  <script src="script.js"></script>
 </body>
 </html>
