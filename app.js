@@ -53,6 +53,16 @@ function parseShards(val) {
   return isNaN(num) ? 0 : Math.round(num * multiplier);
 }
 
+// Helper to format values nicely for display (e.g., 5000 -> 5k, 10000 -> 10k)
+function formatShardsDisplay(val) {
+  const num = parseShards(val);
+  if (num >= 1000) {
+    const kVal = num / 1000;
+    return Number.isInteger(kVal) ? `${kVal}k` : `${kVal.toFixed(1)}k`;
+  }
+  return num.toLocaleString();
+}
+
 async function loadData() {
   try {
     const [cosmeticsRes, tradesRes] = await Promise.all([
@@ -186,7 +196,7 @@ function renderItemCardHtml(item) {
   const imgUrl = item.imageUrl || item.image || 'https://via.placeholder.com/150?text=No+Image';
   const badgeBg = getRarityBadgeColor(item.rarity);
   const calculatedVal = getItemCalculatedValue(item);
-  const valDisplay = calculatedVal > 0 ? `${calculatedVal.toLocaleString()} shards` : 'Unlisted';
+  const valDisplay = calculatedVal > 0 ? `${formatShardsDisplay(calculatedVal)} shards` : 'Unlisted';
 
   return `
     <div class="item-card" data-id="${item.id || item.name}" style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s;">
@@ -226,7 +236,7 @@ function openItemModal(item) {
   const currentQty = inv[itemId] || 0;
 
   const calculatedVal = getItemCalculatedValue(item);
-  const valDisplay = calculatedVal > 0 ? `${calculatedVal.toLocaleString()} shards` : 'Unlisted';
+  const valDisplay = calculatedVal > 0 ? `${formatShardsDisplay(calculatedVal)} shards` : 'Unlisted';
 
   // Recent Trades HTML Generator
   const key = cleanName(item.name);
@@ -245,7 +255,7 @@ function openItemModal(item) {
         <div style="display: flex; flex-direction: column; gap: 6px;">
           ${visibleTrades.map(t => `
             <div style="background: #0d1117; padding: 6px 10px; border-radius: 6px; font-size: 12px; color: #c9d1d9; border: 1px solid #21262d;">
-              <strong style="color: #5EF2B6;">${t.shardsPaid.toLocaleString()} Shards</strong> — <span style="color: #8b949e;">${escapeHtml(t.rawText)}</span>
+              <strong style="color: #5EF2B6;">${formatShardsDisplay(t.shardsPaid)} Shards</strong> — <span style="color: #8b949e;">${escapeHtml(t.rawText)}</span>
             </div>
           `).join('')}
         </div>
@@ -457,7 +467,7 @@ function renderHomePage(container) {
         </div>
         <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
           <div style="font-size: 12px; color: #aaa;">Market Capitalization</div>
-          <div style="font-size: 18px; font-weight: 700; color: #5EF2B6; margin-top: 4px;">${totalValue.toLocaleString()} shards</div>
+          <div style="font-size: 18px; font-weight: 700; color: #5EF2B6; margin-top: 4px;">${formatShardsDisplay(totalValue)} shards</div>
         </div>
       </div>
 
@@ -621,7 +631,7 @@ function renderComparePage(container) {
       <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: center;">
         <span style="background: ${badgeBg}; color: #fff; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 14px; display: inline-block;">${outcomeLabel}</span>
         <div style="color: #aaa; font-size: 13px; margin-top: 8px;">
-          Difference: <strong style="color: #5EF2B6;">${Math.abs(diff).toLocaleString()} shards</strong> (${pctDiff}% variation)
+          Difference: <strong style="color: #5EF2B6;">${formatShardsDisplay(Math.abs(diff))} shards</strong> (${pctDiff}% variation)
         </div>
       </div>
 
@@ -635,7 +645,7 @@ function renderComparePage(container) {
           <button id="zv-add-left" style="width: 100%; margin-top: 12px; background: #0d1117; border: 1px dashed #30363d; color: #5EF2B6; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;">+ Add Cosmetic</button>
           <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #282e38; display: flex; justify-content: space-between; font-weight: 700;">
             <span style="color: #aaa;">Total Value:</span>
-            <span style="color: #5EF2B6;">${leftTotal.toLocaleString()} shards</span>
+            <span style="color: #5EF2B6;">${formatShardsDisplay(leftTotal)} shards</span>
           </div>
         </div>
 
@@ -648,7 +658,7 @@ function renderComparePage(container) {
           <button id="zv-add-right" style="width: 100%; margin-top: 12px; background: #0d1117; border: 1px dashed #30363d; color: #5EF2B6; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;">+ Add Cosmetic</button>
           <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #282e38; display: flex; justify-content: space-between; font-weight: 700;">
             <span style="color: #aaa;">Total Value:</span>
-            <span style="color: #5EF2B6;">${rightTotal.toLocaleString()} shards</span>
+            <span style="color: #5EF2B6;">${formatShardsDisplay(rightTotal)} shards</span>
           </div>
         </div>
       </div>
@@ -715,7 +725,7 @@ function renderCompareSlotsHtml(items, side) {
           <img src="${imgUrl}" style="width: 32px; height: 32px; object-fit: contain; border-radius: 4px; background: #161b22;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
           <div>
             <div style="color: #fff; font-weight: 600; font-size: 13px;">${escapeHtml(item.name)}</div>
-            <div style="color: #5EF2B6; font-size: 11px;">${val.toLocaleString()} shards</div>
+            <div style="color: #5EF2B6; font-size: 11px;">${formatShardsDisplay(val)} shards</div>
           </div>
         </div>
         <button class="zv-slot-remove-btn" data-side="${side}" data-index="${index}" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px;">✕</button>
@@ -740,7 +750,7 @@ function renderPickerItemsHtml(query) {
           <img src="${imgUrl}" style="width: 28px; height: 28px; object-fit: contain; background: #0d1117; border-radius: 4px;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
           <span style="color: #fff; font-weight: 600; font-size: 13px;">${escapeHtml(i.name)}</span>
         </div>
-        <span style="color: #5EF2B6; font-weight: 700; font-size: 12px;">${val.toLocaleString()} shards</span>
+        <span style="color: #5EF2B6; font-weight: 700; font-size: 12px;">${formatShardsDisplay(val)} shards</span>
       </div>
     `;
   }).join('');
@@ -791,7 +801,7 @@ function renderCollectionPage(container) {
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
         <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
           <div style="font-size: 12px; color: #aaa;">Total Inventory Value</div>
-          <div style="font-size: 22px; font-weight: 800; color: #5EF2B6; margin-top: 4px;">${totalNetWorth.toLocaleString()} shards</div>
+          <div style="font-size: 22px; font-weight: 800; color: #5EF2B6; margin-top: 4px;">${formatShardsDisplay(totalNetWorth)} shards</div>
         </div>
         <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
           <div style="font-size: 12px; color: #aaa;">Items Collected</div>
