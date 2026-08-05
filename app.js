@@ -114,14 +114,15 @@ function processTradeStats() {
     const itemKey = cleanName(matchedCosmetic.name);
     if (!groupedTrades[itemKey]) groupedTrades[itemKey] = [];
 
-    const shardsPaid = parseShards(trade.shards);
+    // FIXED: trade.shards is ALREADY pre-calculated as the per-item price in trades.json
+    const unitPrice = parseShards(trade.shards);
     const qty = parseInt(trade.quantity, 10) || 1;
-    const unitPrice = qty > 0 ? Math.round(shardsPaid / qty) : shardsPaid;
+    const totalShardsPaid = parseShards(trade.total_shards) || (unitPrice * qty);
     const tradeTimestamp = trade.timestamp ? new Date(trade.timestamp).getTime() : Date.now();
 
     groupedTrades[itemKey].push({
       rawText: trade.raw_trade || `${trade.item} -> ${trade.shards}`,
-      shardsPaid: shardsPaid,
+      shardsPaid: unitPrice,
       unitPrice: unitPrice,
       qty: qty,
       timestamp: tradeTimestamp
