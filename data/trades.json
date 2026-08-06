@@ -166,5 +166,19 @@
     "shards": "10k",
     "total_shards": "10k",
     "raw_trade": "Jul 29 YORealZynx 10.0k \u2192 Bonehead Costume Chainmail"
+  },
+  {
+    "item": "Chainmail Pride - Intersex",
+    "quantity": 1,
+    "shards": "350",
+    "total_shards": "350",
+    "raw_trade": "Aug 6 Chainmail Pride - Intersex \u2192 350 MASTERHONEY01"
+  },
+  {
+    "item": "Pride - Intersex",
+    "quantity": 1,
+    "shards": "350",
+    "total_shards": "350",
+    "raw_trade": "Pride - Intersex \u2192 350"
   }
 ]
