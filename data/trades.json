@@ -180,5 +180,19 @@
     "shards": "350",
     "total_shards": "350",
     "raw_trade": "Pride - Intersex \u2192 350"
+  },
+  {
+    "item": "Heart +9 more Chainmail",
+    "quantity": 1,
+    "shards": "51.8k",
+    "total_shards": "51.8k",
+    "raw_trade": "Aug 6 trzhxw 51.8k \u2192 Heart +9 more Chainmail"
+  },
+  {
+    "item": "Heart +9 more",
+    "quantity": 1,
+    "shards": "51.8k",
+    "total_shards": "51.8k",
+    "raw_trade": "51.8k \u2192 Heart +9 more"
   }
 ]
