@@ -194,5 +194,19 @@
     "shards": "51.8k",
     "total_shards": "51.8k",
     "raw_trade": "51.8k \u2192 Heart +9 more"
+  },
+  {
+    "item": "Rabbit Ears DiamondFlash426",
+    "quantity": 1,
+    "shards": "100k",
+    "total_shards": "100k",
+    "raw_trade": "Aug 7 Chainmail 100.0k \u2192 Rabbit Ears DiamondFlash426"
+  },
+  {
+    "item": "Rabbit Ears",
+    "quantity": 1,
+    "shards": "100k",
+    "total_shards": "100k",
+    "raw_trade": "100.0k \u2192 Rabbit Ears"
   }
 ]
