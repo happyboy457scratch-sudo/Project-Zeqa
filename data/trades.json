@@ -208,5 +208,19 @@
     "shards": "100k",
     "total_shards": "100k",
     "raw_trade": "100.0k \u2192 Rabbit Ears"
+  },
+  {
+    "item": "5th Anniversary Cake +15 more Chainmail",
+    "quantity": 1,
+    "shards": "1.8k",
+    "total_shards": "1.8k",
+    "raw_trade": "Aug 8 Voidpiercer9410 1.8k \u2192 5th Anniversary Cake +15 more Chainmail"
+  },
+  {
+    "item": "5th Anniversary Cake +15 more",
+    "quantity": 1,
+    "shards": "1.8k",
+    "total_shards": "1.8k",
+    "raw_trade": "1.8k \u2192 5th Anniversary Cake +15 more"
   }
 ]
