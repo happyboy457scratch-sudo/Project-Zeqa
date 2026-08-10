@@ -264,5 +264,19 @@
     "shards": "15k",
     "total_shards": "15k",
     "raw_trade": "Phoenix Wings \u2192 15.0k"
+  },
+  {
+    "item": "1 MILL +10 more Chainmail",
+    "quantity": 29,
+    "shards": "2.7k",
+    "total_shards": "77.9k",
+    "raw_trade": "Aug 10 trzhxw 77.9k \u2192 1 MILL x29 +10 more Chainmail"
+  },
+  {
+    "item": "1 MILL +10 more",
+    "quantity": 29,
+    "shards": "2.7k",
+    "total_shards": "77.9k",
+    "raw_trade": "77.9k \u2192 1 MILL x29 +10 more"
   }
 ]
