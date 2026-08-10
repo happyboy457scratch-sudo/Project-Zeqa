@@ -250,5 +250,19 @@
     "shards": "150",
     "total_shards": "600",
     "raw_trade": "600 \u2192 Golden Heart x4"
+  },
+  {
+    "item": "Chainmail Phoenix Wings",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Aug 10 Chainmail Phoenix Wings \u2192 15.0k fawyl"
+  },
+  {
+    "item": "Phoenix Wings",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Phoenix Wings \u2192 15.0k"
   }
 ]
