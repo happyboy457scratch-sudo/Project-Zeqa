@@ -278,5 +278,47 @@
     "shards": "2.7k",
     "total_shards": "77.9k",
     "raw_trade": "77.9k \u2192 1 MILL x29 +10 more"
+  },
+  {
+    "item": "67 Cape Chainmail",
+    "quantity": 2,
+    "shards": "250",
+    "total_shards": "500",
+    "raw_trade": "Aug 10 Voidpiercer9410 500 \u2192 67 Cape x2 Chainmail"
+  },
+  {
+    "item": "67 Cape",
+    "quantity": 2,
+    "shards": "250",
+    "total_shards": "500",
+    "raw_trade": "500 \u2192 67 Cape x2"
+  },
+  {
+    "item": "Golden Space Helmet +5 more Chainmail",
+    "quantity": 10,
+    "shards": "580",
+    "total_shards": "5.8k",
+    "raw_trade": "Aug 10 xhnf 5.8k \u2192 Golden Space Helmet x10 +5 more Chainmail"
+  },
+  {
+    "item": "Golden Space Helmet +5 more",
+    "quantity": 10,
+    "shards": "580",
+    "total_shards": "5.8k",
+    "raw_trade": "5.8k \u2192 Golden Space Helmet x10 +5 more"
+  },
+  {
+    "item": "Chainmail Golden Space Helmet +5 more",
+    "quantity": 2,
+    "shards": "1.2k",
+    "total_shards": "2.5k",
+    "raw_trade": "Aug 10 Chainmail Golden Space Helmet x2 +5 more \u2192 2.5k Voidpiercer9410"
+  },
+  {
+    "item": "Golden Space Helmet +5 more",
+    "quantity": 2,
+    "shards": "1.2k",
+    "total_shards": "2.5k",
+    "raw_trade": "Golden Space Helmet x2 +5 more \u2192 2.5k"
   }
 ]
