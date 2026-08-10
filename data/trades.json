@@ -222,5 +222,33 @@
     "shards": "1.8k",
     "total_shards": "1.8k",
     "raw_trade": "1.8k \u2192 5th Anniversary Cake +15 more"
+  },
+  {
+    "item": "Golden Heart Chainmail",
+    "quantity": 17,
+    "shards": "147",
+    "total_shards": "2.5k",
+    "raw_trade": "Aug 10 xhnf 2.5k \u2192 Golden Heart x17 Chainmail"
+  },
+  {
+    "item": "Golden Heart",
+    "quantity": 17,
+    "shards": "147",
+    "total_shards": "2.5k",
+    "raw_trade": "2.5k \u2192 Golden Heart x17"
+  },
+  {
+    "item": "Golden Heart Chainmail",
+    "quantity": 4,
+    "shards": "150",
+    "total_shards": "600",
+    "raw_trade": "Aug 9 xhnf 600 \u2192 Golden Heart x4 Chainmail"
+  },
+  {
+    "item": "Golden Heart",
+    "quantity": 4,
+    "shards": "150",
+    "total_shards": "600",
+    "raw_trade": "600 \u2192 Golden Heart x4"
   }
 ]
