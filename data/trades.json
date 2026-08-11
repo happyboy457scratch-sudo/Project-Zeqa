@@ -320,5 +320,19 @@
     "shards": "1.2k",
     "total_shards": "2.5k",
     "raw_trade": "Golden Space Helmet x2 +5 more \u2192 2.5k"
+  },
+  {
+    "item": "Chainmail Ender Dragon Tail",
+    "quantity": 1,
+    "shards": "277",
+    "total_shards": "277",
+    "raw_trade": "Aug 11 Chainmail Ender Dragon Tail \u2192 A #277 Voidpiercer9410"
+  },
+  {
+    "item": "Ender Dragon Tail",
+    "quantity": 1,
+    "shards": "277",
+    "total_shards": "277",
+    "raw_trade": "Ender Dragon Tail \u2192 A #277"
   }
 ]
