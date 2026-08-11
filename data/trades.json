@@ -411,5 +411,19 @@
     "shards": "51.8k",
     "total_shards": "51.8k",
     "raw_trade": "Aug 6 T trzhxw 51.8k \u2192 Heart +9 more Chainmail C"
+  },
+  {
+    "item": "Pastel Cute Face Chainmail",
+    "quantity": 10,
+    "shards": "180",
+    "total_shards": "1.8k",
+    "raw_trade": "Aug 11 Solidbytee 1.8k \u2192 Pastel Cute Face x10 Chainmail"
+  },
+  {
+    "item": "Pastel Cute Face",
+    "quantity": 10,
+    "shards": "180",
+    "total_shards": "1.8k",
+    "raw_trade": "1.8k \u2192 Pastel Cute Face x10"
   }
 ]
