@@ -1,1 +1,3785 @@
-[]
+[
+  {
+    "category": "Artifacts",
+    "item_name": "Afroficey",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Binary Aura",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "DanyPlayz' Headband",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "DanyPlayz' Knockback Nemo",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Dave",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Emric Chain",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Fenwos' Fox Band",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Fenwos' Fox Buddy",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "GM19's Disguise",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Hubert",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Icy's Headband",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Icy's Wings",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "LightBringer Wings",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Number 1 Meal",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Obsidian Fists",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Piggy Aura",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Piggy Costume",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Sandwiched",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Tub's Crown",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "WORST Player Headband",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Alien Abduction",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Bat Wings",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Bonehead Costume",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Bunny Hat",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Bunny Merch",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Butterfly Wings",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Candy Cane Sword",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Carrot Hat",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Cauldron Cap",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Cherry Blossom Crown",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Cherry Wings",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Chick",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Chicken Costume",
+    "page": 1,
+    "average_shard_value": 48.0,
+    "shard_trade_history": [
+      48.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Christmas Stocking",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Crown Of Shadows",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Cupids Wings",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Easter Basket",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Easter Bunny",
+    "page": 1,
+    "average_shard_value": 49.0,
+    "shard_trade_history": [
+      49.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Egg Collector",
+    "page": 1,
+    "average_shard_value": 46.0,
+    "shard_trade_history": [
+      46.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Egg Warrior",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Farmer Costume",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Frankenstein Costume",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Frost Sword",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Frostfall",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Frostveil",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Gingerbread Pet",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Ice Crown",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Maple Leaf Wings",
+    "page": 2,
+    "average_shard_value": 63.0,
+    "shard_trade_history": [
+      63.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pharaoh Costume",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Present Head",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pumpkin Bite",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Reindeer",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Santa",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Ski Backpack",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Snowman Costume",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Snowman Outfit",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Stack of Chicks",
+    "page": 2,
+    "average_shard_value": 48.0,
+    "shard_trade_history": [
+      48.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Valentines Headband",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Anchor Wings",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Angel Wing",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Ape Costume",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Archer",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Blue Wing",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Blueblade",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Bubble",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Crab Hat",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Crocodile Hat",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Cyborg Suit",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Dragon Wing",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Dragon Wings",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Ducky Costume",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Elite Astronaut Costume",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Enchanters Table",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Fairy",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Fire Crown",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Fire Spirit Costume",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Foxzy Costume",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Glitcher Costume",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Green Yukata",
+    "page": 2,
+    "average_shard_value": 5398.0,
+    "shard_trade_history": [
+      5398.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Headphone & Notes",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Hooded Man Costume",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Hot Dog Hat",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Ice Spirit Costume",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "John Pork",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Katana Wing",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "King's Crown",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Lightning Aura",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Lilac Raven",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Meme Glasses",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Peacock Wings",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Phoenix",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Phoenix Wings",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pink Kimono",
+    "page": 3,
+    "average_shard_value": 5520.0,
+    "shard_trade_history": [
+      5520.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pirate Flag",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pumpkin Man Costume",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Question Hound Costume",
+    "page": 3,
+    "average_shard_value": 2696.0,
+    "shard_trade_history": [
+      2696.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Robot Creeper Costume",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Summer Monki",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Summer Solstice",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Sumo Suit",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Sweet Headband",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Alien Costume",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Arrow Head",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Balloons",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Banana Man Costume",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Black Angel Set",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Blaze Rod",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Blue Susanoo",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Broom",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Burger Hat",
+    "page": 3,
+    "average_shard_value": 60.0,
+    "shard_trade_history": [
+      60.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Cat Mask",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Champions Sword",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Clown Wig",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Confetti Wings",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Crimson Seedwing",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Cuddle Bear Costume",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Cupid Costume",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Cute Creeper",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Dog Mask",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Duality Costume",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Earth Hand",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Eye",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Festive Hat",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Fire Aura",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Fire Wing",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Firework Aura",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Flamingo Buoy",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Fries King Costume",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Galaxy Dream",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Golden Totem Costume",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Heart Glasses",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Heart Headphones",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Heart Wings",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Heartseeker Costume",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Horse",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Horseman Costume",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Hotdog Hat",
+    "page": 4,
+    "average_shard_value": 78.0,
+    "shard_trade_history": [
+      78.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Ice Aura",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Jack-o'-lantern",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Lil Megalodon",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Little Frog",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Love Byte",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "McDonalds Costume",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Melon Madness",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "MLG Set",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Mooberry Costume",
+    "page": 4,
+    "average_shard_value": 582.0,
+    "shard_trade_history": [
+      582.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Muramasa",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Mushroom Cap",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Nexus Wing",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "No.1 MLG RUSH",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pie Face",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pig Mask",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pineapple Hat",
+    "page": 4,
+    "average_shard_value": 29.0,
+    "shard_trade_history": [
+      29.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "PROOF OF CONCEPT 128x",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Purple Zeqa Bandanna",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Rabbit Ears",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Reaper Costume",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Red Kagune",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Shutter Glasses",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Skully Drip Costume",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Sky Island",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Stardust Wings",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Stonks Costume",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "The Mudge Costume",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Valentines Confetti",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Warriors Sword",
+    "page": 5,
+    "average_shard_value": 97.0,
+    "shard_trade_history": [
+      97.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "White Angel Set",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Widows Grasp",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Wither Head",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Angel Wing 2",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Bird",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Black Karate Gi",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Donut Fists",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Dragon",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Earth Aura",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Ender Dragon Tail",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Ender Wing",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Fox",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Ghost Costume",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Gummy Bear",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Iron Helmet",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Katana Set",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Leather Backpack",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Menacing",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Mini Angel Wing",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Mini Milky Way",
+    "page": 5,
+    "average_shard_value": 9683.0,
+    "shard_trade_history": [
+      9683.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Moon",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Mushling",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Phantom Wing",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pirate Guy",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pirate Sword",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Puppet Monkey Costume",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Queen of Flowers",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Raijin Drums",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Rich Headband",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Surfer Duck",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Tech Wing",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Thief Bird",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Tiki Mask",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Treasure Chest",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Triple T",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Virus Claws",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "White Karate Gi",
+    "page": 6,
+    "average_shard_value": 13319.0,
+    "shard_trade_history": [
+      13319.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Wizard",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "67 Headband",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Axe & Shield",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Axe On Head",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Blue Space Suit",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Candy Cane",
+    "page": 6,
+    "average_shard_value": 34139.0,
+    "shard_trade_history": [
+      34139.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Earth Spirit Costume",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Egg Yolk",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Flushed Emoji Mask",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Golden Skull",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Hacker Jetpack",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Mouth Lollipop",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Mrs. Moo",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Noob Mask",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Penguin",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Rabbit",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Red Space Suit",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Santa Hat",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Shining Armor",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Shirasaya Flag",
+    "page": 6,
+    "average_shard_value": 34455.0,
+    "shard_trade_history": [
+      34455.0
+    ]
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Snorkel",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Super Mini Angel Wing",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Sword Holster",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Viking",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "White Heart",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Witch Hat",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Antler",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Axolotl Hat",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Backcap",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Boxing Gloves",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Classic Moustache",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Classic Spaceman",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Dollar",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Duck",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Egg Head",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Goat Horn",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Golden Space Helmet",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Halo",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Headphone",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Holding Banana",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Keyboard Blade",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Koala Hat",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Little Doge",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Necktie",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Pirate Hat",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Question Mark",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Sickle",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Small Crown",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Sun Glasses",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Thunder Cloud",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Turtle Costume",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "UFO",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Wanderer",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Avery's Lunar Cape",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "DanyPlayz' Cape",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Fenwos' Cape",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "GM19's Cape",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "LightBringer Cape",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Tub's Cape",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Arrow Heart",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Butterfly",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Carrot",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Chicken Coop",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Chilly Charmer",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2025 - Hot Chocolate",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2025 - Reindeer",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2025 - Snowman",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas Bauble",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas Star",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Easter Egg",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Fireplace",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Fresh Start",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Golden Egg",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Gravestone",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Hearts",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Love Letter Cape",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Maple Leaf Stem",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pharaoh's Cloak",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pumpkin",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "RGB Heart",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Rose Glass",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Snowflake",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Sunflower",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Terry The Chick",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Tulips",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Webbed",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "ZeqMas",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Allay",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Bird Eye",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Bruhhh",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "CawPe",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Chimera",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Code",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Enchanters Cape",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Foxzy",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Gold",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Ice",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Lightning",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Lollipop",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Missing Texture",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Panda",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Parrot Feather",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Phoenix Feather",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Rat",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Star Streak",
+    "page": 2,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "The Great Wave",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "The Rich",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Wizards Cape",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "5 Years of Zeqa",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "5th Anniversary Cake",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Alien",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Archer Champion",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Archer Warrior",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Bat",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Battlerush Champion",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Battlerush Warrior",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "BedFight Champion",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "BedFight Warrior",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Berry",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Birthday Cake",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Black Hole",
+    "page": 3,
+    "average_shard_value": 38.0,
+    "shard_trade_history": [
+      38.0
+    ]
+  },
+  {
+    "category": "Capes",
+    "item_name": "Blossom",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Blue Balloon",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Blue Beta",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Blue Chr7st",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Bonebit",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Boxing Champion",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Boxing Warrior",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Bridge Champion",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Bridge Warrior",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "BuildUHC Champion",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "BuildUHC Warrior",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "ButterBeer",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Cake",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Candy",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Candy Bag",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "CaveUHC Champion",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "CaveUHC Warrior",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Chocolate",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Chocolate Cake",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2021 - Candy",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2021 - Pine",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2021 - Reindeer",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2021 - Snowman",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2022 - Christmas Tree",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2022 - Present",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2022 - Snowman",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2022 - Wreath",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Christmas 2025 - Santa",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Citicx's Cape",
+    "page": 3,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Classic Champion",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Classic Warrior",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Clown Cape",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Combo Champion",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Combo Warrior",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Cute Cowboy",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Dark Chocolate",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Debuff Champion",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Debuff Warrior",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Donkey Tail",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Earth Board",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Easter 2022 - Basket",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Easter 2022 - Basket 2",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Easter 2022 - Bunny",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Easter 2022 - Bunny 2",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Easter 2022 - Egg",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Easter 2022 - Moai",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "FinalUHC Champion",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "FinalUHC Warrior",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Fire",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "FireballFight Champion",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "FireballFight Warrior",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Fist Champion",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Fist Warrior",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Friesy",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Gapple Champion",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Gapple Warrior",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Glimmer",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Golden Hearts",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Green Balloon",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Halloween 2022 - Candy Corn",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Halloween 2022 - Eye Ball",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Halloween 2022 - Ghost",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Halloween 2022 - Pumpkin",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Heart",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Heart King",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Hot Dog",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Melon Cape",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "MLGRush Champion",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "MLGRush Warrior",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Muffin Avatar",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Music Note",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "NetherUHC Champion",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "NetherUHC Warrior",
+    "page": 4,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "New Years 2026",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "NoDebuff Champion",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "NoDebuff Warrior",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Peace",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pearlfight Champion",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pearlfight Warrior",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pinata",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pink Donut",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pink Heart",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pride - Agender",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pride - Ally",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pride - Bisexual",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pride - Fluid",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pride - Intersex",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pride - Lesbian",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pride - LGBTQ+",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pride - Non Binary",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pride - Pansexual",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pride - Transgender",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Purple Assasin",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Purple Balloon",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Purple Beta",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "R3 X ZEQA",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Red Apple",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Red Balloon",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Red Beta",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Red Heart",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Rocket",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Rose",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Scroll",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "SG Champion",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "SG Warrior",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "SheeShult",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Skywars Champion",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Skywars Warrior",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Snowball Sumo Champion",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Snowball Sumo Warrior",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Soft Drink",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Soup Champion",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Soup Warrior",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Spleef Champion",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Spleef Warrior",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "StickFight Champion",
+    "page": 5,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "StickFight Warrior",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Sumo Champion",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Sumo Warrior",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Trophy",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Valentine 2022 - Bed Heart",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Valentine 2022 - Black Heart",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Valentine 2022 - Rose",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Valentine 2022 - Teddy",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Valentine 2022 - White Heart",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Water",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "White Allay",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "White Chocolate",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Wrath Champion",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Wrath Warrior",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Zeqalotl",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Zeqentine 2022",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Zombie Hand",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Air",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Bear",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Cotton Candy",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Gremlin",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Hacker",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Moob",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Mushling Cape",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Ninja",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Ocean Waves",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Robo",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Shadow Bird",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Shiba Inu",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Smart Phone",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Sunrise Bird",
+    "page": 6,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "The Starry Night",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Anchor",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "BED",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Brown Chicken",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Controller",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Crown",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Crowned Clown",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Disguise",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Dragon Scales",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Eagle",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Fake Parrot",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Fantastic Blue",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Galaxy",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Pastel Cute Face",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Polar Bear",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Samurai Helmet",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Silver",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Tent",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Treasure Map",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Versus",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "White Chicken",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "White Slash",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "1 MILL",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "67 Cape",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Ancient Creeper",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Black Butterfly",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Black L",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "BlackHeart",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Candy Corn",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Cherry Blossom",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Clown",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Console",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Dark Cross",
+    "page": 7,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Darkblue L",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Day Dream",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Fake Wing",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Golden Heart",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Herz",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Horsey",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Hot Air Balloon",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Island",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Katana Symbol",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Nerd",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Niche Apple",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Noob Smile",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Orangest",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Popsicle",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Ring Pop",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Rising Sun",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Rooster",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Royal",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Sakura Tree",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Target",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Three Blade",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Capes",
+    "item_name": "Wheel",
+    "page": 8,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Projectiles",
+    "item_name": "Critical",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Projectiles",
+    "item_name": "Enchantment Table",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Projectiles",
+    "item_name": "Explode",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Projectiles",
+    "item_name": "Flame",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Projectiles",
+    "item_name": "Lava",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Projectiles",
+    "item_name": "Redstone",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Projectiles",
+    "item_name": "Splash",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Projectiles",
+    "item_name": "Villager Happy",
+    "page": 1,
+    "average_shard_value": 3.0,
+    "shard_trade_history": [
+      3.0
+    ]
+  },
+  {
+    "category": "Projectiles",
+    "item_name": "Water Splash",
+    "page": 1,
+    "average_shard_value": 0,
+    "shard_trade_history": []
+  }
+]
