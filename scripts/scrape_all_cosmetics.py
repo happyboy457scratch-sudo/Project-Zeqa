@@ -99,7 +99,6 @@ async def scrape_shard_history():
 
         captured_api_prices = []
 
-        # Catch all internal API JSON responses from inpvp.net strictly related to items/history
         async def handle_response(response):
             try:
                 if "inpvp.net" in response.url and response.status == 200:
@@ -138,7 +137,7 @@ async def scrape_shard_history():
                 
                 await auto_scroll(page)
 
-                # Locate all card elements on the current page grid
+                # Scan grid elements cleanly
                 raw_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
                 count = await raw_cards.count()
                 matched_items_on_page = []
@@ -164,13 +163,13 @@ async def scrape_shard_history():
 
                 print(f"Matched {len(matched_items_on_page)} item(s) on page {current_page} with cosmetics.json.")
 
-                # Scrape each matched item using index-based tracking to avoid stale locator errors
+                # Scrape each matched item safely with fresh element re-querying
                 for idx, item_name in enumerate(matched_items_on_page):
                     print(f"[{idx+1}/{len(matched_items_on_page)}] Fetching match: {item_name}")
                     captured_api_prices.clear()
 
                     try:
-                        # Re-query elements and find the matching card index dynamically
+                        # Re-query elements on the fly to eliminate stale handle errors
                         fresh_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
                         total_elements = await fresh_cards.count()
                         
@@ -187,20 +186,20 @@ async def scrape_shard_history():
                             await target_card.scroll_into_view_if_needed()
                             await target_card.click(force=True)
                             
-                            # Give modal time to mount and load
-                            await page.wait_for_timeout(2500)
+                            # Wait for modal overlay to appear
+                            await page.wait_for_timeout(2000)
 
-                            # Locate and click 'Shards' tab inside modal
+                            # Locate and click 'Shards' tab inside the active modal container
                             shards_tab = page.locator("button:has-text('Shards'), div:has-text('Shards'), a:has-text('Shards')").last
                             if await shards_tab.count() > 0:
                                 try:
                                     await shards_tab.wait_for(state="visible", timeout=3000)
                                     await shards_tab.click(force=True)
-                                    await page.wait_for_timeout(2000)
+                                    await page.wait_for_timeout(1500)
                                 except Exception:
                                     pass
 
-                            # DOM/SVG Chart text fallback
+                            # DOM/SVG Chart text parsing fallback
                             dom_prices = []
                             try:
                                 svg_nodes = await page.locator("svg text, svg title, [class*='recharts'], [class*='chart']").all_inner_texts()
@@ -236,18 +235,18 @@ async def scrape_shard_history():
                             })
                             processed_item_names.add(item_name)
 
-                            # Secure Modal Close / Navigation Return
-                            if "vault" not in page.url.lower():
-                                await page.go_back(wait_until="domcontentloaded")
-                            else:
-                                await page.keyboard.press("Escape")
-                                await page.wait_for_timeout(1000)
-                                
-                                close_btn = page.locator("button:has-text('×'), [role='dialog'] button[aria-label='Close']").first
-                                if await close_btn.count() > 0 and await close_btn.is_visible():
-                                    await close_btn.click()
+                            # Close modal reliably using Escape and fall back to clicking backdrop/close button
+                            await page.keyboard.press("Escape")
+                            await page.wait_for_timeout(800)
+                            
+                            close_btn = page.locator("button:has-text('×'), [role='dialog'] button[aria-label='Close'], div[class*='backdrop']").first
+                            if await close_btn.count() > 0 and await close_btn.is_visible():
+                                try:
+                                    await close_btn.click(force=True)
+                                except Exception:
+                                    pass
                                     
-                            await page.wait_for_timeout(1200)
+                            await page.wait_for_timeout(1000)
                         else:
                             print(f"  -> Element for {item_name} could not be located in DOM.")
 
@@ -256,7 +255,7 @@ async def scrape_shard_history():
                         await page.keyboard.press("Escape")
                         await page.wait_for_timeout(1000)
 
-                # Pagination Advance
+                # Pagination Advance Logic
                 next_page_num = str(current_page + 1)
                 next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
                 arrow_btn = page.locator("button:has-text('>'), a:has-text('>')").first
