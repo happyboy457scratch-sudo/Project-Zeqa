@@ -68,7 +68,7 @@ async def scrape_shard_history():
                 print(f"--- Category: {cat_name} | Page {current_page}/{total_pages} ---")
                 await page.wait_for_timeout(2500)
 
-                # PASS 1: Identify True Cosmetic Items (Strict Filtering)
+                # PASS 1: Identify True Cosmetic Items
                 raw_cards = page.locator("main [class*='cursor-pointer'], main a")
                 count = await raw_cards.count()
                 valid_item_names = []
@@ -84,26 +84,16 @@ async def scrape_shard_history():
                             continue
                         
                         lines = [l.strip() for l in text.split("\n") if l.strip()]
-                        
-                        # True cosmetic cards have multiple lines (Name + Rarity/Stats)
                         if len(lines) < 2:
                             continue
                         
                         name = lines[0]
                         name_lower = name.lower()
                         
-                        # Rule 1: Exclude Leaderboard Ranks (#1, #2, etc.)
-                        if name.startswith("#"):
+                        if name.startswith("#") or not name[0].isupper():
                             continue
-                            
-                        # Rule 2: Cosmetic names are always Capitalized. Player usernames/tags are often lowercase.
-                        if not name[0].isupper():
-                            continue
-                        
-                        # Rule 3: Exclude navigation/system titles
                         if name_lower in IGNORED_TITLES:
                             continue
-                        
                         if any(x in name_lower for x in ["resolved", "open now", "online", "general discussion"]):
                             continue
                         
@@ -114,7 +104,7 @@ async def scrape_shard_history():
 
                 print(f"Found {len(valid_item_names)} true cosmetic items on page {current_page}.")
 
-                # PASS 2: Safely Locate and Click Each Item
+                # PASS 2: Click and Verify URL
                 for idx, item_name in enumerate(valid_item_names):
                     try:
                         print(f"[{idx+1}/{len(valid_item_names)}] Fetching: {item_name}")
@@ -134,26 +124,34 @@ async def scrape_shard_history():
                         
                         if target_idx != -1:
                             await clickables_locator.nth(target_idx).click()
-                            await page.wait_for_timeout(1500)
+                            await page.wait_for_timeout(2000)
                             
-                            # Safety Check: Did we accidentally navigate away from the Vault?
-                            if "vault" not in page.url.lower():
-                                print("  -> Error: Navigated away from the Vault. Reverting...")
+                            current_url = page.url.lower()
+
+                            # YOUR IDEA: Verify if current URL is a valid cosmetic page or stayed on vault modal
+                            is_valid_item_page = (
+                                "inpvp.net/mineville/cosmetic" in current_url 
+                                or "inpvp.net/mineville/item" in current_url
+                                or "vault" in current_url
+                            )
+
+                            if not is_valid_item_page:
+                                print(f"  -> Navigated to unintended page ({page.url}). Reverting...")
                                 await page.go_back(wait_until="domcontentloaded")
-                                await page.wait_for_timeout(2500)
+                                await page.wait_for_timeout(2000)
                                 continue
 
-                            # Click 'Shards' tab inside modal
-                            shards_tab = page.locator("button:has-text('Shards'), div:has-text('Shards')").last
+                            # Locate and click 'Shards' tab on the page or modal
+                            shards_tab = page.locator("button:has-text('Shards'), div:has-text('Shards'), a:has-text('Shards')").last
                             if await shards_tab.count() > 0 and await shards_tab.is_visible():
                                 await shards_tab.click()
                                 await page.wait_for_timeout(1500)
 
-                                trade_rows = await page.locator("[class*='modal'] tr, [class*='history'] tr, [class*='trade-row'], [class*='overflow-x-auto'] div").all()
+                                trade_rows = await page.locator("tr, [class*='trade-row'], [class*='overflow-x-auto'] div, table div").all()
                                 item_trades = []
                                 for row in trade_rows:
                                     row_text = (await row.inner_text()).strip()
-                                    if row_text and ("Shards" in row_text or "Shard" in row_text):
+                                    if row_text and ("Shards" in row_text or "Shard" in row_text or "Bought" in row_text or "Sold" in row_text):
                                         item_trades.append(row_text)
 
                                 all_items_shard_data.append({
@@ -162,16 +160,20 @@ async def scrape_shard_history():
                                     "page": current_page,
                                     "shard_trade_history": item_trades
                                 })
+                                print(f"  -> Scraped shard history for {item_name}!")
                             else:
                                 print(f"  -> No 'Shards' tab found for {item_name}.")
 
-                            # Close modal safely
-                            close_btn = page.locator("button:has-text('×'), button[aria-label='Close'], [class*='close']").first
-                            if await close_btn.count() > 0 and await close_btn.is_visible():
-                                await close_btn.click()
-                                await page.wait_for_timeout(1000)
+                            # Return back if navigated to separate URL, or close modal if stayed on vault
+                            if "vault" not in current_url:
+                                await page.go_back(wait_until="domcontentloaded")
+                                await page.wait_for_timeout(2000)
                             else:
-                                await page.keyboard.press("Escape")
+                                close_btn = page.locator("button:has-text('×'), button[aria-label='Close'], [class*='close']").first
+                                if await close_btn.count() > 0 and await close_btn.is_visible():
+                                    await close_btn.click()
+                                else:
+                                    await page.keyboard.press("Escape")
                                 await page.wait_for_timeout(1000)
                         else:
                             print(f"  -> Could not locate target element for {item_name}, skipping.")
@@ -181,7 +183,7 @@ async def scrape_shard_history():
                         await page.keyboard.press("Escape")
                         await page.wait_for_timeout(1000)
 
-                # Move to the next page using exact number matching or next arrow fallback
+                # Next page navigation
                 if current_page < total_pages:
                     next_page_num = str(current_page + 1)
                     next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
@@ -190,7 +192,6 @@ async def scrape_shard_history():
                         await next_btn.click()
                         await page.wait_for_timeout(3000)
                     else:
-                        # Fallback to Next arrow button if page number isn't explicitly found
                         arrow_btn = page.locator("button:has-text('>')").first
                         if await arrow_btn.count() > 0:
                             await arrow_btn.click()
