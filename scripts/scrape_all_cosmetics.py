@@ -5,6 +5,7 @@ import re
 from playwright.async_api import async_playwright
 
 VAULT_URL = "https://inpvp.net/mineville/vault?mode=pvp"
+TOTAL_PAGES = 7
 
 def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
     trades = []
@@ -33,14 +34,13 @@ async def main():
     captured_responses = []
 
     async with async_playwright() as p:
-        # Launch headless Chromium browser
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
         )
         page = await context.new_page()
 
-        # Intercept network responses fired by client-side clicks
+        # Network listener to capture trade payloads
         async def handle_response(response):
             if response.status == 200:
                 try:
@@ -54,39 +54,48 @@ async def main():
 
         print(f"Navigating to Vault page: {VAULT_URL}")
         await page.goto(VAULT_URL, wait_until="networkidle")
-
-        # Give client-side JS time to hydrate
         await page.wait_for_timeout(3000)
 
-        # -------------------------------------------------------------
-        # ACTIVE CLICK SEQUENCE
-        # -------------------------------------------------------------
-        try:
-            print("Executing browser interactions...")
+        # Loop through all 7 pages
+        for current_page in range(1, TOTAL_PAGES + 1):
+            print(f"\n--- Processing Page {current_page} of {TOTAL_PAGES} ---")
 
-            # 1. Wait for and click the category (e.g., Artifacts)
-            await page.wait_for_selector("text='Artifacts'", timeout=10000)
-            await page.click("text='Artifacts'")
-            print("Clicked Artifacts tab!")
-            await page.wait_for_timeout(1500)
+            # 1. Scroll down to trigger lazy loading for all items on the page
+            await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+            await page.wait_for_timeout(2000)
 
-            # 2. Click a specific item (e.g., Antler or Cat Mask)
-            # You can also use page.locator("div").filter(has_text=...).first.click()
-            await page.click("text='Antler'")
-            print("Clicked Antler!")
-            await page.wait_for_timeout(1500)
+            # 2. Click visible item cards on the current page
+            items = await page.locator("div[class*='item'], div[class*='card']").all()
+            print(f"Found {len(items)} items on page {current_page}")
 
-            # 3. Click the 'Shards' button to trigger the graph/trade data
-            await page.click("text='Shards'")
-            print("Clicked Shards graph button!")
+            for idx, item in enumerate(items[:10]):  # Clicks items on current page
+                try:
+                    await item.click()
+                    await page.wait_for_timeout(1000)
 
-            # Pause to let the network response complete
-            await page.wait_for_timeout(3000)
+                    # Click 'Shards' button if present
+                    shards_btn = page.locator("text=/Shards/i").first
+                    if await shards_btn.count() > 0:
+                        await shards_btn.click()
+                        await page.wait_for_timeout(1500)
+                except Exception as e:
+                    continue
 
-        except Exception as e:
-            print(f"Interaction warning: {e}")
+            # 3. Scroll all the way down to reach the Next Page button
+            await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+            await page.wait_for_timeout(1000)
 
-        # Process all intercepted data streams
+            # 4. Click Next Page button if not on the last page
+            if current_page < TOTAL_PAGES:
+                next_btn = page.locator("button:has-text('Next'), [aria-label*='next'], text='>'").first
+                if await next_btn.count() > 0:
+                    await next_btn.click()
+                    print(f"Clicked Next Page button -> Loading page {current_page + 1}...")
+                    await page.wait_for_timeout(3000)
+                else:
+                    print("Next Page button not found by text, searching for pagination control...")
+
+        # Process all intercepted network chunks across all 7 pages
         for raw_text in captured_responses:
             chunks = re.findall(r'self\.__next_f\.push\((.*?)\)', raw_text)
             extracted = parse_trade_chunks(chunks if chunks else [raw_text])
@@ -99,7 +108,7 @@ async def main():
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_trades, f, indent=2, ensure_ascii=False)
 
-    print(f"\nDone! Saved {len(all_trades)} trade entries to {output_path}")
+    print(f"\nFinished all pages! Saved {len(all_trades)} trade entries to {output_path}")
 
 if __name__ == "__main__":
     asyncio.run(main())
