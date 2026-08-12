@@ -34,6 +34,16 @@ def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
                     continue
     return trades
 
+async def safe_click(element):
+    """Attempts regular click, falls back to forced click or JS click if intercepted by fixed headers."""
+    try:
+        await element.click(timeout=3000)
+    except Exception:
+        try:
+            await element.click(force=True, timeout=3000)
+        except Exception:
+            await element.evaluate("el => el.click()")
+
 async def main():
     os.makedirs("data", exist_ok=True)
     all_trades = []
@@ -67,13 +77,12 @@ async def main():
             print(f"==========================================")
 
             try:
-                # Target exact tab names: Artifacts, Capes, Killphrases, Projectiles
                 category_tab = page.locator("button, [role='tab'], a, div").filter(
                     has_text=re.compile(rf"{category_name}", re.I)
                 ).first
                 
                 if await category_tab.count() > 0:
-                    await category_tab.click()
+                    await safe_click(category_tab)
                     print(f"Clicked {category_name} tab!")
                     await page.wait_for_timeout(2000)
                 else:
@@ -84,7 +93,6 @@ async def main():
                 print(f"Error switching to category {category_name}: {e}")
                 continue
 
-            # Loop through all pages for this category
             for current_page in range(1, total_pages + 1):
                 print(f"\n--- {category_name} | Page {current_page} of {total_pages} ---")
 
@@ -96,12 +104,12 @@ async def main():
 
                 for idx, item in enumerate(items[:10]):
                     try:
-                        await item.click()
+                        await safe_click(item)
                         await page.wait_for_timeout(800)
 
                         shards_btn = page.locator("text=/Shards|History|Graph/i").first
                         if await shards_btn.count() > 0:
-                            await shards_btn.click()
+                            await safe_click(shards_btn)
                             await page.wait_for_timeout(1200)
                     except Exception:
                         continue
@@ -109,21 +117,27 @@ async def main():
                 await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 await page.wait_for_timeout(1000)
 
-                # Pagination: Target numerical buttons (2, 3, 4...) directly
+                # Target pagination buttons specifically inside pagination elements
                 if current_page < total_pages:
                     next_page_num = current_page + 1
+                    
+                    # Specific pagination locator to avoid stray site/ad links like dawn.gg
                     next_btn = page.locator(
-                        f"button:has-text('{next_page_num}'), a:has-text('{next_page_num}'), [aria-label*='Next'], [aria-label*='page {next_page_num}']"
+                        f"nav button:has-text('{next_page_num}'), nav a:has-text('{next_page_num}'), "
+                        f"[class*='pagination'] button:has-text('{next_page_num}'), [class*='pagination'] a:has-text('{next_page_num}')"
                     ).first
                     
+                    if await next_btn.count() == 0:
+                        # Fallback for direct button matching if nav wrapper isn't used
+                        next_btn = page.locator(f"button:has-text('^\\s*{next_page_num}\\s*$')").first
+
                     if await next_btn.count() > 0:
-                        await next_btn.click()
+                        await safe_click(next_btn)
                         print(f"Clicked Page {next_page_num} button!")
                         await page.wait_for_timeout(2500)
                     else:
                         print(f"Page {next_page_num} button not found directly.")
 
-        # Process captured network chunks
         for raw_text in captured_responses:
             chunks = re.findall(r'self\.__next_f\.push\((.*?)\)', raw_text)
             extracted = parse_trade_chunks(chunks if chunks else [raw_text])
