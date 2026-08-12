@@ -4,9 +4,9 @@ import re
 import os
 import time
 
-# UPDATE THIS string to match your browser's exact address bar URL format
 BASE_URL = "https://inpvp.net/mineville/cosmetics"
 
+# Categories and their item limits
 CATEGORIES = {
     "artifacts": 327,
     "capes": 385,
@@ -14,17 +14,19 @@ CATEGORIES = {
     "projectiles": 13
 }
 
-# Use a full browser Session to bypass basic bot/404 blocks
+# Create a browser session to maintain cookies & bypass basic bot blocks
 session = requests.Session()
 session.headers.update({
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.5",
-    "Referer": "https://inpvp.net/"
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://inpvp.net/mineville/cosmetics"
 })
 
 def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
+    """Parses Next.js data stream chunks into structured JSON trades."""
     trades = []
+    
     for chunk in raw_chunks:
         if "shards" in chunk or "trade" in chunk:
             matches = re.findall(r'\{[^{}]*"shards"[^{}]*\}', chunk)
@@ -32,6 +34,7 @@ def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
                 try:
                     clean_json = m.replace('\\"', '"')
                     data = json.loads(clean_json)
+                    
                     trade_entry = {
                         "item": str(data.get("item", default_item_name)),
                         "quantity": int(data.get("quantity", 1)),
@@ -42,6 +45,7 @@ def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
                     trades.append(trade_entry)
                 except json.JSONDecodeError:
                     continue
+
     return trades
 
 def run_scraper():
@@ -52,7 +56,7 @@ def run_scraper():
         print(f"\n--- Scraping Category: {cat_name.upper()} (1 to {total_count}) ---")
 
         for item_id in range(1, total_count + 1):
-            # Formats URL: https://inpvp.net/mineville/cosmetics/artifacts/7
+            # Matches exact format: https://inpvp.net/mineville/cosmetics/artifacts/7
             target_url = f"{BASE_URL}/{cat_name}/{item_id}"
             
             try:
@@ -61,6 +65,7 @@ def run_scraper():
                 if response.status_code == 200:
                     raw_chunks = re.findall(r'self\.__next_f\.push\((.*?)\)', response.text)
                     extracted_trades = parse_trade_chunks(raw_chunks)
+                    
                     all_trades.extend(extracted_trades)
                     print(f"[{cat_name}] Item #{item_id}: OK (Extracted {len(extracted_trades)} trades)")
                 else:
@@ -69,8 +74,10 @@ def run_scraper():
             except Exception as e:
                 print(f"[{cat_name}] Item #{item_id}: Error ({e})")
 
-            time.sleep(0.4)
+            # Pause between requests to stay under rate limits
+            time.sleep(0.3)
 
+    # Save final array directly into data/trades.json
     output_path = "data/trades.json"
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_trades, f, indent=2, ensure_ascii=False)
