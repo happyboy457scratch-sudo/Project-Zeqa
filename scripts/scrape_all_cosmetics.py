@@ -6,7 +6,6 @@ from playwright.async_api import async_playwright
 
 VAULT_URL = "https://inpvp.net/mineville/vault?mode=pvp"
 
-# Tradeable categories only
 CATEGORIES = [
     {"name": "Artifacts", "pages": 7},
     {"name": "Capes", "pages": 8},
@@ -35,7 +34,7 @@ def parse_trade_chunks(raw_chunks):
     return trades
 
 async def safe_click(element):
-    """Bypasses fixed overlays or navigation headers using forced clicks."""
+    """Bypasses fixed overlays or navigation headers using forced or JS clicks."""
     try:
         await element.click(timeout=3000)
     except Exception:
@@ -80,9 +79,12 @@ async def main():
             print(f" CATEGORY: {cat_name.upper()} ({total_pages} Pages)")
             print(f"==========================================")
 
-            category_tab = page.locator("button, div").filter(
-                has_text=re.compile(rf"\b{cat_name}\b", re.I)
-            ).first
+            # Look for button/tab containing category name string directly
+            category_tab = page.locator(f"button:has-text('{cat_name}'), div[role='button']:has-text('{cat_name}')").first
+
+            # Fallback to general text matching if button tag is not used
+            if await category_tab.count() == 0:
+                category_tab = page.locator(f"text=/{cat_name}/i").first
 
             if await category_tab.count() > 0:
                 await safe_click(category_tab)
