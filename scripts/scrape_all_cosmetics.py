@@ -16,7 +16,7 @@ CATEGORIES = {
 def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
     trades = []
     for chunk in raw_chunks:
-        if "shards" in chunk or "trade" in chunk:
+        if "shards" in chunk or "trade" in chunk or "price" in chunk:
             matches = re.findall(r'\{[^{}]*"shards"[^{}]*\}', chunk)
             for m in matches:
                 try:
@@ -50,7 +50,7 @@ async def main():
             if response.status == 200:
                 try:
                     text = await response.text()
-                    if "shards" in text or "trade" in text:
+                    if "shards" in text or "trade" in text or "history" in text or "graph" in text:
                         captured_responses.append(text)
                 except Exception:
                     pass
@@ -67,36 +67,31 @@ async def main():
             print(f"==========================================")
 
             try:
-                # 1. Flexible Category Tab Locator
-                category_tab = page.locator("button, [role='tab'], div[class*='tab'], div[class*='category'], a").filter(has_text=re.compile(category_name, re.I)).first
+                # Target exact tab names: Artifacts, Capes, Killphrases, Projectiles
+                category_tab = page.locator("button, [role='tab'], a, div").filter(
+                    has_text=re.compile(rf"{category_name}", re.I)
+                ).first
                 
                 if await category_tab.count() > 0:
                     await category_tab.click()
                     print(f"Clicked {category_name} tab!")
                     await page.wait_for_timeout(2000)
                 else:
-                    # Fallback: Click text node directly if tab wrapper isn't caught
-                    text_node = page.locator(f"text=/{category_name}/i").first
-                    if await text_node.count() > 0:
-                        await text_node.click()
-                        print(f"Clicked {category_name} via text fallback!")
-                        await page.wait_for_timeout(2000)
-                    else:
-                        print(f"Could not find tab for {category_name}, skipping...")
-                        continue
+                    print(f"Could not find tab for {category_name}, skipping...")
+                    continue
 
             except Exception as e:
                 print(f"Error switching to category {category_name}: {e}")
                 continue
 
-            # 2. Loop through pages for this category
+            # Loop through all pages for this category
             for current_page in range(1, total_pages + 1):
                 print(f"\n--- {category_name} | Page {current_page} of {total_pages} ---")
 
                 await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 await page.wait_for_timeout(1500)
 
-                items = await page.locator("div[class*='item'], div[class*='card']").all()
+                items = await page.locator("div[class*='item'], div[class*='card'], div[class*='cosmetic']").all()
                 print(f"Found {len(items)} items on page {current_page}")
 
                 for idx, item in enumerate(items[:10]):
@@ -104,7 +99,7 @@ async def main():
                         await item.click()
                         await page.wait_for_timeout(800)
 
-                        shards_btn = page.locator("text=/Shards/i").first
+                        shards_btn = page.locator("text=/Shards|History|Graph/i").first
                         if await shards_btn.count() > 0:
                             await shards_btn.click()
                             await page.wait_for_timeout(1200)
@@ -114,15 +109,21 @@ async def main():
                 await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 await page.wait_for_timeout(1000)
 
+                # Pagination: Target numerical buttons (2, 3, 4...) directly
                 if current_page < total_pages:
-                    next_btn = page.locator("button, a").filter(has_text=re.compile(r"Next|>", re.I)).first
+                    next_page_num = current_page + 1
+                    next_btn = page.locator(
+                        f"button:has-text('{next_page_num}'), a:has-text('{next_page_num}'), [aria-label*='Next'], [aria-label*='page {next_page_num}']"
+                    ).first
+                    
                     if await next_btn.count() > 0:
                         await next_btn.click()
-                        print(f"Clicked Next -> Loading page {current_page + 1}...")
+                        print(f"Clicked Page {next_page_num} button!")
                         await page.wait_for_timeout(2500)
                     else:
-                        print(f"Next button not found on page {current_page}!")
+                        print(f"Page {next_page_num} button not found directly.")
 
+        # Process captured network chunks
         for raw_text in captured_responses:
             chunks = re.findall(r'self\.__next_f\.push\((.*?)\)', raw_text)
             extracted = parse_trade_chunks(chunks if chunks else [raw_text])
