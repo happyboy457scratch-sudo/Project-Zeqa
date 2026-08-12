@@ -35,7 +35,7 @@ def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
     return trades
 
 async def safe_click(element):
-    """Attempts regular click, falls back to forced click or JS click if intercepted by fixed headers."""
+    """Bypasses fixed overlay headers using forced or JS click."""
     try:
         await element.click(timeout=3000)
     except Exception:
@@ -77,9 +77,8 @@ async def main():
             print(f"==========================================")
 
             try:
-                category_tab = page.locator("button, [role='tab'], a, div").filter(
-                    has_text=re.compile(rf"{category_name}", re.I)
-                ).first
+                # Target text directly regardless of tag type
+                category_tab = page.locator(f"text=/{category_name}/i").first
                 
                 if await category_tab.count() > 0:
                     await safe_click(category_tab)
@@ -117,26 +116,23 @@ async def main():
                 await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 await page.wait_for_timeout(1000)
 
-                # Target pagination buttons specifically inside pagination elements
+                # Pagination: Search for page numbers or SVG forward arrows at bottom
                 if current_page < total_pages:
                     next_page_num = current_page + 1
                     
-                    # Specific pagination locator to avoid stray site/ad links like dawn.gg
-                    next_btn = page.locator(
-                        f"nav button:has-text('{next_page_num}'), nav a:has-text('{next_page_num}'), "
-                        f"[class*='pagination'] button:has-text('{next_page_num}'), [class*='pagination'] a:has-text('{next_page_num}')"
-                    ).first
+                    # Try finding the exact page number element or next SVG button
+                    next_btn = page.locator(f"text='{next_page_num}'").first
                     
                     if await next_btn.count() == 0:
-                        # Fallback for direct button matching if nav wrapper isn't used
-                        next_btn = page.locator(f"button:has-text('^\\s*{next_page_num}\\s*$')").first
+                        # Fallback to arrow buttons/SVGs near the bottom
+                        next_btn = page.locator("button:has(svg), a:has(svg)").last
 
                     if await next_btn.count() > 0:
                         await safe_click(next_btn)
-                        print(f"Clicked Page {next_page_num} button!")
+                        print(f"Clicked Page {next_page_num} / Next button!")
                         await page.wait_for_timeout(2500)
                     else:
-                        print(f"Page {next_page_num} button not found directly.")
+                        print(f"Next button for page {next_page_num} not found.")
 
         for raw_text in captured_responses:
             chunks = re.findall(r'self\.__next_f\.push\((.*?)\)', raw_text)
