@@ -1,12 +1,12 @@
-import requests
+=import requests
 import json
 import re
 import os
 import time
 
+# UPDATE THIS string to match your browser's exact address bar URL format
 BASE_URL = "https://inpvp.net/mineville/cosmetics"
 
-# Categories and their item counts
 CATEGORIES = {
     "artifacts": 327,
     "capes": 385,
@@ -14,14 +14,17 @@ CATEGORIES = {
     "projectiles": 13
 }
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-}
+# Use a full browser Session to bypass basic bot/404 blocks
+session = requests.Session()
+session.headers.update({
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Referer": "https://inpvp.net/"
+})
 
 def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
-    """Parses Next.js stream chunks into structured trade objects."""
     trades = []
-    
     for chunk in raw_chunks:
         if "shards" in chunk or "trade" in chunk:
             matches = re.findall(r'\{[^{}]*"shards"[^{}]*\}', chunk)
@@ -29,7 +32,6 @@ def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
                 try:
                     clean_json = m.replace('\\"', '"')
                     data = json.loads(clean_json)
-                    
                     trade_entry = {
                         "item": str(data.get("item", default_item_name)),
                         "quantity": int(data.get("quantity", 1)),
@@ -40,7 +42,6 @@ def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
                     trades.append(trade_entry)
                 except json.JSONDecodeError:
                     continue
-
     return trades
 
 def run_scraper():
@@ -51,27 +52,25 @@ def run_scraper():
         print(f"\n--- Scraping Category: {cat_name.upper()} (1 to {total_count}) ---")
 
         for item_id in range(1, total_count + 1):
+            # Formats URL: https://inpvp.net/mineville/cosmetics/artifacts/7
             target_url = f"{BASE_URL}/{cat_name}/{item_id}"
             
             try:
-                response = requests.get(target_url, headers=HEADERS, timeout=10)
+                response = session.get(target_url, timeout=10)
                 
                 if response.status_code == 200:
                     raw_chunks = re.findall(r'self\.__next_f\.push\((.*?)\)', response.text)
                     extracted_trades = parse_trade_chunks(raw_chunks)
-                    
                     all_trades.extend(extracted_trades)
                     print(f"[{cat_name}] Item #{item_id}: OK (Extracted {len(extracted_trades)} trades)")
                 else:
-                    print(f"[{cat_name}] Item #{item_id}: Skipped (HTTP {response.status_code})")
+                    print(f"[{cat_name}] Item #{item_id}: HTTP {response.status_code} -> {target_url}")
 
             except Exception as e:
                 print(f"[{cat_name}] Item #{item_id}: Error ({e})")
 
-            # Pause to avoid getting rate-limited
-            time.sleep(0.3)
+            time.sleep(0.4)
 
-    # Write output to data/trades.json
     output_path = "data/trades.json"
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_trades, f, indent=2, ensure_ascii=False)
