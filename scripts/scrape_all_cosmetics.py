@@ -13,33 +13,13 @@ CATEGORIES = [
     {"name": "Projectiles", "pages": 1}
 ]
 
-def parse_trade_chunks(raw_chunks):
-    trades = []
-    for chunk in raw_chunks:
-        matches = re.findall(r'\{[^{}]*"(?:shards|price|trade|history|item)"[^{}]*\}', chunk)
-        for m in matches:
-            try:
-                clean_json = m.replace('\\"', '"')
-                data = json.loads(clean_json)
-                trade_entry = {
-                    "item": str(data.get("item", data.get("name", "Unknown Cosmetic"))),
-                    "quantity": int(data.get("quantity", 1)),
-                    "shards": str(data.get("shards", data.get("price", "0"))),
-                    "total_shards": str(data.get("total_shards", data.get("shards", "0"))),
-                    "raw_trade": str(data.get("raw_trade", f"{data.get('item', 'Item')} → {data.get('shards', '0')}"))
-                }
-                trades.append(trade_entry)
-            except json.JSONDecodeError:
-                continue
-    return trades
-
 async def safe_click(element):
     """Bypasses fixed overlays or navigation headers using forced or JS clicks."""
     try:
-        await element.click(timeout=3000)
+        await element.click(timeout=4000)
     except Exception:
         try:
-            await element.click(force=True, timeout=3000)
+            await element.click(force=True, timeout=4000)
         except Exception:
             await element.evaluate("el => el.click()")
 
@@ -51,25 +31,22 @@ async def main():
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            viewport={"width": 1280, "height": 800}
         )
         page = await context.new_page()
 
+        # Listen for any JSON or streaming data coming back from the server
         async def handle_response(response):
             if response.status == 200:
                 try:
-                    content_type = response.headers.get("content-type", "")
-                    if "application/json" in content_type or "text/x-component" in content_type:
-                        text = await response.text()
+                    text = await response.text()
+                    if any(key in text for key in ["shards", "trade", "price", "history", "item"]):
                         captured_responses.append(text)
                 except Exception:
                     pass
 
         page.on("response", handle_response)
-
-        print(f"Navigating to Vault page: {VAULT_URL}")
-        await page.goto(VAULT_URL, wait_until="networkidle")
-        await page.wait_for_timeout(3000)
 
         for cat in CATEGORIES:
             cat_name = cat["name"]
@@ -79,50 +56,69 @@ async def main():
             print(f" CATEGORY: {cat_name.upper()} ({total_pages} Pages)")
             print(f"==========================================")
 
-            # Look for button/tab containing category name string directly
-            category_tab = page.locator(f"button:has-text('{cat_name}'), div[role='button']:has-text('{cat_name}')").first
+            # Navigate fresh per category to clear any lingering modal/overlay state
+            print(f"Navigating to Vault page...")
+            await page.goto(VAULT_URL, wait_until="networkidle")
+            await page.wait_for_timeout(3000)
 
-            # Fallback to general text matching if button tag is not used
-            if await category_tab.count() == 0:
-                category_tab = page.locator(f"text=/{cat_name}/i").first
+            # Locate category tab using text containment
+            category_tab = page.locator(f"text=/{cat_name}/i").first
 
             if await category_tab.count() > 0:
                 await safe_click(category_tab)
-                print(f"Clicked {cat_name} category button!")
-                await page.wait_for_timeout(2000)
+                print(f"Clicked {cat_name} category tab!")
+                await page.wait_for_timeout(2500)
             else:
-                print(f"Could not find category button for {cat_name}, skipping...")
+                print(f"Could not find tab for {cat_name}, skipping...")
                 continue
 
             for current_page in range(1, total_pages + 1):
                 print(f"\n--- {cat_name} | Page {current_page} of {total_pages} ---")
 
+                # Scroll down to lazy-load elements into DOM
                 await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 await page.wait_for_timeout(1500)
 
+                # Collect item cards visible on page
                 items = await page.locator("div[class*='item'], div[class*='card'], div[class*='cosmetic']").all()
                 print(f"Found {len(items)} items on page {current_page}")
 
-                for item in items[:10]:
+                # Extract text data directly from item cards
+                for item in items:
+                    try:
+                        text_content = await item.inner_text()
+                        if text_content.strip():
+                            all_trades.append({
+                                "category": cat_name,
+                                "page": current_page,
+                                "raw_data": text_content.strip()
+                            })
+                    except Exception:
+                        continue
+
+                # Click item cards to trigger network data fetches
+                for item in items[:8]:
                     try:
                         await safe_click(item)
-                        await page.wait_for_timeout(800)
+                        await page.wait_for_timeout(600)
 
                         shards_btn = page.locator("text=/Shards|History|Graph/i").first
                         if await shards_btn.count() > 0:
                             await safe_click(shards_btn)
-                            await page.wait_for_timeout(1200)
+                            await page.wait_for_timeout(800)
 
+                        # Close modal/slideout if opened
                         close_btn = page.locator("button[aria-label*='Close'], button:has-text('✕')").first
                         if await close_btn.count() > 0:
                             await safe_click(close_btn)
                     except Exception:
                         continue
 
-                await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-                await page.wait_for_timeout(1000)
-
+                # Handle pagination to next page
                 if current_page < total_pages:
+                    await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                    await page.wait_for_timeout(1000)
+
                     next_page_num = current_page + 1
                     next_btn = page.locator(f"button:has-text('{next_page_num}'), a:has-text('{next_page_num}')").first
                     
@@ -136,17 +132,29 @@ async def main():
                     else:
                         print(f"Next button for page {next_page_num} not found.")
 
-        for raw_text in captured_responses:
-            extracted = parse_trade_chunks([raw_text])
-            all_trades.extend(extracted)
+        # Take a final debug screenshot for visual confirmation
+        await page.screenshot(path="data/debug.png")
+        print("\nSaved debug screenshot to data/debug.png")
+
+        # Parse raw captured network responses into trades payload
+        for raw in captured_responses:
+            matches = re.findall(r'\{[^{}]*"(?:shards|price|trade|history|item)"[^{}]*\}', raw)
+            for m in matches:
+                try:
+                    clean = m.replace('\\"', '"')
+                    data = json.loads(clean)
+                    all_trades.append(data)
+                except Exception:
+                    continue
 
         await browser.close()
 
+    # Save output dataset
     output_path = "data/trades.json"
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_trades, f, indent=2, ensure_ascii=False)
 
-    print(f"\nDone! Scraped tradeable categories. Saved {len(all_trades)} entries to {output_path}")
+    print(f"\nDone! Saved {len(all_trades)} entries to {output_path}")
 
 if __name__ == "__main__":
     asyncio.run(main())
