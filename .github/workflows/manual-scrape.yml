@@ -6,6 +6,8 @@ on:
 jobs:
   run-manual-scraper:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Enables git push permissions
 
     steps:
       - name: Checkout Repository
