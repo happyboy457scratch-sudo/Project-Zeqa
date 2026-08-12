@@ -1,35 +1,38 @@
-name: Manual Scrape Trigger
+name: Scrape Mineville Cosmetics
 
 on:
+  schedule:
+    # Runs automatically every day at midnight UTC
+    - cron: '0 0 * * *'
+  # Allows manually triggering the workflow from the Actions tab
   workflow_dispatch:
 
 jobs:
-  run-manual-scraper:
+  scrape:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # Enables git push permissions
 
     steps:
-      - name: Checkout Repository
+      - name: Check out Repository
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
 
-      - name: Install Dependencies & Playwright Chromium
+      - name: Install Dependencies
         run: |
-          pip install playwright beautifulsoup4
-          playwright install --with-deps chromium
+          python -m pip install --upgrade pip
+          pip install playwright
+          playwright install chromium --with-deps
 
-      - name: Run Playwright Scraper Script
+      - name: Run Cosmetic Scraper
         run: python scripts/scrape_all_cosmetics.py
 
-      - name: Commit Updated Graph Data
+      - name: Commit and Push Updated Data
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/
-          git diff-index --quiet HEAD || git commit -m "manual: update cosmetic trades data"
-          git push
+          git add data/trades.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "auto: update cosmetic trades data" && git push)
