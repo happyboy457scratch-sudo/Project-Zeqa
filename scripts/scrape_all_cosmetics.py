@@ -14,20 +14,16 @@ CATEGORIES = [
 ]
 
 def load_target_cosmetics():
-    """Loads cosmetics.json or data/cosmetics.json into a set for fast lookup."""
-    file_path = "cosmetics.json"
+    """Loads cosmetics.json into a lookup set."""
+    file_path = "cosmetics.json" if os.path.exists("cosmetics.json") else "data/cosmetics.json"
     if not os.path.exists(file_path):
-        file_path = "data/cosmetics.json"
-        
-    if not os.path.exists(file_path):
-        print("Warning: Neither 'cosmetics.json' nor 'data/cosmetics.json' was found. Script will find 0 matches.")
+        print("Warning: 'cosmetics.json' not found. 0 matches will occur.")
         return set()
 
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     target_set = set()
-
     if isinstance(data, list):
         for item in data:
             if isinstance(item, str):
@@ -44,11 +40,11 @@ def load_target_cosmetics():
     return target_set
 
 def extract_numbers_from_json(obj):
-    """Recursively extracts shard values from API payloads."""
+    """Recursively pulls non-zero numerical price values from JSON structures."""
     prices = []
     if isinstance(obj, dict):
         for k, v in obj.items():
-            if k.lower() in ["amount", "shards", "price", "value", "cost"] and isinstance(v, (int, float)) and v > 0:
+            if k.lower() in ["amount", "shards", "price", "value", "cost", "y", "val"] and isinstance(v, (int, float)) and v > 0:
                 prices.append(float(v))
             else:
                 prices.extend(extract_numbers_from_json(v))
@@ -58,7 +54,7 @@ def extract_numbers_from_json(obj):
     return prices
 
 async def auto_scroll(page):
-    """Scrolls down and back up to trigger dynamic rendering for all items."""
+    """Scrolls down and back up to trigger dynamic image and card loading."""
     await page.evaluate("""async () => {
         await new Promise((resolve) => {
             let totalHeight = 0;
@@ -72,15 +68,13 @@ async def auto_scroll(page):
                     window.scrollTo(0, 0);
                     resolve();
                 }
-            }, 100);
+            }, 80);
         });
     }""")
-    await page.wait_for_timeout(1000)
+    await page.wait_for_timeout(800)
 
 async def scrape_shard_history():
     os.makedirs("data", exist_ok=True)
-    
-    # 1. Load target cosmetics to match against
     target_cosmetics = load_target_cosmetics()
     
     all_items_shard_data = []
@@ -89,11 +83,7 @@ async def scrape_shard_history():
     async with async_playwright() as p:
         browser = await p.chromium.launch(
             headless=True,
-            args=[
-                "--disable-blink-features=AutomationControlled",
-                "--no-sandbox",
-                "--disable-setuid-sandbox"
-            ]
+            args=["--disable-blink-features=AutomationControlled", "--no-sandbox", "--disable-setuid-sandbox"]
         )
         
         context_kwargs = {
@@ -109,11 +99,12 @@ async def scrape_shard_history():
 
         captured_api_prices = []
 
+        # Catch ANY successful JSON response from inpvp.net
         async def handle_response(response):
             try:
-                url = response.url.lower()
-                if any(k in url for k in ["trade", "history", "shard", "graph", "chart", "item"]):
-                    if response.status == 200 and "json" in response.headers.get("content-type", ""):
+                if "inpvp.net" in response.url and response.status == 200:
+                    ct = response.headers.get("content-type", "")
+                    if "application/json" in ct:
                         data = await response.json()
                         found = extract_numbers_from_json(data)
                         if found:
@@ -125,11 +116,11 @@ async def scrape_shard_history():
 
         print(f"Navigating to Mineville Vault: {VAULT_URL}")
         try:
-            await page.goto(VAULT_URL, wait_until="domcontentloaded", timeout=60000)
+            await page.goto(VAULT_URL, wait_until="networkidle", timeout=60000)
         except Exception:
             await page.goto(VAULT_URL, wait_until="load", timeout=60000)
             
-        await page.wait_for_timeout(4000)
+        await page.wait_for_timeout(3000)
 
         for cat in CATEGORIES:
             cat_name = cat["name"]
@@ -147,7 +138,7 @@ async def scrape_shard_history():
                 
                 await auto_scroll(page)
 
-                # PASS 1: Find items on the page that match cosmetics.json
+                # Find matching cosmetic cards on current page
                 raw_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
                 count = await raw_cards.count()
                 matched_items_on_page = []
@@ -166,7 +157,6 @@ async def scrape_shard_history():
                         name = lines[0]
                         name_lower = name.lower()
 
-                        # MATCHING CHECK: Must be in cosmetics.json and not yet processed
                         if name_lower in target_cosmetics and name not in processed_item_names and name not in matched_items_on_page:
                             matched_items_on_page.append(name)
                     except Exception:
@@ -174,18 +164,18 @@ async def scrape_shard_history():
 
                 print(f"Matched {len(matched_items_on_page)} item(s) on page {current_page} with cosmetics.json.")
 
-                # PASS 2: Fetch and average shard data for matched items
+                # Scrape each matched item
                 for idx, item_name in enumerate(matched_items_on_page):
                     try:
                         print(f"[{idx+1}/{len(matched_items_on_page)}] Fetching match: {item_name}")
                         captured_api_prices.clear()
 
-                        clickables_locator = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
-                        total_elements = await clickables_locator.count()
+                        clickables = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
+                        total_elements = await clickables.count()
                         
                         target_idx = -1
                         for i in range(total_elements):
-                            elem = clickables_locator.nth(i)
+                            elem = clickables.nth(i)
                             txt = await elem.inner_text()
                             txt_lines = [l.strip() for l in txt.strip().split("\n") if l.strip()]
                             if txt_lines and txt_lines[0] == item_name:
@@ -193,12 +183,10 @@ async def scrape_shard_history():
                                 break
                         
                         if target_idx != -1:
-                            target_elem = clickables_locator.nth(target_idx)
+                            target_elem = clickables.nth(target_idx)
                             await target_elem.scroll_into_view_if_needed()
                             await target_elem.click()
-                            await page.wait_for_timeout(2000)
-                            
-                            current_url = page.url.lower()
+                            await page.wait_for_timeout(2500)
 
                             # Click 'Shards' tab
                             shards_tab = page.locator("button:has-text('Shards'), div:has-text('Shards'), a:has-text('Shards')").last
@@ -206,35 +194,46 @@ async def scrape_shard_history():
                                 await shards_tab.click()
                                 await page.wait_for_timeout(2000)
 
-                                # Fallback HTML text parsing for shard price numbers
+                            # DOM / SVG fallback for graph values
+                            dom_prices = []
+                            try:
+                                # Extract SVG chart node numbers
+                                svg_nodes = await page.locator("svg text, svg title, [class*='recharts'], [class*='chart']").all_inner_texts()
+                                for node_text in svg_nodes:
+                                    cleaned = node_text.replace(",", "").strip()
+                                    if cleaned.isdigit() and int(cleaned) > 0:
+                                        dom_prices.append(float(cleaned))
+
+                                # Extract page text matches
                                 dom_html = await page.content()
                                 dom_matches = re.findall(r'(\d[\d,]*)\s*Shards|Shards:\s*(\d[\d,]*)', dom_html, re.IGNORECASE)
-                                dom_prices = []
                                 for m in dom_matches:
                                     v_str = (m[0] or m[1]).replace(",", "")
                                     if v_str.isdigit() and int(v_str) > 0:
                                         dom_prices.append(float(v_str))
+                            except Exception:
+                                pass
 
-                                all_prices = captured_api_prices + dom_prices
+                            all_prices = captured_api_prices + dom_prices
 
-                                if all_prices:
-                                    average_val = round(sum(all_prices) / len(all_prices))
-                                    shard_history = [average_val]
-                                    print(f"  -> Averaged trade value: {average_val}")
-                                else:
-                                    shard_history = []
-                                    print(f"  -> No shard trades found.")
+                            if all_prices:
+                                average_val = round(sum(all_prices) / len(all_prices))
+                                shard_history = [average_val]
+                                print(f"  -> Averaged trade value: {average_val}")
+                            else:
+                                shard_history = []
+                                print(f"  -> No shard trades found.")
 
-                                all_items_shard_data.append({
-                                    "category": cat_name,
-                                    "item_name": item_name,
-                                    "page": current_page,
-                                    "shard_trade_history": shard_history
-                                })
-                                processed_item_names.add(item_name)
+                            all_items_shard_data.append({
+                                "category": cat_name,
+                                "item_name": item_name,
+                                "page": current_page,
+                                "shard_trade_history": shard_history
+                            })
+                            processed_item_names.add(item_name)
 
-                            # Return back
-                            if "vault" not in current_url:
+                            # Navigation return logic
+                            if "vault" not in page.url.lower():
                                 await page.go_back(wait_until="domcontentloaded")
                                 await page.wait_for_timeout(2000)
                             else:
@@ -250,23 +249,27 @@ async def scrape_shard_history():
                         await page.keyboard.press("Escape")
                         await page.wait_for_timeout(1000)
 
-                # Pagination
+                # Pagination handling
                 if current_page < total_pages:
                     next_page_num = str(current_page + 1)
                     next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
                     
                     if await next_btn.count() > 0:
                         await next_btn.click()
-                        await page.wait_for_timeout(3500)
                     else:
                         arrow_btn = page.locator("button:has-text('>'), a:has-text('>')").first
                         if await arrow_btn.count() > 0:
                             await arrow_btn.click()
-                            await page.wait_for_timeout(3500)
+                    
+                    # Force waiting for network idle so page 2, 3, etc. populate completely
+                    try:
+                        await page.wait_for_load_state("networkidle", timeout=5000)
+                    except Exception:
+                        await page.wait_for_timeout(3500)
 
         await browser.close()
 
-    # Save matched results
+    # Save output
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
