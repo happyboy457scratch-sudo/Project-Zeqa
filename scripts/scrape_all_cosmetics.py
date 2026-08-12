@@ -13,10 +13,9 @@ CATEGORIES = [
 ]
 
 def load_target_cosmetics():
-    """Loads cosmetics.json into a lookup set."""
     file_path = "cosmetics.json" if os.path.exists("cosmetics.json") else "data/cosmetics.json"
     if not os.path.exists(file_path):
-        print("Warning: 'cosmetics.json' not found. 0 matches will occur.")
+        print("Warning: 'cosmetics.json' not found.")
         return set()
 
     with open(file_path, "r", encoding="utf-8") as f:
@@ -38,36 +37,32 @@ def load_target_cosmetics():
     print(f"Loaded {len(target_set)} unique target cosmetic names to match against.")
     return target_set
 
-def extract_prices_and_items(obj, collected_data):
-    """Recursively walks through API JSON payloads to find items and their corresponding shard values."""
-    if isinstance(obj, dict):
-        # Look for potential item name keys alongside value/shard keys
-        item_name = obj.get("name") or obj.get("item_name") or obj.get("title")
-        
-        # Look for numerical values representing costs, shards, or prices
-        prices = []
-        for k, v in obj.items():
-            if k.lower() in ["amount", "shards", "price", "value", "cost", "y", "val"] and isinstance(v, (int, float)) and v > 0:
-                prices.append(float(v))
-        
-        if item_name and prices:
-            collected_data[item_name.strip().lower()] = {
-                "original_name": item_name.strip(),
-                "prices": prices
-            }
-            
-        for k, v in obj.items():
-            extract_prices_and_items(v, collected_data)
-            
-    elif isinstance(obj, list):
-        for item in obj:
-            extract_prices_and_items(item, collected_data)
+async def auto_scroll(page):
+    """Scrolls down and back up to force all lazy-loaded cards to render."""
+    await page.evaluate("""async () => {
+        await new Promise((resolve) => {
+            let totalHeight = 0;
+            const distance = 300;
+            const timer = setInterval(() => {
+                const scrollHeight = document.body.scrollHeight;
+                window.scrollBy(0, distance);
+                totalHeight += distance;
+                if (totalHeight >= scrollHeight) {
+                    clearInterval(timer);
+                    window.scrollTo(0, 0);
+                    resolve();
+                }
+            }, 60);
+        });
+    }""")
+    await page.wait_for_timeout(1500)
 
 async def scrape_shard_history():
     os.makedirs("data", exist_ok=True)
     target_cosmetics = load_target_cosmetics()
     
-    master_api_cache = {}
+    all_items_shard_data = []
+    processed_item_names = set()
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(
@@ -86,63 +81,99 @@ async def scrape_shard_history():
         context = await browser.new_context(**context_kwargs)
         page = await context.new_page()
 
-        # Intercept background API responses containing vault data
-        async def handle_response(response):
-            try:
-                if "inpvp.net" in response.url and response.status == 200:
-                    url_lower = response.url.lower()
-                    if any(x in url_lower for x in ["/item", "/history", "/trade", "/cosmetic", "/api/v1", "/vault"]):
-                        ct = response.headers.get("content-type", "")
-                        if "application/json" in ct:
-                            data = await response.json()
-                            extract_prices_and_items(data, master_api_cache)
-            except Exception:
-                pass
-
-        page.on("response", handle_response)
-
         print(f"Navigating to Mineville Vault: {VAULT_URL}")
         try:
             await page.goto(VAULT_URL, wait_until="domcontentloaded", timeout=60000)
         except Exception:
             await page.goto(VAULT_URL, wait_until="load", timeout=60000)
             
-        await page.wait_for_timeout(5000)
+        await page.wait_for_timeout(4000)
 
-        # Click through categories to force the site to fire all background API calls
         for cat_name in CATEGORIES:
-            print(f"Requesting category feed: {cat_name}")
+            print(f"\n================ Processing Category: {cat_name} ================")
+
             cat_tab = page.locator(f"button:has-text('{cat_name}'), a:has-text('{cat_name}')").first
             if await cat_tab.count() > 0:
-                try:
-                    await cat_tab.click()
-                    await page.wait_for_timeout(3000)
-                except Exception:
-                    pass
+                await cat_tab.click()
+                await page.wait_for_timeout(3000)
+
+            current_page = 1
+            while True:
+                print(f"--- Category: {cat_name} | Page {current_page} ---")
+                
+                await auto_scroll(page)
+
+                # Query all visible card elements on the page grid
+                raw_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
+                count = await raw_cards.count()
+                matched_on_page = 0
+                
+                for i in range(count):
+                    try:
+                        card = raw_cards.nth(i)
+                        text = (await card.inner_text()).strip()
+                        if not text:
+                            continue
+                        
+                        lines = [l.strip() for l in text.split("\n") if l.strip()]
+                        if not lines:
+                            continue
+                        
+                        name = lines[0]
+                        name_lower = name.lower()
+
+                        if name_lower in target_cosmetics and name not in processed_item_names:
+                            processed_item_names.add(name)
+                            matched_on_page += 1
+                            
+                            # Extract any prices/shards visible directly on the card text block if available
+                            card_prices = []
+                            for line in lines[1:]:
+                                cleaned = line.replace(",", "").replace("Shards", "").strip()
+                                if cleaned.isdigit() and int(cleaned) > 0:
+                                    card_prices.append(float(cleaned))
+
+                            avg_val = round(sum(card_prices) / len(card_prices)) if card_prices else 0
+
+                            all_items_shard_data.append({
+                                "category": cat_name,
+                                "item_name": name,
+                                "page": current_page,
+                                "shard_trade_history": [avg_val] if avg_val > 0 else []
+                            })
+                    except Exception:
+                        continue
+
+                print(f"Captured {matched_on_page} matched item(s) from page {current_page}.")
+
+                # Pagination Advance Logic
+                next_page_num = str(current_page + 1)
+                next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
+                arrow_btn = page.locator("button:has-text('>'), a:has-text('>')").first
+                
+                if await next_btn.count() > 0 and await next_btn.is_visible():
+                    await next_btn.scroll_into_view_if_needed()
+                    await next_btn.click()
+                    current_page += 1
+                elif await arrow_btn.count() > 0 and await arrow_btn.is_visible():
+                    if not await arrow_btn.get_attribute("disabled"):
+                        await arrow_btn.scroll_into_view_if_needed()
+                        await arrow_btn.click()
+                        current_page += 1
+                    else:
+                        break
+                else:
+                    break
+                
+                await page.wait_for_timeout(3000)
 
         await browser.close()
 
-    # Match intercepted API data against cosmetics.json targets
-    all_items_shard_data = []
-    
-    for target_lower in target_cosmetics:
-        if target_lower in master_api_cache:
-            item_info = master_api_cache[target_lower]
-            prices = item_info["prices"]
-            avg_price = round(sum(prices) / len(prices)) if prices else 0
-            
-            all_items_shard_data.append({
-                "category": "Matched from API",
-                "item_name": item_info["original_name"],
-                "page": 1,
-                "shard_trade_history": [avg_price] if avg_price > 0 else []
-            })
-
-    # Save output
+    # Save output data
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
-    print(f"\nDone! Successfully matched and saved {len(all_items_shard_data)} items to data/trades.json.")
+    print(f"\nDone! Successfully saved {len(all_items_shard_data)} items to data/trades.json.")
 
 if __name__ == "__main__":
     asyncio.run(scrape_shard_history())
