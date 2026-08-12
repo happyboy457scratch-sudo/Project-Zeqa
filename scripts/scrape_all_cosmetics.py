@@ -5,7 +5,14 @@ import re
 from playwright.async_api import async_playwright
 
 VAULT_URL = "https://inpvp.net/mineville/vault?mode=pvp"
-TOTAL_PAGES = 7
+
+# Define categories and their exact total page counts
+CATEGORIES = {
+    "Artifacts": 7,
+    "Capes": 8,
+    "Killphrases": 2,
+    "Projectiles": 1
+}
 
 def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
     trades = []
@@ -40,7 +47,7 @@ async def main():
         )
         page = await context.new_page()
 
-        # Network listener to capture trade payloads
+        # Listen for trade data network responses
         async def handle_response(response):
             if response.status == 200:
                 try:
@@ -56,46 +63,66 @@ async def main():
         await page.goto(VAULT_URL, wait_until="networkidle")
         await page.wait_for_timeout(3000)
 
-        # Loop through all 7 pages
-        for current_page in range(1, TOTAL_PAGES + 1):
-            print(f"\n--- Processing Page {current_page} of {TOTAL_PAGES} ---")
+        # Loop through each category tab
+        for category_name, total_pages in CATEGORIES.items():
+            print(f"\n==========================================")
+            print(f" CATEGORY: {category_name.upper()} ({total_pages} Pages)")
+            print(f"==========================================")
 
-            # 1. Scroll down to trigger lazy loading for all items on the page
-            await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-            await page.wait_for_timeout(2000)
-
-            # 2. Click visible item cards on the current page
-            items = await page.locator("div[class*='item'], div[class*='card']").all()
-            print(f"Found {len(items)} items on page {current_page}")
-
-            for idx, item in enumerate(items[:10]):  # Clicks items on current page
-                try:
-                    await item.click()
-                    await page.wait_for_timeout(1000)
-
-                    # Click 'Shards' button if present
-                    shards_btn = page.locator("text=/Shards/i").first
-                    if await shards_btn.count() > 0:
-                        await shards_btn.click()
-                        await page.wait_for_timeout(1500)
-                except Exception as e:
-                    continue
-
-            # 3. Scroll all the way down to reach the Next Page button
-            await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-            await page.wait_for_timeout(1000)
-
-            # 4. Click Next Page button if not on the last page
-            if current_page < TOTAL_PAGES:
-                next_btn = page.locator("button:has-text('Next'), [aria-label*='next'], text='>'").first
-                if await next_btn.count() > 0:
-                    await next_btn.click()
-                    print(f"Clicked Next Page button -> Loading page {current_page + 1}...")
-                    await page.wait_for_timeout(3000)
+            try:
+                # 1. Click Category Selector Tab
+                category_tab = page.locator("button, a, div").filter(has_text=re.compile(f"^{category_name}$", re.I)).first
+                if await category_tab.count() > 0:
+                    await category_tab.click()
+                    print(f"Clicked {category_name} tab!")
+                    await page.wait_for_timeout(2000)
                 else:
-                    print("Next Page button not found by text, searching for pagination control...")
+                    print(f"Could not find tab for {category_name}, skipping...")
+                    continue
+            except Exception as e:
+                print(f"Error switching to category {category_name}: {e}")
+                continue
 
-        # Process all intercepted network chunks across all 7 pages
+            # 2. Loop through all pages in the current category
+            for current_page in range(1, total_pages + 1):
+                print(f"\n--- {category_name} | Page {current_page} of {total_pages} ---")
+
+                # Scroll down to lazy-load items
+                await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                await page.wait_for_timeout(1500)
+
+                # Find visible item cards
+                items = await page.locator("div[class*='item'], div[class*='card']").all()
+                print(f"Found {len(items)} items on page {current_page}")
+
+                # Click items on the page to trigger shard network requests
+                for idx, item in enumerate(items[:10]):
+                    try:
+                        await item.click()
+                        await page.wait_for_timeout(800)
+
+                        shards_btn = page.locator("text=/Shards/i").first
+                        if await shards_btn.count() > 0:
+                            await shards_btn.click()
+                            await page.wait_for_timeout(1200)
+                    except Exception:
+                        continue
+
+                # Scroll to bottom for pagination button
+                await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+                await page.wait_for_timeout(1000)
+
+                # Click 'Next' button if not on the final page of this category
+                if current_page < total_pages:
+                    next_btn = page.locator("button, a").filter(has_text=re.compile(r"Next|>", re.I)).first
+                    if await next_btn.count() > 0:
+                        await next_btn.click()
+                        print(f"Clicked Next -> Loading page {current_page + 1}...")
+                        await page.wait_for_timeout(2500)
+                    else:
+                        print(f"Next button not found on page {current_page}!")
+
+        # Parse intercepted network data chunks
         for raw_text in captured_responses:
             chunks = re.findall(r'self\.__next_f\.push\((.*?)\)', raw_text)
             extracted = parse_trade_chunks(chunks if chunks else [raw_text])
@@ -103,12 +130,12 @@ async def main():
 
         await browser.close()
 
-    # Save output to data/trades.json
+    # Save complete dataset to data/trades.json
     output_path = "data/trades.json"
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_trades, f, indent=2, ensure_ascii=False)
 
-    print(f"\nFinished all pages! Saved {len(all_trades)} trade entries to {output_path}")
+    print(f"\nDone! Successfully scraped across all categories. Saved {len(all_trades)} entries to {output_path}")
 
 if __name__ == "__main__":
     asyncio.run(main())
