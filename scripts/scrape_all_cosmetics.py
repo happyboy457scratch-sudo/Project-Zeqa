@@ -14,7 +14,6 @@ CATEGORIES = [
 ]
 
 def load_target_cosmetics():
-    """Loads cosmetics.json into a lookup set."""
     file_path = "cosmetics.json" if os.path.exists("cosmetics.json") else "data/cosmetics.json"
     if not os.path.exists(file_path):
         print("Warning: 'cosmetics.json' not found. 0 matches will occur.")
@@ -40,7 +39,6 @@ def load_target_cosmetics():
     return target_set
 
 def extract_numbers_from_json(obj):
-    """Recursively pulls price/shard numbers from JSON structures."""
     prices = []
     if isinstance(obj, dict):
         for k, v in obj.items():
@@ -54,7 +52,6 @@ def extract_numbers_from_json(obj):
     return prices
 
 async def auto_scroll(page):
-    """Scrolls down and back up to force image and card rendering."""
     await page.evaluate("""async () => {
         await new Promise((resolve) => {
             let totalHeight = 0;
@@ -137,7 +134,6 @@ async def scrape_shard_history():
                 
                 await auto_scroll(page)
 
-                # Scan grid elements cleanly
                 raw_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
                 count = await raw_cards.count()
                 matched_items_on_page = []
@@ -163,33 +159,26 @@ async def scrape_shard_history():
 
                 print(f"Matched {len(matched_items_on_page)} item(s) on page {current_page} with cosmetics.json.")
 
-                # Scrape each matched item safely with fresh element re-querying
                 for idx, item_name in enumerate(matched_items_on_page):
                     print(f"[{idx+1}/{len(matched_items_on_page)}] Fetching match: {item_name}")
                     captured_api_prices.clear()
 
                     try:
-                        # Re-query elements on the fly to eliminate stale handle errors
-                        fresh_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
-                        total_elements = await fresh_cards.count()
-                        
-                        target_card = None
-                        for i in range(total_elements):
-                            elem = fresh_cards.nth(i)
-                            txt = await elem.inner_text()
-                            txt_lines = [l.strip() for l in txt.strip().split("\n") if l.strip()]
-                            if txt_lines and txt_lines[0].lower() == item_name.lower():
-                                target_card = elem
-                                break
-                        
-                        if target_card and await target_card.count() > 0:
+                        # Absolute target locator using exact text match inside card elements
+                        target_card = page.locator("main div[class*='card']").filter(
+                            has_text=re.compile(f"^{re.escape(item_name)}$", re.IGNORECASE)
+                        ).first
+
+                        if await target_card.count() == 0:
+                            # Fallback broad match if exact line regex fails
+                            target_card = page.locator("main div[class*='card']").filter(has_text=item_name).first
+
+                        if await target_card.count() > 0:
                             await target_card.scroll_into_view_if_needed()
                             await target_card.click(force=True)
                             
-                            # Wait for modal overlay to appear
-                            await page.wait_for_timeout(2000)
+                            await page.wait_for_timeout(2500)
 
-                            # Locate and click 'Shards' tab inside the active modal container
                             shards_tab = page.locator("button:has-text('Shards'), div:has-text('Shards'), a:has-text('Shards')").last
                             if await shards_tab.count() > 0:
                                 try:
@@ -199,7 +188,6 @@ async def scrape_shard_history():
                                 except Exception:
                                     pass
 
-                            # DOM/SVG Chart text parsing fallback
                             dom_prices = []
                             try:
                                 svg_nodes = await page.locator("svg text, svg title, [class*='recharts'], [class*='chart']").all_inner_texts()
@@ -235,18 +223,18 @@ async def scrape_shard_history():
                             })
                             processed_item_names.add(item_name)
 
-                            # Close modal reliably using Escape and fall back to clicking backdrop/close button
+                            # Close modal cleanly and ensure DOM state resets
                             await page.keyboard.press("Escape")
-                            await page.wait_for_timeout(800)
+                            await page.wait_for_timeout(1000)
                             
-                            close_btn = page.locator("button:has-text('×'), [role='dialog'] button[aria-label='Close'], div[class*='backdrop']").first
+                            close_btn = page.locator("button:has-text('×'), [role='dialog'] button[aria-label='Close']").first
                             if await close_btn.count() > 0 and await close_btn.is_visible():
                                 try:
                                     await close_btn.click(force=True)
                                 except Exception:
                                     pass
                                     
-                            await page.wait_for_timeout(1000)
+                            await page.wait_for_timeout(1500)
                         else:
                             print(f"  -> Element for {item_name} could not be located in DOM.")
 
@@ -255,7 +243,7 @@ async def scrape_shard_history():
                         await page.keyboard.press("Escape")
                         await page.wait_for_timeout(1000)
 
-                # Pagination Advance Logic
+                # Pagination Advance
                 next_page_num = str(current_page + 1)
                 next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
                 arrow_btn = page.locator("button:has-text('>'), a:has-text('>')").first
@@ -278,7 +266,6 @@ async def scrape_shard_history():
 
         await browser.close()
 
-    # Save output
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
