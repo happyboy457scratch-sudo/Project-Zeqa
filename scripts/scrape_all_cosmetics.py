@@ -12,7 +12,6 @@ CATEGORIES = [
     {"name": "Projectiles", "pages": 1}
 ]
 
-# Words to ignore so navigation text doesn't get treated as cosmetics
 IGNORED_TITLES = {
     "overview", "community", "bundles", "vault", "hall of fame", 
     "cities", "item market", "trades", "pvp leaderboards", "staff", 
@@ -63,32 +62,41 @@ async def scrape_shard_history():
             for current_page in range(1, total_pages + 1):
                 print(f"--- Category: {cat_name} | Page {current_page}/{total_pages} ---")
 
-                # Target actual item grid boxes that contain rarities/labels, ignoring mobile navigation
-                item_cards = await page.locator("main div.grid > div, main [class*='cursor-pointer']").all()
+                # Broadened selector to target item cards within the main content region
+                item_cards = await page.locator("main article, main a[href*='item'], main div[class*='group'], main div.flex-col").all()
 
                 valid_cards = []
                 for card in item_cards:
-                    text = (await card.inner_text()).strip()
-                    if not text:
+                    try:
+                        text = (await card.inner_text()).strip()
+                        if not text:
+                            continue
+                        first_line = text.split("\n")[0].strip().lower()
+                        
+                        if first_line not in IGNORED_TITLES and "resolved" not in first_line and "online" not in first_line and len(text) > 3:
+                            # Avoid duplicates from nested locators
+                            if card not in valid_cards:
+                                valid_cards.append(card)
+                    except Exception:
                         continue
-                    first_line = text.split("\n")[0].strip().lower()
-                    # Filter out navigation links and stats counters
-                    if first_line not in IGNORED_TITLES and "resolved" not in first_line and "online" not in first_line:
-                        valid_cards.append(card)
 
                 print(f"Found {len(valid_cards)} valid cosmetic items on page {current_page}.")
 
                 for idx in range(len(valid_cards)):
                     try:
-                        # Re-query cards to prevent stale handles
+                        # Re-query elements to avoid stale handles
+                        raw_cards = await page.locator("main article, main a[href*='item'], main div[class*='group'], main div.flex-col").all()
                         refreshed_cards = []
-                        raw_cards = await page.locator("main div.grid > div, main [class*='cursor-pointer']").all()
                         for c in raw_cards:
-                            txt = (await c.inner_text()).strip()
-                            if txt:
-                                fl = txt.split("\n")[0].strip().lower()
-                                if fl not in IGNORED_TITLES and "resolved" not in fl and "online" not in fl:
-                                    refreshed_cards.append(c)
+                            try:
+                                txt = (await c.inner_text()).strip()
+                                if txt:
+                                    fl = txt.split("\n")[0].strip().lower()
+                                    if fl not in IGNORED_TITLES and "resolved" not in fl and "online" not in fl and len(txt) > 3:
+                                        if c not in refreshed_cards:
+                                            refreshed_cards.append(c)
+                            except Exception:
+                                continue
 
                         if idx >= len(refreshed_cards):
                             break
@@ -99,18 +107,17 @@ async def scrape_shard_history():
 
                         print(f"[{idx+1}/{len(refreshed_cards)}] Fetching Shard History for: {item_name}")
 
-                        # Click card to open modal
                         await target_card.click()
-                        await page.wait_for_timeout(1200)
+                        await page.wait_for_timeout(1500)
 
                         # Click 'Shards' tab inside modal
                         shards_tab = page.locator("button:has-text('Shards'), div:has-text('Shards')").last
                         if await shards_tab.count() > 0 and await shards_tab.is_visible():
                             await shards_tab.click()
-                            await page.wait_for_timeout(1200)
+                            await page.wait_for_timeout(1500)
 
                         # Extract trade rows
-                        trade_rows = await page.locator("[class*='modal'] tr, [class*='history'] tr, [class*='trade-row']").all()
+                        trade_rows = await page.locator("[class*='modal'] tr, [class*='history'] tr, [class*='trade-row'], [class*='overflow-x-auto'] div").all()
                         
                         item_trades = []
                         for row in trade_rows:
@@ -126,13 +133,13 @@ async def scrape_shard_history():
                         })
 
                         # Close modal
-                        close_btn = page.locator("button:has-text('×'), button[aria-label='Close']").first
+                        close_btn = page.locator("button:has-text('×'), button[aria-label='Close'], [class*='close']").first
                         if await close_btn.count() > 0 and await close_btn.is_visible():
                             await close_btn.click()
-                            await page.wait_for_timeout(800)
+                            await page.wait_for_timeout(1000)
                         else:
                             await page.keyboard.press("Escape")
-                            await page.wait_for_timeout(800)
+                            await page.wait_for_timeout(1000)
 
                     except Exception as err:
                         print(f"Error processing item index {idx}: {err}")
