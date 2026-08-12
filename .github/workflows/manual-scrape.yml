@@ -5,7 +5,6 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 
-# Add this permissions block
 permissions:
   contents: write
 
@@ -29,7 +28,7 @@ jobs:
           playwright install chromium --with-deps
 
       - name: Run Shard History Scraper
-        run: python scripts/scrape_shard_history.py
+        run: python scripts/scrape_all_cosmetics.py
 
       - name: Commit and Push Data
         run: |
