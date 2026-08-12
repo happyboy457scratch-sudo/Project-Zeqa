@@ -54,58 +54,58 @@ async def scrape_shard_history():
 
             print(f"\n================ Processing Category: {cat_name} ================")
 
+            # Click category tab safely
             cat_tab = page.locator(f"button:has-text('{cat_name}'), a:has-text('{cat_name}')").first
             if await cat_tab.count() > 0:
                 await cat_tab.click()
-                await page.wait_for_timeout(2000)
+                await page.wait_for_timeout(3000)
 
             for current_page in range(1, total_pages + 1):
                 print(f"--- Category: {cat_name} | Page {current_page}/{total_pages} ---")
 
-                # Broadened selector to target item cards within the main content region
-                item_cards = await page.locator("main article, main a[href*='item'], main div[class*='group'], main div.flex-col").all()
+                # Allow elements to settle
+                try:
+                    await page.wait_for_selector("main div", timeout=5000)
+                except Exception:
+                    pass
 
-                valid_cards = []
-                for card in item_cards:
+                # Build a fresh list of card elements for this page iteration
+                raw_cards = await page.locator("main div[class*='cursor-pointer'], main div.flex.flex-col, main a").all()
+                valid_card_count = 0
+                
+                # Pre-count valid cards to iterate safely by index
+                indexes_to_process = []
+                for idx, card in enumerate(raw_cards):
                     try:
                         text = (await card.inner_text()).strip()
                         if not text:
                             continue
-                        first_line = text.split("\n")[0].strip().lower()
+                        lines = text.split("\n")
+                        first_line = lines[0].strip().lower()
                         
-                        if first_line not in IGNORED_TITLES and "resolved" not in first_line and "online" not in first_line and len(text) > 3:
-                            # Avoid duplicates from nested locators
-                            if card not in valid_cards:
-                                valid_cards.append(card)
+                        if first_line in IGNORED_TITLES or "resolved" in first_line or "online" in first_line or len(text) < 2:
+                            continue
+                        
+                        card_full_text = text.lower()
+                        if any(r in card_full_text for r in ["legendary", "exotic", "partner", "rare", "common", "epic", "limited"]):
+                            indexes_to_process.append(idx)
                     except Exception:
                         continue
 
-                print(f"Found {len(valid_cards)} valid cosmetic items on page {current_page}.")
+                print(f"Found {len(indexes_to_process)} valid cosmetic items on page {current_page}.")
 
-                for idx in range(len(valid_cards)):
+                for item_position, original_idx in enumerate(indexes_to_process):
                     try:
-                        # Re-query elements to avoid stale handles
-                        raw_cards = await page.locator("main article, main a[href*='item'], main div[class*='group'], main div.flex-col").all()
-                        refreshed_cards = []
-                        for c in raw_cards:
-                            try:
-                                txt = (await c.inner_text()).strip()
-                                if txt:
-                                    fl = txt.split("\n")[0].strip().lower()
-                                    if fl not in IGNORED_TITLES and "resolved" not in fl and "online" not in fl and len(txt) > 3:
-                                        if c not in refreshed_cards:
-                                            refreshed_cards.append(c)
-                            except Exception:
-                                continue
-
-                        if idx >= len(refreshed_cards):
+                        # Re-query fresh card list to avoid stale reference errors after modal closures
+                        current_raw_cards = await page.locator("main div[class*='cursor-pointer'], main div.flex.flex-col, main a").all()
+                        if original_idx >= len(current_raw_cards):
                             break
                         
-                        target_card = refreshed_cards[idx]
+                        target_card = current_raw_cards[original_idx]
                         full_text_block = (await target_card.inner_text()).strip()
                         item_name = full_text_block.split("\n")[0].strip()
 
-                        print(f"[{idx+1}/{len(refreshed_cards)}] Fetching Shard History for: {item_name}")
+                        print(f"[{item_position+1}/{len(indexes_to_process)}] Fetching Shard History for: {item_name}")
 
                         await target_card.click()
                         await page.wait_for_timeout(1500)
@@ -116,7 +116,7 @@ async def scrape_shard_history():
                             await shards_tab.click()
                             await page.wait_for_timeout(1500)
 
-                        # Extract trade rows
+                        # Extract trade rows from modal history
                         trade_rows = await page.locator("[class*='modal'] tr, [class*='history'] tr, [class*='trade-row'], [class*='overflow-x-auto'] div").all()
                         
                         item_trades = []
@@ -132,7 +132,7 @@ async def scrape_shard_history():
                             "shard_trade_history": item_trades
                         })
 
-                        # Close modal
+                        # Close modal gracefully
                         close_btn = page.locator("button:has-text('×'), button[aria-label='Close'], [class*='close']").first
                         if await close_btn.count() > 0 and await close_btn.is_visible():
                             await close_btn.click()
@@ -142,16 +142,19 @@ async def scrape_shard_history():
                             await page.wait_for_timeout(1000)
 
                     except Exception as err:
-                        print(f"Error processing item index {idx}: {err}")
+                        print(f"Error processing item at index {original_idx}: {err}")
                         await page.keyboard.press("Escape")
                         await page.wait_for_timeout(1000)
 
-                # Pagination
+                # Robust pagination: explicitly query for the next page button right before clicking
                 if current_page < total_pages:
-                    next_btn = page.locator(f"button:has-text('{current_page + 1}')").first
+                    next_page_num = current_page + 1
+                    next_btn = page.locator(f"button:has-text('{next_page_num}'), a:has-text('{next_page_num}')").first
                     if await next_btn.count() > 0:
                         await next_btn.click()
-                        await page.wait_for_timeout(2000)
+                        await page.wait_for_timeout(2500)
+                    else:
+                        print(f"Warning: Could not locate button for page {next_page_num}")
 
         await browser.close()
 
