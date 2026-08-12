@@ -37,6 +37,24 @@ def load_target_cosmetics():
     print(f"Loaded {len(target_set)} unique target cosmetic names to match against.")
     return target_set
 
+def parse_price(line):
+    """Parses standard numbers and values with a 'K' suffix (e.g., '1.5K' -> 1500.0)."""
+    line_clean = line.strip().replace(",", "")
+    if not line_clean:
+        return None
+    
+    try:
+        if line_clean.lower().endswith('k'):
+            num_part = float(line_clean[:-1])
+            return num_part * 1000.0
+        else:
+            digits_only = "".join([c for c in line_clean if c.isdigit() or c == '.'])
+            if digits_only:
+                return float(digits_only)
+    except ValueError:
+        pass
+    return None
+
 async def auto_scroll(page):
     await page.evaluate("""async () => {
         await new Promise((resolve) => {
@@ -102,7 +120,8 @@ async def scrape_shard_history():
                 
                 await auto_scroll(page)
 
-                raw_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
+                # Expanded selector to ensure killphrases and other grid items are captured reliably
+                raw_cards = page.locator("main div[class*='grid'] > div, main [class*='cursor-pointer'], main a, main div[class*='card']")
                 count = await raw_cards.count()
                 matched_on_page = 0
                 
@@ -125,12 +144,12 @@ async def scrape_shard_history():
                             matched_on_page += 1
                             
                             card_prices = []
+                            # Scan all text lines after the item name for prices or shorthand 'K' values
                             for line in lines[1:]:
-                                cleaned = "".join([c for c in line if c.isdigit()])
-                                if cleaned and int(cleaned) > 0:
-                                    card_prices.append(float(cleaned))
+                                parsed_val = parse_price(line)
+                                if parsed_val is not None and parsed_val > 0:
+                                    card_prices.append(parsed_val)
 
-                            # Calculate the average of the graph data points if they exist
                             avg_value = 0
                             if card_prices:
                                 avg_value = round(sum(card_prices) / len(card_prices), 2)
@@ -147,7 +166,6 @@ async def scrape_shard_history():
 
                 print(f"Captured {matched_on_page} matched item(s) from page {current_page}.")
 
-                # Pagination advancement logic
                 next_page_num = str(current_page + 1)
                 next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
                 generic_next = page.locator("button[aria-label*='Next' i], a[aria-label*='Next' i], button:has-text('Next'), nav button:has-text('>')").first
@@ -180,7 +198,7 @@ async def scrape_shard_history():
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
-    print(f"\nDone! Successfully calculated averages and saved {len(all_items_shard_data)} items to data/trades.json.")
+    print(f"\nDone! Successfully processed all categories, calculated averages, and saved {len(all_items_shard_data)} items to data/trades.json.")
 
 if __name__ == "__main__":
     asyncio.run(scrape_shard_history())
