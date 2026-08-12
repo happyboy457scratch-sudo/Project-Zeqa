@@ -79,8 +79,7 @@ async def scrape_shard_history():
                         
                         lines = [l.strip() for l in text.split("\n") if l.strip()]
                         
-                        # A true cosmetic card always has multiple lines (e.g. Name + Rarity or Stats)
-                        # Regular navigation links and player names are usually just 1 line.
+                        # True cosmetic cards have multiple lines (Name + Rarity/Stats)
                         if len(lines) < 2:
                             continue
                         
@@ -105,7 +104,6 @@ async def scrape_shard_history():
                     try:
                         print(f"[{idx+1}/{len(valid_item_names)}] Fetching: {item_name}")
 
-                        # Re-query elements dynamically to avoid stale elements
                         clickables_locator = page.locator("main [class*='cursor-pointer'], main a")
                         count = await clickables_locator.count()
                         
@@ -123,7 +121,7 @@ async def scrape_shard_history():
                             await clickables_locator.nth(target_idx).click()
                             await page.wait_for_timeout(1500)
                             
-                            # Safety Check: Did we accidentally click a link that navigated us away?
+                            # Safety Check: Did we accidentally navigate away from the Vault?
                             if "vault" not in page.url.lower():
                                 print("  -> Error: Navigated away from the Vault. Reverting...")
                                 await page.go_back(wait_until="domcontentloaded")
@@ -168,7 +166,7 @@ async def scrape_shard_history():
                         await page.keyboard.press("Escape")
                         await page.wait_for_timeout(1000)
 
-                # Move to next page via exact text matching so it doesn't click page "12" for page "2"
+                # Move to the next page using exact number matching
                 if current_page < total_pages:
                     next_page_num = str(current_page + 1)
                     next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
