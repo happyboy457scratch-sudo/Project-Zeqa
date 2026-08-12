@@ -12,12 +12,12 @@ CATEGORIES = [
     {"name": "Projectiles", "pages": 1}
 ]
 
-# Words to ignore so the bot doesn't try to click navigation menus
 IGNORED_TITLES = {
     "overview", "community", "bundles", "vault", "hall of fame", 
     "cities", "item market", "trades", "pvp leaderboards", "staff", 
     "orebits", "profile", "support", "ban appeal", "teams", "giveaways",
-    "genwars", "airdrops", "megasmp", "oneblock online", "what are orebits?"
+    "genwars", "airdrops", "megasmp", "oneblock online", "what are orebits?",
+    "mineville zeqa", "back to general discussion", "sign in"
 }
 
 async def scrape_shard_history():
@@ -55,7 +55,6 @@ async def scrape_shard_history():
 
             print(f"\n================ Processing Category: {cat_name} ================")
 
-            # Click the category tab
             cat_tab = page.locator(f"button:has-text('{cat_name}'), a:has-text('{cat_name}')").first
             if await cat_tab.count() > 0:
                 await cat_tab.click()
@@ -63,91 +62,120 @@ async def scrape_shard_history():
 
             for current_page in range(1, total_pages + 1):
                 print(f"--- Category: {cat_name} | Page {current_page}/{total_pages} ---")
-                await page.wait_for_timeout(2000) # Give grid time to load
+                await page.wait_for_timeout(2000)
 
-                # PASS 1: Collect Exact Item Names
-                raw_cards = await page.locator("main div[class*='cursor-pointer'], main div.flex.flex-col, main a").all()
+                # PASS 1: Identify True Cosmetic Items
+                raw_cards = await page.locator("main [class*='cursor-pointer'], main a").all()
                 valid_item_names = []
                 
                 for card in raw_cards:
                     try:
+                        if not await card.is_visible():
+                            continue
+                            
                         text = (await card.inner_text()).strip()
                         if not text:
                             continue
                         
-                        # The item name is usually the very first line of text in the card block
-                        first_line = text.split("\n")[0].strip()
-                        fl_lower = first_line.lower()
+                        lines = [l.strip() for l in text.split("\n") if l.strip()]
                         
-                        # If it's a navigation button, support ticket, or too short, skip it
-                        if fl_lower in IGNORED_TITLES or "resolved" in fl_lower or "online" in fl_lower or len(first_line) < 3:
+                        # A true cosmetic card always has multiple lines (e.g. Name + Rarity or Stats)
+                        # Regular navigation links and player names are usually just 1 line.
+                        if len(lines) < 2:
                             continue
                         
-                        if first_line not in valid_item_names:
-                            valid_item_names.append(first_line)
+                        name = lines[0]
+                        name_lower = name.lower()
+                        
+                        if name_lower in IGNORED_TITLES:
+                            continue
+                        
+                        if "resolved" in name_lower or "open now" in name_lower or "online" in name_lower:
+                            continue
+                        
+                        if name not in valid_item_names:
+                            valid_item_names.append(name)
                     except Exception:
                         continue
 
-                print(f"Found {len(valid_item_names)} items to process on page {current_page}.")
+                print(f"Found {len(valid_item_names)} true cosmetic items on page {current_page}.")
 
-                # PASS 2: Search the DOM for the exact names and click them
+                # PASS 2: Safely Locate and Click Each Item
                 for idx, item_name in enumerate(valid_item_names):
                     try:
                         print(f"[{idx+1}/{len(valid_item_names)}] Fetching: {item_name}")
 
-                        # Locate by exact text match within the main block, preventing index shift issues
-                        target_card = page.locator("main").get_by_text(item_name, exact=True).first
+                        # Re-query elements dynamically to avoid stale elements
+                        clickables_locator = page.locator("main [class*='cursor-pointer'], main a")
+                        count = await clickables_locator.count()
                         
-                        if await target_card.count() > 0 and await target_card.is_visible():
-                            await target_card.click()
-                            await page.wait_for_timeout(1500)
-                        else:
-                            print(f"  -> Could not locate card for {item_name}, skipping.")
-                            continue
-
-                        # Click 'Shards' tab inside modal
-                        shards_tab = page.locator("button:has-text('Shards'), div:has-text('Shards')").last
-                        if await shards_tab.count() > 0 and await shards_tab.is_visible():
-                            await shards_tab.click()
-                            await page.wait_for_timeout(1500)
-
-                        # Extract trade rows from modal history
-                        trade_rows = await page.locator("[class*='modal'] tr, [class*='history'] tr, [class*='trade-row'], [class*='overflow-x-auto'] div").all()
+                        target_idx = -1
+                        for i in range(count):
+                            elem = clickables_locator.nth(i)
+                            if await elem.is_visible():
+                                txt = await elem.inner_text()
+                                txt_lines = [l.strip() for l in txt.strip().split("\n") if l.strip()]
+                                if txt_lines and txt_lines[0] == item_name:
+                                    target_idx = i
+                                    break
                         
-                        item_trades = []
-                        for row in trade_rows:
-                            row_text = (await row.inner_text()).strip()
-                            if row_text and ("Shards" in row_text or "Shard" in row_text):
-                                item_trades.append(row_text)
+                        if target_idx != -1:
+                            await clickables_locator.nth(target_idx).click()
+                            await page.wait_for_timeout(1500)
+                            
+                            # Safety Check: Did we accidentally click a link that navigated us away?
+                            if "vault" not in page.url.lower():
+                                print("  -> Error: Navigated away from the Vault. Reverting...")
+                                await page.go_back(wait_until="domcontentloaded")
+                                await page.wait_for_timeout(2500)
+                                continue
 
-                        all_items_shard_data.append({
-                            "category": cat_name,
-                            "item_name": item_name,
-                            "page": current_page,
-                            "shard_trade_history": item_trades
-                        })
+                            # Click 'Shards' tab inside modal
+                            shards_tab = page.locator("button:has-text('Shards'), div:has-text('Shards')").last
+                            if await shards_tab.count() > 0 and await shards_tab.is_visible():
+                                await shards_tab.click()
+                                await page.wait_for_timeout(1500)
 
-                        # Close modal gracefully
-                        close_btn = page.locator("button:has-text('×'), button[aria-label='Close'], [class*='close']").first
-                        if await close_btn.count() > 0 and await close_btn.is_visible():
-                            await close_btn.click()
-                            await page.wait_for_timeout(1000)
+                                trade_rows = await page.locator("[class*='modal'] tr, [class*='history'] tr, [class*='trade-row'], [class*='overflow-x-auto'] div").all()
+                                item_trades = []
+                                for row in trade_rows:
+                                    row_text = (await row.inner_text()).strip()
+                                    if row_text and ("Shards" in row_text or "Shard" in row_text):
+                                        item_trades.append(row_text)
+
+                                all_items_shard_data.append({
+                                    "category": cat_name,
+                                    "item_name": item_name,
+                                    "page": current_page,
+                                    "shard_trade_history": item_trades
+                                })
+                            else:
+                                print(f"  -> No 'Shards' tab found for {item_name}.")
+
+                            # Close modal
+                            close_btn = page.locator("button:has-text('×'), button[aria-label='Close'], [class*='close']").first
+                            if await close_btn.count() > 0 and await close_btn.is_visible():
+                                await close_btn.click()
+                                await page.wait_for_timeout(1000)
+                            else:
+                                await page.keyboard.press("Escape")
+                                await page.wait_for_timeout(1000)
                         else:
-                            await page.keyboard.press("Escape")
-                            await page.wait_for_timeout(1000)
+                            print(f"  -> Could not locate target element for {item_name}, skipping.")
 
                     except Exception as err:
                         print(f"Error processing item '{item_name}': {err}")
                         await page.keyboard.press("Escape")
                         await page.wait_for_timeout(1000)
 
-                # Pagination: Move to the next page
+                # Move to next page via exact text matching so it doesn't click page "12" for page "2"
                 if current_page < total_pages:
-                    next_page_num = current_page + 1
-                    next_btn = page.locator(f"button:has-text('{next_page_num}'), a:has-text('{next_page_num}')").first
+                    next_page_num = str(current_page + 1)
+                    next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
+                    
                     if await next_btn.count() > 0:
                         await next_btn.click()
-                        await page.wait_for_timeout(2500)
+                        await page.wait_for_timeout(3000)
                     else:
                         print(f"Warning: Could not locate pagination button for page {next_page_num}")
 
