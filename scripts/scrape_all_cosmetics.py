@@ -6,7 +6,6 @@ from playwright.async_api import async_playwright
 
 VAULT_URL = "https://inpvp.net/mineville/vault?mode=pvp"
 
-# Define categories and their exact total page counts
 CATEGORIES = {
     "Artifacts": 7,
     "Capes": 8,
@@ -47,7 +46,6 @@ async def main():
         )
         page = await context.new_page()
 
-        # Listen for trade data network responses
         async def handle_response(response):
             if response.status == 200:
                 try:
@@ -63,39 +61,44 @@ async def main():
         await page.goto(VAULT_URL, wait_until="networkidle")
         await page.wait_for_timeout(3000)
 
-        # Loop through each category tab
         for category_name, total_pages in CATEGORIES.items():
             print(f"\n==========================================")
             print(f" CATEGORY: {category_name.upper()} ({total_pages} Pages)")
             print(f"==========================================")
 
             try:
-                # 1. Click Category Selector Tab
-                category_tab = page.locator("button, a, div").filter(has_text=re.compile(f"^{category_name}$", re.I)).first
+                # 1. Flexible Category Tab Locator
+                category_tab = page.locator("button, [role='tab'], div[class*='tab'], div[class*='category'], a").filter(has_text=re.compile(category_name, re.I)).first
+                
                 if await category_tab.count() > 0:
                     await category_tab.click()
                     print(f"Clicked {category_name} tab!")
                     await page.wait_for_timeout(2000)
                 else:
-                    print(f"Could not find tab for {category_name}, skipping...")
-                    continue
+                    # Fallback: Click text node directly if tab wrapper isn't caught
+                    text_node = page.locator(f"text=/{category_name}/i").first
+                    if await text_node.count() > 0:
+                        await text_node.click()
+                        print(f"Clicked {category_name} via text fallback!")
+                        await page.wait_for_timeout(2000)
+                    else:
+                        print(f"Could not find tab for {category_name}, skipping...")
+                        continue
+
             except Exception as e:
                 print(f"Error switching to category {category_name}: {e}")
                 continue
 
-            # 2. Loop through all pages in the current category
+            # 2. Loop through pages for this category
             for current_page in range(1, total_pages + 1):
                 print(f"\n--- {category_name} | Page {current_page} of {total_pages} ---")
 
-                # Scroll down to lazy-load items
                 await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 await page.wait_for_timeout(1500)
 
-                # Find visible item cards
                 items = await page.locator("div[class*='item'], div[class*='card']").all()
                 print(f"Found {len(items)} items on page {current_page}")
 
-                # Click items on the page to trigger shard network requests
                 for idx, item in enumerate(items[:10]):
                     try:
                         await item.click()
@@ -108,11 +111,9 @@ async def main():
                     except Exception:
                         continue
 
-                # Scroll to bottom for pagination button
                 await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 await page.wait_for_timeout(1000)
 
-                # Click 'Next' button if not on the final page of this category
                 if current_page < total_pages:
                     next_btn = page.locator("button, a").filter(has_text=re.compile(r"Next|>", re.I)).first
                     if await next_btn.count() > 0:
@@ -122,7 +123,6 @@ async def main():
                     else:
                         print(f"Next button not found on page {current_page}!")
 
-        # Parse intercepted network data chunks
         for raw_text in captured_responses:
             chunks = re.findall(r'self\.__next_f\.push\((.*?)\)', raw_text)
             extracted = parse_trade_chunks(chunks if chunks else [raw_text])
@@ -130,7 +130,6 @@ async def main():
 
         await browser.close()
 
-    # Save complete dataset to data/trades.json
     output_path = "data/trades.json"
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_trades, f, indent=2, ensure_ascii=False)
