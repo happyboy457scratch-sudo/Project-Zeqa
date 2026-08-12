@@ -12,6 +12,14 @@ CATEGORIES = [
     {"name": "Projectiles", "pages": 1}
 ]
 
+# Words to ignore so navigation text doesn't get treated as cosmetics
+IGNORED_TITLES = {
+    "overview", "community", "bundles", "vault", "hall of fame", 
+    "cities", "item market", "trades", "pvp leaderboards", "staff", 
+    "orebits", "profile", "support", "ban appeal", "teams", "giveaways",
+    "genwars", "airdrops", "megasmp", "oneblock online", "what are orebits?"
+}
+
 async def scrape_shard_history():
     os.makedirs("data", exist_ok=True)
     all_items_shard_data = []
@@ -31,7 +39,6 @@ async def scrape_shard_history():
             "viewport": {"width": 1400, "height": 900}
         }
         
-        # Inject saved authentication state if present
         if os.path.exists("state.json"):
             context_kwargs["storage_state"] = "state.json"
 
@@ -48,7 +55,6 @@ async def scrape_shard_history():
 
             print(f"\n================ Processing Category: {cat_name} ================")
 
-            # Click category tab
             cat_tab = page.locator(f"button:has-text('{cat_name}'), a:has-text('{cat_name}')").first
             if await cat_tab.count() > 0:
                 await cat_tab.click()
@@ -57,38 +63,59 @@ async def scrape_shard_history():
             for current_page in range(1, total_pages + 1):
                 print(f"--- Category: {cat_name} | Page {current_page}/{total_pages} ---")
 
-                # Get all cosmetic item cards present on this page
-                item_cards = await page.locator("main [class*='item'], main [class*='card']").all()
+                # Target actual item grid boxes that contain rarities/labels, ignoring mobile navigation
+                item_cards = await page.locator("main div.grid > div, main [class*='cursor-pointer']").all()
 
-                for idx in range(len(item_cards)):
+                valid_cards = []
+                for card in item_cards:
+                    text = (await card.inner_text()).strip()
+                    if not text:
+                        continue
+                    first_line = text.split("\n")[0].strip().lower()
+                    # Filter out navigation links and stats counters
+                    if first_line not in IGNORED_TITLES and "resolved" not in first_line and "online" not in first_line:
+                        valid_cards.append(card)
+
+                print(f"Found {len(valid_cards)} valid cosmetic items on page {current_page}.")
+
+                for idx in range(len(valid_cards)):
                     try:
-                        # Re-fetch cards to avoid stale element handle exceptions
-                        cards = await page.locator("main [class*='item'], main [class*='card']").all()
-                        if idx >= len(cards):
+                        # Re-query cards to prevent stale handles
+                        refreshed_cards = []
+                        raw_cards = await page.locator("main div.grid > div, main [class*='cursor-pointer']").all()
+                        for c in raw_cards:
+                            txt = (await c.inner_text()).strip()
+                            if txt:
+                                fl = txt.split("\n")[0].strip().lower()
+                                if fl not in IGNORED_TITLES and "resolved" not in fl and "online" not in fl:
+                                    refreshed_cards.append(c)
+
+                        if idx >= len(refreshed_cards):
                             break
                         
-                        card = cards[idx]
-                        item_name = (await card.inner_text()).split("\n")[0].strip()
+                        target_card = refreshed_cards[idx]
+                        full_text_block = (await target_card.inner_text()).strip()
+                        item_name = full_text_block.split("\n")[0].strip()
 
-                        print(f"Fetching Shard History for: {item_name}")
+                        print(f"[{idx+1}/{len(refreshed_cards)}] Fetching Shard History for: {item_name}")
 
-                        # Click item card to open detail view / modal
-                        await card.click()
-                        await page.wait_for_timeout(1500)
+                        # Click card to open modal
+                        await target_card.click()
+                        await page.wait_for_timeout(1200)
 
-                        # Click 'Shards' tab under Trade History inside the item view
+                        # Click 'Shards' tab inside modal
                         shards_tab = page.locator("button:has-text('Shards'), div:has-text('Shards')").last
                         if await shards_tab.count() > 0 and await shards_tab.is_visible():
                             await shards_tab.click()
-                            await page.wait_for_timeout(1500)
+                            await page.wait_for_timeout(1200)
 
-                        # Extract historical trade records/table rows
-                        trade_rows = await page.locator("[class*='history'] tr, [class*='trade'] tr, [class*='TradeHistory'] tr").all()
+                        # Extract trade rows
+                        trade_rows = await page.locator("[class*='modal'] tr, [class*='history'] tr, [class*='trade-row']").all()
                         
                         item_trades = []
                         for row in trade_rows:
                             row_text = (await row.inner_text()).strip()
-                            if row_text and ("Shards" in row_text or "Shard" in row_text or any(c.isdigit() for c in row_text)):
+                            if row_text and ("Shards" in row_text or "Shard" in row_text):
                                 item_trades.append(row_text)
 
                         all_items_shard_data.append({
@@ -98,21 +125,21 @@ async def scrape_shard_history():
                             "shard_trade_history": item_trades
                         })
 
-                        # Close modal / navigate back to main grid
-                        close_btn = page.locator("button:has-text('×'), button[aria-label='Close'], a:has-text('Back to Cosmetics')").first
+                        # Close modal
+                        close_btn = page.locator("button:has-text('×'), button[aria-label='Close']").first
                         if await close_btn.count() > 0 and await close_btn.is_visible():
                             await close_btn.click()
-                            await page.wait_for_timeout(1000)
+                            await page.wait_for_timeout(800)
                         else:
                             await page.keyboard.press("Escape")
-                            await page.wait_for_timeout(1000)
+                            await page.wait_for_timeout(800)
 
                     except Exception as err:
                         print(f"Error processing item index {idx}: {err}")
                         await page.keyboard.press("Escape")
                         await page.wait_for_timeout(1000)
 
-                # Move to next page in pagination
+                # Pagination
                 if current_page < total_pages:
                     next_btn = page.locator(f"button:has-text('{current_page + 1}')").first
                     if await next_btn.count() > 0:
@@ -121,7 +148,6 @@ async def scrape_shard_history():
 
         await browser.close()
 
-    # Save output to data/trades.json
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
