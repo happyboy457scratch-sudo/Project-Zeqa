@@ -22,5 +22,138 @@
     "item_name": "Sign in",
     "page": 2,
     "shard_trade_history": []
+  },
+  {
+    "item": "Terapagos \u2014",
+    "quantity": 1,
+    "shards": "932.4k",
+    "total_shards": "932.4k",
+    "raw_trade": "Aug 11 Terapagos \u2014 \u2192 932.4k Chainmail"
+  },
+  {
+    "item": "Pastel Cute Face Chainmail",
+    "quantity": 10,
+    "shards": "180",
+    "total_shards": "1.8k",
+    "raw_trade": "Aug 11 Solidbytee 1.8k \u2192 Pastel Cute Face x10 Chainmail"
+  },
+  {
+    "item": "Pastel Cute Face",
+    "quantity": 10,
+    "shards": "180",
+    "total_shards": "1.8k",
+    "raw_trade": "1.8k \u2192 Pastel Cute Face x10"
+  },
+  {
+    "item": "Chainmail Ender Dragon Tail",
+    "quantity": 1,
+    "shards": "277",
+    "total_shards": "277",
+    "raw_trade": "Aug 11 Chainmail Ender Dragon Tail \u2192 A #277 Voidpiercer9410"
+  },
+  {
+    "item": "Ender Dragon Tail",
+    "quantity": 1,
+    "shards": "277",
+    "total_shards": "277",
+    "raw_trade": "Ender Dragon Tail \u2192 A #277"
+  },
+  {
+    "item": "67 Cape Chainmail",
+    "quantity": 2,
+    "shards": "250",
+    "total_shards": "500",
+    "raw_trade": "Aug 10 Voidpiercer9410 500 \u2192 67 Cape x2 Chainmail"
+  },
+  {
+    "item": "67 Cape",
+    "quantity": 2,
+    "shards": "250",
+    "total_shards": "500",
+    "raw_trade": "500 \u2192 67 Cape x2"
+  },
+  {
+    "item": "Golden Space Helmet +5 more Chainmail",
+    "quantity": 10,
+    "shards": "580",
+    "total_shards": "5.8k",
+    "raw_trade": "Aug 10 xhnf 5.8k \u2192 Golden Space Helmet x10 +5 more Chainmail"
+  },
+  {
+    "item": "Golden Space Helmet +5 more",
+    "quantity": 10,
+    "shards": "580",
+    "total_shards": "5.8k",
+    "raw_trade": "5.8k \u2192 Golden Space Helmet x10 +5 more"
+  },
+  {
+    "item": "Chainmail Golden Space Helmet +5 more",
+    "quantity": 2,
+    "shards": "1.2k",
+    "total_shards": "2.5k",
+    "raw_trade": "Aug 10 Chainmail Golden Space Helmet x2 +5 more \u2192 2.5k Voidpiercer9410"
+  },
+  {
+    "item": "Golden Space Helmet +5 more",
+    "quantity": 2,
+    "shards": "1.2k",
+    "total_shards": "2.5k",
+    "raw_trade": "Golden Space Helmet x2 +5 more \u2192 2.5k"
+  },
+  {
+    "item": "1 MILL +10 more Chainmail",
+    "quantity": 29,
+    "shards": "2.7k",
+    "total_shards": "77.9k",
+    "raw_trade": "Aug 10 trzhxw 77.9k \u2192 1 MILL x29 +10 more Chainmail"
+  },
+  {
+    "item": "1 MILL +10 more",
+    "quantity": 29,
+    "shards": "2.7k",
+    "total_shards": "77.9k",
+    "raw_trade": "77.9k \u2192 1 MILL x29 +10 more"
+  },
+  {
+    "item": "Chainmail Phoenix Wings",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Aug 10 Chainmail Phoenix Wings \u2192 15.0k fawyl"
+  },
+  {
+    "item": "Phoenix Wings",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Phoenix Wings \u2192 15.0k"
+  },
+  {
+    "item": "Golden Heart Chainmail",
+    "quantity": 17,
+    "shards": "147",
+    "total_shards": "2.5k",
+    "raw_trade": "Aug 10 xhnf 2.5k \u2192 Golden Heart x17 Chainmail"
+  },
+  {
+    "item": "Golden Heart",
+    "quantity": 17,
+    "shards": "147",
+    "total_shards": "2.5k",
+    "raw_trade": "2.5k \u2192 Golden Heart x17"
+  },
+  {
+    "item": "Golden Heart Chainmail",
+    "quantity": 4,
+    "shards": "150",
+    "total_shards": "600",
+    "raw_trade": "Aug 9 xhnf 600 \u2192 Golden Heart x4 Chainmail"
+  },
+  {
+    "item": "Golden Heart",
+    "quantity": 4,
+    "shards": "150",
+    "total_shards": "600",
+    "raw_trade": "600 \u2192 Golden Heart x4"
   }
 ]
