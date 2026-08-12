@@ -144,10 +144,10 @@ async def scrape_shard_history():
 
                 print(f"Captured {matched_on_page} matched item(s) from page {current_page}.")
 
-                # Robust multi-page advancement: Checks explicitly for next numeric page or arrow button
+                # Universal Pagination Next Check (Targets next page numbers, arrows, or general pagination next roles)
                 next_page_num = str(current_page + 1)
                 next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
-                arrow_btn = page.locator("button:has-text('>'), a:has-text('>')").first
+                generic_next = page.locator("button[aria-label*='Next' i], a[aria-label*='Next' i], button:has-text('Next'), nav button:has-text('>')").first
                 
                 advanced = False
                 
@@ -156,27 +156,24 @@ async def scrape_shard_history():
                     await next_btn.click()
                     current_page += 1
                     advanced = True
-                elif await arrow_btn.count() > 0 and await arrow_btn.is_visible():
-                    # Check if arrow is disabled
-                    is_disabled = await arrow_btn.get_attribute("disabled") is not None
-                    aria_disabled = await arrow_btn.get_attribute("aria-disabled") == "true"
+                elif await generic_next.count() > 0 and await generic_next.is_visible():
+                    is_disabled = await generic_next.get_attribute("disabled") is not None
+                    aria_disabled = await generic_next.get_attribute("aria-disabled") == "true"
                     
                     if not is_disabled and not aria_disabled:
-                        await arrow_btn.scroll_into_view_if_needed()
-                        await arrow_btn.click()
+                        await generic_next.scroll_into_view_if_needed()
+                        await generic_next.click()
                         current_page += 1
                         advanced = True
 
                 if not advanced:
-                    # No further pages exist for this category
+                    print(f"Reached the end of category: {cat_name}")
                     break
                 
-                # Wait for next page contents to mount completely
                 await page.wait_for_timeout(4000)
 
         await browser.close()
 
-    # Save output data
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
