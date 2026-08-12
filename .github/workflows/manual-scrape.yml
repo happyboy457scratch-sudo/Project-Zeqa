@@ -1,6 +1,5 @@
 name: Manual Scrape Trigger
 
-# Runs only when you click "Run workflow" in GitHub Actions UI
 on:
   workflow_dispatch:
 
@@ -17,11 +16,12 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Dependencies
+      - name: Install Dependencies & Playwright Chromium
         run: |
-          pip install requests
+          pip install playwright beautifulsoup4
+          playwright install --with-deps chromium
 
-      - name: Run Cosmetic Scraper
+      - name: Run Playwright Scraper Script
         run: python scripts/scrape_all_cosmetics.py
 
       - name: Commit Updated Graph Data
@@ -29,5 +29,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data/
-          git diff-index --quiet HEAD || git commit -m "manual: update cosmetic graphs data"
+          git diff-index --quiet HEAD || git commit -m "manual: update cosmetic trades data"
           git push
