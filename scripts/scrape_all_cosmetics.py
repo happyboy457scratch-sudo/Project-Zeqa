@@ -46,8 +46,12 @@ async def scrape_shard_history():
         page = await context.new_page()
 
         print(f"Navigating to Mineville Vault: {VAULT_URL}")
-        await page.goto(VAULT_URL, wait_until="domcontentloaded")
-        await page.wait_for_timeout(3000)
+        try:
+            await page.goto(VAULT_URL, wait_until="domcontentloaded", timeout=60000)
+        except Exception:
+            await page.goto(VAULT_URL, wait_until="load", timeout=60000)
+            
+        await page.wait_for_timeout(4000)
 
         for cat in CATEGORIES:
             cat_name = cat["name"]
@@ -62,14 +66,16 @@ async def scrape_shard_history():
 
             for current_page in range(1, total_pages + 1):
                 print(f"--- Category: {cat_name} | Page {current_page}/{total_pages} ---")
-                await page.wait_for_timeout(2000)
+                await page.wait_for_timeout(2500)
 
-                # PASS 1: Identify True Cosmetic Items
-                raw_cards = await page.locator("main [class*='cursor-pointer'], main a").all()
+                # PASS 1: Identify True Cosmetic Items (Strict Filtering)
+                raw_cards = page.locator("main [class*='cursor-pointer'], main a")
+                count = await raw_cards.count()
                 valid_item_names = []
                 
-                for card in raw_cards:
+                for i in range(count):
                     try:
+                        card = raw_cards.nth(i)
                         if not await card.is_visible():
                             continue
                             
@@ -86,10 +92,19 @@ async def scrape_shard_history():
                         name = lines[0]
                         name_lower = name.lower()
                         
+                        # Rule 1: Exclude Leaderboard Ranks (#1, #2, etc.)
+                        if name.startswith("#"):
+                            continue
+                            
+                        # Rule 2: Cosmetic names are always Capitalized. Player usernames/tags are often lowercase.
+                        if not name[0].isupper():
+                            continue
+                        
+                        # Rule 3: Exclude navigation/system titles
                         if name_lower in IGNORED_TITLES:
                             continue
                         
-                        if "resolved" in name_lower or "open now" in name_lower or "online" in name_lower:
+                        if any(x in name_lower for x in ["resolved", "open now", "online", "general discussion"]):
                             continue
                         
                         if name not in valid_item_names:
@@ -105,10 +120,10 @@ async def scrape_shard_history():
                         print(f"[{idx+1}/{len(valid_item_names)}] Fetching: {item_name}")
 
                         clickables_locator = page.locator("main [class*='cursor-pointer'], main a")
-                        count = await clickables_locator.count()
+                        total_elements = await clickables_locator.count()
                         
                         target_idx = -1
-                        for i in range(count):
+                        for i in range(total_elements):
                             elem = clickables_locator.nth(i)
                             if await elem.is_visible():
                                 txt = await elem.inner_text()
@@ -150,7 +165,7 @@ async def scrape_shard_history():
                             else:
                                 print(f"  -> No 'Shards' tab found for {item_name}.")
 
-                            # Close modal
+                            # Close modal safely
                             close_btn = page.locator("button:has-text('×'), button[aria-label='Close'], [class*='close']").first
                             if await close_btn.count() > 0 and await close_btn.is_visible():
                                 await close_btn.click()
@@ -166,7 +181,7 @@ async def scrape_shard_history():
                         await page.keyboard.press("Escape")
                         await page.wait_for_timeout(1000)
 
-                # Move to the next page using exact number matching
+                # Move to the next page using exact number matching or next arrow fallback
                 if current_page < total_pages:
                     next_page_num = str(current_page + 1)
                     next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
@@ -175,7 +190,13 @@ async def scrape_shard_history():
                         await next_btn.click()
                         await page.wait_for_timeout(3000)
                     else:
-                        print(f"Warning: Could not locate pagination button for page {next_page_num}")
+                        # Fallback to Next arrow button if page number isn't explicitly found
+                        arrow_btn = page.locator("button:has-text('>')").first
+                        if await arrow_btn.count() > 0:
+                            await arrow_btn.click()
+                            await page.wait_for_timeout(3000)
+                        else:
+                            print(f"Warning: Could not locate pagination button for page {next_page_num}")
 
         await browser.close()
 
