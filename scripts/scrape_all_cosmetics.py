@@ -6,8 +6,6 @@ from playwright.async_api import async_playwright
 
 VAULT_URL = "https://inpvp.net/mineville/vault?mode=pvp"
 
-# Replaced hardcoded pages with just the category names. 
-# The script will now dynamically click "Next" until it reaches the end.
 CATEGORIES = [
     "Artifacts", 
     "Capes", 
@@ -135,12 +133,12 @@ async def scrape_shard_history():
                 await page.wait_for_timeout(3000)
 
             current_page = 1
-            while True: # Dynamic pagination loop
+            while True:
                 print(f"--- Category: {cat_name} | Page {current_page} ---")
                 
                 await auto_scroll(page)
 
-                # Find matched cosmetic cards on page
+                # Locate all card elements on the current page grid
                 raw_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
                 count = await raw_cards.count()
                 matched_items_on_page = []
@@ -166,20 +164,28 @@ async def scrape_shard_history():
 
                 print(f"Matched {len(matched_items_on_page)} item(s) on page {current_page} with cosmetics.json.")
 
-                # Scrape each matched item
+                # Scrape each matched item using index-based tracking to avoid stale locator errors
                 for idx, item_name in enumerate(matched_items_on_page):
                     print(f"[{idx+1}/{len(matched_items_on_page)}] Fetching match: {item_name}")
                     captured_api_prices.clear()
 
                     try:
-                        # Fast, strict DOM targeting using regex wrapper to avoid stale element looping
-                        target_elem = page.locator("main div[class*='card']").filter(
-                            has_text=re.compile(f"^{re.escape(item_name)}$", re.IGNORECASE)
-                        ).first
+                        # Re-query elements and find the matching card index dynamically
+                        fresh_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
+                        total_elements = await fresh_cards.count()
                         
-                        if await target_elem.count() > 0:
-                            await target_elem.scroll_into_view_if_needed()
-                            await target_elem.click(force=True)
+                        target_card = None
+                        for i in range(total_elements):
+                            elem = fresh_cards.nth(i)
+                            txt = await elem.inner_text()
+                            txt_lines = [l.strip() for l in txt.strip().split("\n") if l.strip()]
+                            if txt_lines and txt_lines[0].lower() == item_name.lower():
+                                target_card = elem
+                                break
+                        
+                        if target_card and await target_card.count() > 0:
+                            await target_card.scroll_into_view_if_needed()
+                            await target_card.click(force=True)
                             
                             # Give modal time to mount and load
                             await page.wait_for_timeout(2500)
@@ -237,7 +243,6 @@ async def scrape_shard_history():
                                 await page.keyboard.press("Escape")
                                 await page.wait_for_timeout(1000)
                                 
-                                # Fallback if Escape didn't work
                                 close_btn = page.locator("button:has-text('×'), [role='dialog'] button[aria-label='Close']").first
                                 if await close_btn.count() > 0 and await close_btn.is_visible():
                                     await close_btn.click()
@@ -261,7 +266,6 @@ async def scrape_shard_history():
                     await next_btn.click()
                     current_page += 1
                 elif await arrow_btn.count() > 0 and await arrow_btn.is_visible():
-                    # Ensure the arrow button isn't disabled
                     if not await arrow_btn.get_attribute("disabled"):
                         await arrow_btn.scroll_into_view_if_needed()
                         await arrow_btn.click()
@@ -269,10 +273,8 @@ async def scrape_shard_history():
                     else:
                         break
                 else:
-                    # No next button found, category is complete
                     break
                 
-                # Pause to give React time to replace items on screen
                 await page.wait_for_timeout(4000)
 
         await browser.close()
