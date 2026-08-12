@@ -6,11 +6,13 @@ from playwright.async_api import async_playwright
 
 VAULT_URL = "https://inpvp.net/mineville/vault?mode=pvp"
 
+# Replaced hardcoded pages with just the category names. 
+# The script will now dynamically click "Next" until it reaches the end.
 CATEGORIES = [
-    {"name": "Artifacts", "pages": 7},
-    {"name": "Capes", "pages": 8},
-    {"name": "Killphrases", "pages": 2},
-    {"name": "Projectiles", "pages": 1}
+    "Artifacts", 
+    "Capes", 
+    "Killphrases", 
+    "Projectiles"
 ]
 
 def load_target_cosmetics():
@@ -40,7 +42,7 @@ def load_target_cosmetics():
     return target_set
 
 def extract_numbers_from_json(obj):
-    """Recursively pulls non-zero numerical price values from JSON structures."""
+    """Recursively pulls price/shard numbers from JSON structures."""
     prices = []
     if isinstance(obj, dict):
         for k, v in obj.items():
@@ -54,7 +56,7 @@ def extract_numbers_from_json(obj):
     return prices
 
 async def auto_scroll(page):
-    """Scrolls down and back up to trigger dynamic image and card loading."""
+    """Scrolls down and back up to force image and card rendering."""
     await page.evaluate("""async () => {
         await new Promise((resolve) => {
             let totalHeight = 0;
@@ -71,7 +73,7 @@ async def auto_scroll(page):
             }, 80);
         });
     }""")
-    await page.wait_for_timeout(800)
+    await page.wait_for_timeout(1000)
 
 async def scrape_shard_history():
     os.makedirs("data", exist_ok=True)
@@ -99,16 +101,18 @@ async def scrape_shard_history():
 
         captured_api_prices = []
 
-        # Catch ANY successful JSON response from inpvp.net
+        # Catch all internal API JSON responses from inpvp.net strictly related to items/history
         async def handle_response(response):
             try:
                 if "inpvp.net" in response.url and response.status == 200:
-                    ct = response.headers.get("content-type", "")
-                    if "application/json" in ct:
-                        data = await response.json()
-                        found = extract_numbers_from_json(data)
-                        if found:
-                            captured_api_prices.extend(found)
+                    url_lower = response.url.lower()
+                    if any(x in url_lower for x in ["/item", "/history", "/trade", "/cosmetic", "/api/v1"]):
+                        ct = response.headers.get("content-type", "")
+                        if "application/json" in ct:
+                            data = await response.json()
+                            found = extract_numbers_from_json(data)
+                            if found:
+                                captured_api_prices.extend(found)
             except Exception:
                 pass
 
@@ -116,16 +120,13 @@ async def scrape_shard_history():
 
         print(f"Navigating to Mineville Vault: {VAULT_URL}")
         try:
-            await page.goto(VAULT_URL, wait_until="networkidle", timeout=60000)
+            await page.goto(VAULT_URL, wait_until="domcontentloaded", timeout=60000)
         except Exception:
             await page.goto(VAULT_URL, wait_until="load", timeout=60000)
             
-        await page.wait_for_timeout(3000)
+        await page.wait_for_timeout(4000)
 
-        for cat in CATEGORIES:
-            cat_name = cat["name"]
-            total_pages = cat["pages"]
-
+        for cat_name in CATEGORIES:
             print(f"\n================ Processing Category: {cat_name} ================")
 
             cat_tab = page.locator(f"button:has-text('{cat_name}'), a:has-text('{cat_name}')").first
@@ -133,12 +134,13 @@ async def scrape_shard_history():
                 await cat_tab.click()
                 await page.wait_for_timeout(3000)
 
-            for current_page in range(1, total_pages + 1):
-                print(f"--- Category: {cat_name} | Page {current_page}/{total_pages} ---")
+            current_page = 1
+            while True: # Dynamic pagination loop
+                print(f"--- Category: {cat_name} | Page {current_page} ---")
                 
                 await auto_scroll(page)
 
-                # Find matching cosmetic cards on current page
+                # Find matched cosmetic cards on page
                 raw_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
                 count = await raw_cards.count()
                 matched_items_on_page = []
@@ -166,45 +168,41 @@ async def scrape_shard_history():
 
                 # Scrape each matched item
                 for idx, item_name in enumerate(matched_items_on_page):
-                    try:
-                        print(f"[{idx+1}/{len(matched_items_on_page)}] Fetching match: {item_name}")
-                        captured_api_prices.clear()
+                    print(f"[{idx+1}/{len(matched_items_on_page)}] Fetching match: {item_name}")
+                    captured_api_prices.clear()
 
-                        clickables = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
-                        total_elements = await clickables.count()
+                    try:
+                        # Fast, strict DOM targeting using regex wrapper to avoid stale element looping
+                        target_elem = page.locator("main div[class*='card']").filter(
+                            has_text=re.compile(f"^{re.escape(item_name)}$", re.IGNORECASE)
+                        ).first
                         
-                        target_idx = -1
-                        for i in range(total_elements):
-                            elem = clickables.nth(i)
-                            txt = await elem.inner_text()
-                            txt_lines = [l.strip() for l in txt.strip().split("\n") if l.strip()]
-                            if txt_lines and txt_lines[0] == item_name:
-                                target_idx = i
-                                break
-                        
-                        if target_idx != -1:
-                            target_elem = clickables.nth(target_idx)
+                        if await target_elem.count() > 0:
                             await target_elem.scroll_into_view_if_needed()
-                            await target_elem.click()
+                            await target_elem.click(force=True)
+                            
+                            # Give modal time to mount and load
                             await page.wait_for_timeout(2500)
 
-                            # Click 'Shards' tab
+                            # Locate and click 'Shards' tab inside modal
                             shards_tab = page.locator("button:has-text('Shards'), div:has-text('Shards'), a:has-text('Shards')").last
-                            if await shards_tab.count() > 0 and await shards_tab.is_visible():
-                                await shards_tab.click()
-                                await page.wait_for_timeout(2000)
+                            if await shards_tab.count() > 0:
+                                try:
+                                    await shards_tab.wait_for(state="visible", timeout=3000)
+                                    await shards_tab.click(force=True)
+                                    await page.wait_for_timeout(2000)
+                                except Exception:
+                                    pass
 
-                            # DOM / SVG fallback for graph values
+                            # DOM/SVG Chart text fallback
                             dom_prices = []
                             try:
-                                # Extract SVG chart node numbers
                                 svg_nodes = await page.locator("svg text, svg title, [class*='recharts'], [class*='chart']").all_inner_texts()
                                 for node_text in svg_nodes:
                                     cleaned = node_text.replace(",", "").strip()
                                     if cleaned.isdigit() and int(cleaned) > 0:
                                         dom_prices.append(float(cleaned))
 
-                                # Extract page text matches
                                 dom_html = await page.content()
                                 dom_matches = re.findall(r'(\d[\d,]*)\s*Shards|Shards:\s*(\d[\d,]*)', dom_html, re.IGNORECASE)
                                 for m in dom_matches:
@@ -232,40 +230,50 @@ async def scrape_shard_history():
                             })
                             processed_item_names.add(item_name)
 
-                            # Navigation return logic
+                            # Secure Modal Close / Navigation Return
                             if "vault" not in page.url.lower():
                                 await page.go_back(wait_until="domcontentloaded")
-                                await page.wait_for_timeout(2000)
                             else:
-                                close_btn = page.locator("button:has-text('×'), button[aria-label='Close'], [class*='close']").first
+                                await page.keyboard.press("Escape")
+                                await page.wait_for_timeout(1000)
+                                
+                                # Fallback if Escape didn't work
+                                close_btn = page.locator("button:has-text('×'), [role='dialog'] button[aria-label='Close']").first
                                 if await close_btn.count() > 0 and await close_btn.is_visible():
                                     await close_btn.click()
-                                else:
-                                    await page.keyboard.press("Escape")
-                                await page.wait_for_timeout(1000)
+                                    
+                            await page.wait_for_timeout(1200)
+                        else:
+                            print(f"  -> Element for {item_name} could not be located in DOM.")
 
                     except Exception as err:
-                        print(f"Error processing '{item_name}': {err}")
+                        print(f"  -> Error fetching '{item_name}': {err}")
                         await page.keyboard.press("Escape")
                         await page.wait_for_timeout(1000)
 
-                # Pagination handling
-                if current_page < total_pages:
-                    next_page_num = str(current_page + 1)
-                    next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
-                    
-                    if await next_btn.count() > 0:
-                        await next_btn.click()
+                # Pagination Advance
+                next_page_num = str(current_page + 1)
+                next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
+                arrow_btn = page.locator("button:has-text('>'), a:has-text('>')").first
+                
+                if await next_btn.count() > 0 and await next_btn.is_visible():
+                    await next_btn.scroll_into_view_if_needed()
+                    await next_btn.click()
+                    current_page += 1
+                elif await arrow_btn.count() > 0 and await arrow_btn.is_visible():
+                    # Ensure the arrow button isn't disabled
+                    if not await arrow_btn.get_attribute("disabled"):
+                        await arrow_btn.scroll_into_view_if_needed()
+                        await arrow_btn.click()
+                        current_page += 1
                     else:
-                        arrow_btn = page.locator("button:has-text('>'), a:has-text('>')").first
-                        if await arrow_btn.count() > 0:
-                            await arrow_btn.click()
-                    
-                    # Force waiting for network idle so page 2, 3, etc. populate completely
-                    try:
-                        await page.wait_for_load_state("networkidle", timeout=5000)
-                    except Exception:
-                        await page.wait_for_timeout(3500)
+                        break
+                else:
+                    # No next button found, category is complete
+                    break
+                
+                # Pause to give React time to replace items on screen
+                await page.wait_for_timeout(4000)
 
         await browser.close()
 
