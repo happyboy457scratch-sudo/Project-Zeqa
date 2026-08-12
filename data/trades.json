@@ -1,135 +1,206 @@
 [
   {
-    "item": "Terapagos \u2014",
-    "quantity": 1,
-    "shards": "932.4k",
-    "total_shards": "932.4k",
-    "raw_trade": "Aug 11 Terapagos \u2014 \u2192 932.4k Chainmail"
+    "category": "Artifacts",
+    "item_name": "Captain America Shield",
+    "page": 1,
+    "shard_trade_history": []
   },
   {
-    "item": "Pastel Cute Face Chainmail",
-    "quantity": 10,
-    "shards": "180",
-    "total_shards": "1.8k",
-    "raw_trade": "Aug 11 Solidbytee 1.8k \u2192 Pastel Cute Face x10 Chainmail"
+    "category": "Artifacts",
+    "item_name": "Chicken Costume",
+    "page": 1,
+    "shard_trade_history": []
   },
   {
-    "item": "Pastel Cute Face",
-    "quantity": 10,
-    "shards": "180",
-    "total_shards": "1.8k",
-    "raw_trade": "1.8k \u2192 Pastel Cute Face x10"
+    "category": "Artifacts",
+    "item_name": "Easter Bunny",
+    "page": 1,
+    "shard_trade_history": []
   },
   {
-    "item": "Chainmail Ender Dragon Tail",
-    "quantity": 1,
-    "shards": "277",
-    "total_shards": "277",
-    "raw_trade": "Aug 11 Chainmail Ender Dragon Tail \u2192 A #277 Voidpiercer9410"
+    "category": "Artifacts",
+    "item_name": "Egg Collector",
+    "page": 1,
+    "shard_trade_history": []
   },
   {
-    "item": "Ender Dragon Tail",
-    "quantity": 1,
-    "shards": "277",
-    "total_shards": "277",
-    "raw_trade": "Ender Dragon Tail \u2192 A #277"
+    "category": "Artifacts",
+    "item_name": "Captain America Shield",
+    "page": 2,
+    "shard_trade_history": []
   },
   {
-    "item": "67 Cape Chainmail",
-    "quantity": 2,
-    "shards": "250",
-    "total_shards": "500",
-    "raw_trade": "Aug 10 Voidpiercer9410 500 \u2192 67 Cape x2 Chainmail"
+    "category": "Artifacts",
+    "item_name": "Chicken Costume",
+    "page": 2,
+    "shard_trade_history": []
   },
   {
-    "item": "67 Cape",
-    "quantity": 2,
-    "shards": "250",
-    "total_shards": "500",
-    "raw_trade": "500 \u2192 67 Cape x2"
+    "category": "Artifacts",
+    "item_name": "Easter Bunny",
+    "page": 2,
+    "shard_trade_history": []
   },
   {
-    "item": "Golden Space Helmet +5 more Chainmail",
-    "quantity": 10,
-    "shards": "580",
-    "total_shards": "5.8k",
-    "raw_trade": "Aug 10 xhnf 5.8k \u2192 Golden Space Helmet x10 +5 more Chainmail"
+    "category": "Artifacts",
+    "item_name": "Egg Collector",
+    "page": 2,
+    "shard_trade_history": []
   },
   {
-    "item": "Golden Space Helmet +5 more",
-    "quantity": 10,
-    "shards": "580",
-    "total_shards": "5.8k",
-    "raw_trade": "5.8k \u2192 Golden Space Helmet x10 +5 more"
+    "category": "Artifacts",
+    "item_name": "Captain America Shield",
+    "page": 3,
+    "shard_trade_history": []
   },
   {
-    "item": "Chainmail Golden Space Helmet +5 more",
-    "quantity": 2,
-    "shards": "1.2k",
-    "total_shards": "2.5k",
-    "raw_trade": "Aug 10 Chainmail Golden Space Helmet x2 +5 more \u2192 2.5k Voidpiercer9410"
+    "category": "Artifacts",
+    "item_name": "Chicken Costume",
+    "page": 3,
+    "shard_trade_history": []
   },
   {
-    "item": "Golden Space Helmet +5 more",
-    "quantity": 2,
-    "shards": "1.2k",
-    "total_shards": "2.5k",
-    "raw_trade": "Golden Space Helmet x2 +5 more \u2192 2.5k"
+    "category": "Artifacts",
+    "item_name": "Easter Bunny",
+    "page": 3,
+    "shard_trade_history": []
   },
   {
-    "item": "1 MILL +10 more Chainmail",
-    "quantity": 29,
-    "shards": "2.7k",
-    "total_shards": "77.9k",
-    "raw_trade": "Aug 10 trzhxw 77.9k \u2192 1 MILL x29 +10 more Chainmail"
+    "category": "Artifacts",
+    "item_name": "Egg Collector",
+    "page": 3,
+    "shard_trade_history": []
   },
   {
-    "item": "1 MILL +10 more",
-    "quantity": 29,
-    "shards": "2.7k",
-    "total_shards": "77.9k",
-    "raw_trade": "77.9k \u2192 1 MILL x29 +10 more"
+    "category": "Artifacts",
+    "item_name": "Captain America Shield",
+    "page": 4,
+    "shard_trade_history": []
   },
   {
-    "item": "Chainmail Phoenix Wings",
-    "quantity": 1,
-    "shards": "15k",
-    "total_shards": "15k",
-    "raw_trade": "Aug 10 Chainmail Phoenix Wings \u2192 15.0k fawyl"
+    "category": "Artifacts",
+    "item_name": "Chicken Costume",
+    "page": 4,
+    "shard_trade_history": []
   },
   {
-    "item": "Phoenix Wings",
-    "quantity": 1,
-    "shards": "15k",
-    "total_shards": "15k",
-    "raw_trade": "Phoenix Wings \u2192 15.0k"
+    "category": "Artifacts",
+    "item_name": "Easter Bunny",
+    "page": 4,
+    "shard_trade_history": []
   },
   {
-    "item": "Golden Heart Chainmail",
-    "quantity": 17,
-    "shards": "147",
-    "total_shards": "2.5k",
-    "raw_trade": "Aug 10 xhnf 2.5k \u2192 Golden Heart x17 Chainmail"
+    "category": "Artifacts",
+    "item_name": "Egg Collector",
+    "page": 4,
+    "shard_trade_history": []
   },
   {
-    "item": "Golden Heart",
-    "quantity": 17,
-    "shards": "147",
-    "total_shards": "2.5k",
-    "raw_trade": "2.5k \u2192 Golden Heart x17"
+    "category": "Artifacts",
+    "item_name": "Captain America Shield",
+    "page": 5,
+    "shard_trade_history": []
   },
   {
-    "item": "Golden Heart Chainmail",
-    "quantity": 4,
-    "shards": "150",
-    "total_shards": "600",
-    "raw_trade": "Aug 9 xhnf 600 \u2192 Golden Heart x4 Chainmail"
+    "category": "Artifacts",
+    "item_name": "Chicken Costume",
+    "page": 5,
+    "shard_trade_history": []
   },
   {
-    "item": "Golden Heart",
-    "quantity": 4,
-    "shards": "150",
-    "total_shards": "600",
-    "raw_trade": "600 \u2192 Golden Heart x4"
+    "category": "Artifacts",
+    "item_name": "Easter Bunny",
+    "page": 5,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Egg Collector",
+    "page": 5,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Captain America Shield",
+    "page": 6,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Chicken Costume",
+    "page": 6,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Easter Bunny",
+    "page": 6,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Egg Collector",
+    "page": 6,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Captain America Shield",
+    "page": 7,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Chicken Costume",
+    "page": 7,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Easter Bunny",
+    "page": 7,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Artifacts",
+    "item_name": "Egg Collector",
+    "page": 7,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Killphrases",
+    "item_name": "Buried Alive",
+    "page": 1,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Killphrases",
+    "item_name": "Captain America Shield",
+    "page": 2,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Killphrases",
+    "item_name": "Chicken Costume",
+    "page": 2,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Killphrases",
+    "item_name": "Easter Bunny",
+    "page": 2,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Killphrases",
+    "item_name": "Egg Collector",
+    "page": 2,
+    "shard_trade_history": []
+  },
+  {
+    "category": "Projectiles",
+    "item_name": "Enchantment Table",
+    "page": 1,
+    "shard_trade_history": []
   }
 ]
