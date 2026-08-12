@@ -7,16 +7,6 @@ from playwright.async_api import async_playwright
 VAULT_URL = "https://inpvp.net/mineville/vault?mode=pvp"
 
 def parse_trade_chunks(raw_chunks, default_item_name="Unknown Item"):
-    """
-    Parses Next.js data stream responses into structured JSON trades matching your schema:
-    {
-      "item": "Cat Mask",
-      "quantity": 1,
-      "shards": "5000",
-      "total_shards": "5000",
-      "raw_trade": "Cat Mask → 5.0k"
-    }
-    """
     trades = []
     for chunk in raw_chunks:
         if "shards" in chunk or "trade" in chunk:
@@ -65,21 +55,36 @@ async def main():
         print(f"Navigating to Vault page: {VAULT_URL}")
         await page.goto(VAULT_URL, wait_until="networkidle")
 
-        # Allow client-side JavaScript to fully hydrate
+        # Give client-side JS time to hydrate
         await page.wait_for_timeout(3000)
 
-        # Perform page interactions (clicks)
+        # -------------------------------------------------------------
+        # ACTIVE CLICK SEQUENCE
+        # -------------------------------------------------------------
         try:
             print("Executing browser interactions...")
-            # Uncomment and edit these click lines to target specific buttons as needed:
-            # await page.click("text='Artifacts'")
-            # await page.wait_for_timeout(1000)
-            # await page.click("text='Antler'")
-            # await page.wait_for_timeout(1000)
-            # await page.click("text='Shards'")
-            # await page.wait_for_timeout(2000)
+
+            # 1. Wait for and click the category (e.g., Artifacts)
+            await page.wait_for_selector("text='Artifacts'", timeout=10000)
+            await page.click("text='Artifacts'")
+            print("Clicked Artifacts tab!")
+            await page.wait_for_timeout(1500)
+
+            # 2. Click a specific item (e.g., Antler or Cat Mask)
+            # You can also use page.locator("div").filter(has_text=...).first.click()
+            await page.click("text='Antler'")
+            print("Clicked Antler!")
+            await page.wait_for_timeout(1500)
+
+            # 3. Click the 'Shards' button to trigger the graph/trade data
+            await page.click("text='Shards'")
+            print("Clicked Shards graph button!")
+
+            # Pause to let the network response complete
+            await page.wait_for_timeout(3000)
+
         except Exception as e:
-            print(f"Interaction note: {e}")
+            print(f"Interaction warning: {e}")
 
         # Process all intercepted data streams
         for raw_text in captured_responses:
@@ -89,7 +94,7 @@ async def main():
 
         await browser.close()
 
-    # Save output formatted to data/trades.json
+    # Save output to data/trades.json
     output_path = "data/trades.json"
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_trades, f, indent=2, ensure_ascii=False)
