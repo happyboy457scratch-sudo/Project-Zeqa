@@ -38,11 +38,10 @@ def load_target_cosmetics():
     return target_set
 
 async def auto_scroll(page):
-    """Scrolls down and back up to force all lazy-loaded cards to render."""
     await page.evaluate("""async () => {
         await new Promise((resolve) => {
             let totalHeight = 0;
-            const distance = 300;
+            const distance = 400;
             const timer = setInterval(() => {
                 const scrollHeight = document.body.scrollHeight;
                 window.scrollBy(0, distance);
@@ -52,10 +51,10 @@ async def auto_scroll(page):
                     window.scrollTo(0, 0);
                     resolve();
                 }
-            }, 60);
+            }, 50);
         });
     }""")
-    await page.wait_for_timeout(1500)
+    await page.wait_for_timeout(1000)
 
 async def scrape_shard_history():
     os.makedirs("data", exist_ok=True)
@@ -127,24 +126,28 @@ async def scrape_shard_history():
                             
                             card_prices = []
                             for line in lines[1:]:
-                                cleaned = line.replace(",", "").replace("Shards", "").strip()
-                                if cleaned.isdigit() and int(cleaned) > 0:
+                                cleaned = "".join([c for c in line if c.isdigit()])
+                                if cleaned and int(cleaned) > 0:
                                     card_prices.append(float(cleaned))
 
-                            avg_val = round(sum(card_prices) / len(card_prices)) if card_prices else 0
+                            # Calculate the average of the graph data points if they exist
+                            avg_value = 0
+                            if card_prices:
+                                avg_value = round(sum(card_prices) / len(card_prices), 2)
 
                             all_items_shard_data.append({
                                 "category": cat_name,
                                 "item_name": name,
                                 "page": current_page,
-                                "shard_trade_history": [avg_val] if avg_val > 0 else []
+                                "average_shard_value": avg_value,
+                                "shard_trade_history": card_prices
                             })
                     except Exception:
                         continue
 
                 print(f"Captured {matched_on_page} matched item(s) from page {current_page}.")
 
-                # Universal Pagination Next Check (Targets next page numbers, arrows, or general pagination next roles)
+                # Pagination advancement logic
                 next_page_num = str(current_page + 1)
                 next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
                 generic_next = page.locator("button[aria-label*='Next' i], a[aria-label*='Next' i], button:has-text('Next'), nav button:has-text('>')").first
@@ -170,14 +173,14 @@ async def scrape_shard_history():
                     print(f"Reached the end of category: {cat_name}")
                     break
                 
-                await page.wait_for_timeout(4000)
+                await page.wait_for_timeout(3000)
 
         await browser.close()
 
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
-    print(f"\nDone! Successfully saved {len(all_items_shard_data)} items to data/trades.json.")
+    print(f"\nDone! Successfully calculated averages and saved {len(all_items_shard_data)} items to data/trades.json.")
 
 if __name__ == "__main__":
     asyncio.run(scrape_shard_history())
