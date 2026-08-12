@@ -103,7 +103,6 @@ async def scrape_shard_history():
                 
                 await auto_scroll(page)
 
-                # Query all visible card elements on the page grid
                 raw_cards = page.locator("main [class*='cursor-pointer'], main a, main div[class*='card']")
                 count = await raw_cards.count()
                 matched_on_page = 0
@@ -126,7 +125,6 @@ async def scrape_shard_history():
                             processed_item_names.add(name)
                             matched_on_page += 1
                             
-                            # Extract any prices/shards visible directly on the card text block if available
                             card_prices = []
                             for line in lines[1:]:
                                 cleaned = line.replace(",", "").replace("Shards", "").strip()
@@ -146,26 +144,35 @@ async def scrape_shard_history():
 
                 print(f"Captured {matched_on_page} matched item(s) from page {current_page}.")
 
-                # Pagination Advance Logic
+                # Robust multi-page advancement: Checks explicitly for next numeric page or arrow button
                 next_page_num = str(current_page + 1)
                 next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
                 arrow_btn = page.locator("button:has-text('>'), a:has-text('>')").first
+                
+                advanced = False
                 
                 if await next_btn.count() > 0 and await next_btn.is_visible():
                     await next_btn.scroll_into_view_if_needed()
                     await next_btn.click()
                     current_page += 1
+                    advanced = True
                 elif await arrow_btn.count() > 0 and await arrow_btn.is_visible():
-                    if not await arrow_btn.get_attribute("disabled"):
+                    # Check if arrow is disabled
+                    is_disabled = await arrow_btn.get_attribute("disabled") is not None
+                    aria_disabled = await arrow_btn.get_attribute("aria-disabled") == "true"
+                    
+                    if not is_disabled and not aria_disabled:
                         await arrow_btn.scroll_into_view_if_needed()
                         await arrow_btn.click()
                         current_page += 1
-                    else:
-                        break
-                else:
+                        advanced = True
+
+                if not advanced:
+                    # No further pages exist for this category
                     break
                 
-                await page.wait_for_timeout(3000)
+                # Wait for next page contents to mount completely
+                await page.wait_for_timeout(4000)
 
         await browser.close()
 
