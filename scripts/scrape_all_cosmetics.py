@@ -14,6 +14,7 @@ CATEGORIES = [
 ]
 
 def load_target_cosmetics():
+    """Loads target cosmetic names from cosmetics.json or data/cosmetics.json."""
     file_path = "cosmetics.json" if os.path.exists("cosmetics.json") else "data/cosmetics.json"
     if not os.path.exists(file_path):
         print("Warning: 'cosmetics.json' not found.")
@@ -39,7 +40,7 @@ def load_target_cosmetics():
     return target_set
 
 def parse_price(line):
-    """Parses standard numbers and values with a 'K' suffix (e.g., '1.5K' -> 1500.0)."""
+    """Parses numbers, decimals, and values with 'K' shorthand (e.g., '1.5K' -> 1500.0)."""
     line_clean = line.strip().replace(",", "")
     if not line_clean:
         return None
@@ -57,6 +58,7 @@ def parse_price(line):
     return None
 
 async def auto_scroll(page):
+    """Scrolls down smoothly to trigger lazy-loaded cards."""
     await page.evaluate("""async () => {
         await new Promise((resolve) => {
             let totalHeight = 0;
@@ -76,17 +78,27 @@ async def auto_scroll(page):
     await page.wait_for_timeout(1000)
 
 def auto_commit_and_push():
-    """Commits and pushes the updated data/trades.json file to GitHub."""
-    print("\n--- Pushing updates to GitHub ---")
+    """Commits and pushes data/trades.json to GitHub safely without throwing status 128."""
+    print("\n--- Checking Git Status & Pushing to GitHub ---")
     try:
+        # Check if any modified files exist
+        status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
+        
+        if not status.stdout.strip():
+            print("No changes detected in trades.json. Skipping Git commit/push.")
+            return
+
         subprocess.run(["git", "add", "data/trades.json"], check=True)
         subprocess.run(["git", "commit", "-m", "Auto-update shard trade data"], check=True)
         subprocess.run(["git", "push"], check=True)
         print("Successfully committed and pushed updated JSON to GitHub!")
     except subprocess.CalledProcessError as e:
-        print(f"Git push failed: {e}. You can manually run: git add data/trades.json && git commit -m 'update' && git push")
+        print(f"\nGit push failed ({e}).")
+        print("If Git configuration is missing on this machine, run:")
+        print('  git config --global user.email "your_email@example.com"')
+        print('  git config --global user.name "Your Name"')
     except Exception as e:
-        print(f"An error occurred while pushing to Git: {e}")
+        print(f"An unexpected error occurred during Git sync: {e}")
 
 async def scrape_shard_history():
     os.makedirs("data", exist_ok=True)
@@ -123,7 +135,7 @@ async def scrape_shard_history():
         for cat_name in CATEGORIES:
             print(f"\n================ Processing Category: {cat_name} ================")
 
-            # Exact text locator fix to prevent missing category clicks like Killphrases
+            # Exact matching tab locator to properly register category buttons
             cat_tab = page.locator(f"button:text-is('{cat_name}'), a:text-is('{cat_name}'), [role='tab']:has-text('{cat_name}')").first
             if await cat_tab.count() > 0:
                 await cat_tab.click()
@@ -135,7 +147,7 @@ async def scrape_shard_history():
                 
                 await auto_scroll(page)
 
-                # Comprehensive card element selector
+                # Broader card selector for varying UI templates (Artifacts vs Killphrases)
                 raw_cards = page.locator("main div[class*='grid'] > div, main [class*='cursor-pointer'], main a, main div[class*='card']")
                 count = await raw_cards.count()
                 matched_on_page = 0
@@ -180,7 +192,7 @@ async def scrape_shard_history():
 
                 print(f"Captured {matched_on_page} matched item(s) from page {current_page}.")
 
-                # Pagination advancement
+                # Page navigation handling
                 next_page_num = str(current_page + 1)
                 next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
                 generic_next = page.locator("button[aria-label*='Next' i], a[aria-label*='Next' i], button:has-text('Next'), nav button:has-text('>')").first
@@ -210,13 +222,13 @@ async def scrape_shard_history():
 
         await browser.close()
 
-    # Save to JSON
+    # Save to data/trades.json
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
-    print(f"\nDone! Saved {len(all_items_shard_data)} items to data/trades.json.")
+    print(f"\nDone! Successfully processed all categories, calculated averages, and saved {len(all_items_shard_data)} items to data/trades.json.")
 
-    # Automatically push updates to GitHub
+    # Commit and push changes
     auto_commit_and_push()
 
 if __name__ == "__main__":
