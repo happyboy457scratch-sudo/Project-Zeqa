@@ -78,25 +78,36 @@ async def auto_scroll(page):
     await page.wait_for_timeout(1000)
 
 def auto_commit_and_push():
-    """Commits and pushes data/trades.json to GitHub safely without throwing status 128."""
+    """Commits and pushes data/trades.json to GitHub, ensuring git identity is set."""
     print("\n--- Checking Git Status & Pushing to GitHub ---")
     try:
-        # Check if any modified files exist
+        # 1. Check if any modified files exist
         status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
         
         if not status.stdout.strip():
             print("No changes detected in trades.json. Skipping Git commit/push.")
             return
 
+        # 2. Check if git user configuration exists; if not, set temporary defaults
+        user_name = subprocess.run(["git", "config", "user.name"], capture_output=True, text=True)
+        user_email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True)
+
+        if not user_name.stdout.strip():
+            print("Setting temporary Git user.name...")
+            subprocess.run(["git", "config", "user.name", "Mineville Scraper Bot"], check=True)
+            
+        if not user_email.stdout.strip():
+            print("Setting temporary Git user.email...")
+            subprocess.run(["git", "config", "user.email", "bot@example.com"], check=True)
+
+        # 3. Add, commit, and push
         subprocess.run(["git", "add", "data/trades.json"], check=True)
         subprocess.run(["git", "commit", "-m", "Auto-update shard trade data"], check=True)
         subprocess.run(["git", "push"], check=True)
         print("Successfully committed and pushed updated JSON to GitHub!")
+
     except subprocess.CalledProcessError as e:
         print(f"\nGit push failed ({e}).")
-        print("If Git configuration is missing on this machine, run:")
-        print('  git config --global user.email "your_email@example.com"')
-        print('  git config --global user.name "Your Name"')
     except Exception as e:
         print(f"An unexpected error occurred during Git sync: {e}")
 
