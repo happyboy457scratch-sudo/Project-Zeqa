@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import subprocess
 from playwright.async_api import async_playwright
 
 VAULT_URL = "https://inpvp.net/mineville/vault?mode=pvp"
@@ -74,6 +75,19 @@ async def auto_scroll(page):
     }""")
     await page.wait_for_timeout(1000)
 
+def auto_commit_and_push():
+    """Commits and pushes the updated data/trades.json file to GitHub."""
+    print("\n--- Pushing updates to GitHub ---")
+    try:
+        subprocess.run(["git", "add", "data/trades.json"], check=True)
+        subprocess.run(["git", "commit", "-m", "Auto-update shard trade data"], check=True)
+        subprocess.run(["git", "push"], check=True)
+        print("Successfully committed and pushed updated JSON to GitHub!")
+    except subprocess.CalledProcessError as e:
+        print(f"Git push failed: {e}. You can manually run: git add data/trades.json && git commit -m 'update' && git push")
+    except Exception as e:
+        print(f"An error occurred while pushing to Git: {e}")
+
 async def scrape_shard_history():
     os.makedirs("data", exist_ok=True)
     target_cosmetics = load_target_cosmetics()
@@ -109,7 +123,8 @@ async def scrape_shard_history():
         for cat_name in CATEGORIES:
             print(f"\n================ Processing Category: {cat_name} ================")
 
-            cat_tab = page.locator(f"button:has-text('{cat_name}'), a:has-text('{cat_name}')").first
+            # Exact text locator fix to prevent missing category clicks like Killphrases
+            cat_tab = page.locator(f"button:text-is('{cat_name}'), a:text-is('{cat_name}'), [role='tab']:has-text('{cat_name}')").first
             if await cat_tab.count() > 0:
                 await cat_tab.click()
                 await page.wait_for_timeout(3000)
@@ -120,7 +135,7 @@ async def scrape_shard_history():
                 
                 await auto_scroll(page)
 
-                # Expanded selector to ensure killphrases and other grid items are captured reliably
+                # Comprehensive card element selector
                 raw_cards = page.locator("main div[class*='grid'] > div, main [class*='cursor-pointer'], main a, main div[class*='card']")
                 count = await raw_cards.count()
                 matched_on_page = 0
@@ -144,7 +159,6 @@ async def scrape_shard_history():
                             matched_on_page += 1
                             
                             card_prices = []
-                            # Scan all text lines after the item name for prices or shorthand 'K' values
                             for line in lines[1:]:
                                 parsed_val = parse_price(line)
                                 if parsed_val is not None and parsed_val > 0:
@@ -166,6 +180,7 @@ async def scrape_shard_history():
 
                 print(f"Captured {matched_on_page} matched item(s) from page {current_page}.")
 
+                # Pagination advancement
                 next_page_num = str(current_page + 1)
                 next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
                 generic_next = page.locator("button[aria-label*='Next' i], a[aria-label*='Next' i], button:has-text('Next'), nav button:has-text('>')").first
@@ -195,10 +210,14 @@ async def scrape_shard_history():
 
         await browser.close()
 
+    # Save to JSON
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
-    print(f"\nDone! Successfully processed all categories, calculated averages, and saved {len(all_items_shard_data)} items to data/trades.json.")
+    print(f"\nDone! Saved {len(all_items_shard_data)} items to data/trades.json.")
+
+    # Automatically push updates to GitHub
+    auto_commit_and_push()
 
 if __name__ == "__main__":
     asyncio.run(scrape_shard_history())
