@@ -9,7 +9,6 @@ def load_reference_names():
         try:
             with open(ref_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                # Extract names depending on whether it's a list or dictionary
                 if isinstance(data, list):
                     return {item.get("name") for item in data if "name" in item}
                 elif isinstance(data, dict):
@@ -24,13 +23,11 @@ def clean_and_match_name(raw_name, valid_names):
     If a match is found, it returns only the matched name.
     """
     if not valid_names:
-        return raw_name  # Fallback if no reference file exists yet
+        return raw_name
 
-    # Exact match check first
     if raw_name in valid_names:
         return raw_name
 
-    # Substring / fuzzy match check (longest match preferred to avoid partial overlaps)
     matched_name = None
     for valid_name in sorted(valid_names, key=len, reverse=True):
         if valid_name.lower() in raw_name.lower():
@@ -43,7 +40,7 @@ def run_scraper():
     url = "https://milkyclan.com/values"
     output_file = "data/cosmetics.json"
     
-    # 1. Load valid names *before* potentially deleting the file
+    # 1. Load valid names before wiping the file
     valid_names = load_reference_names()
 
     # 2. ALWAYS DELETE THE OLD FILE IF IT EXISTS TO WIPE GLITCHED DATA
@@ -138,6 +135,10 @@ def run_scraper():
             for item in raw_items:
                 raw_name = item["name"]
                 
+                # Autodelete filter: Must start with a capital letter (A-Z) or a number (0-9)
+                if not raw_name or not (raw_name[0].isupper() or raw_name[0].isdigit()):
+                    continue
+
                 # Match and trim name against valid cosmetics list
                 matched_name = clean_and_match_name(raw_name, valid_names)
                 
