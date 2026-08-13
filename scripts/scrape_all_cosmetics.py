@@ -193,8 +193,9 @@ async def scrape_shard_history():
         for cat_name in CATEGORIES:
             print(f"\n================ Processing Category: {cat_name} ================")
 
-            # Flexible tab locator matching space variations like 'Killphrases' or 'Kill Phrases'
-            tab_pattern = re.compile(rf"{cat_name.replace('phrases', '[\s]*phrases')}", re.I)
+            # Prepared regex pattern outside f-string brackets to prevent SyntaxError
+            cat_pattern_str = cat_name.replace('phrases', r'[\s]*phrases')
+            tab_pattern = re.compile(cat_pattern_str, re.I)
             cat_tab = page.locator("button, a, [role='tab']").filter(has_text=tab_pattern).first
             
             if await cat_tab.count() > 0:
