@@ -7,13 +7,6 @@ from playwright.async_api import async_playwright
 
 VAULT_URL = "https://inpvp.net/mineville/vault?mode=pvp"
 
-CATEGORIES = [
-    "Artifacts", 
-    "Capes", 
-    "Killphrases", 
-    "Projectiles"
-]
-
 def load_target_cosmetics():
     """Loads target cosmetic names from cosmetics.json or data/cosmetics.json."""
     file_path = "cosmetics.json" if os.path.exists("cosmetics.json") else "data/cosmetics.json"
@@ -42,6 +35,8 @@ def load_target_cosmetics():
 
 def parse_price(line):
     """Parses standard numbers, decimals, and values with 'K' shorthand (e.g., '1.5K' -> 1500.0)."""
+    if not line or not isinstance(line, str):
+        return None
     line_clean = line.strip().replace(",", "")
     if not line_clean:
         return None
@@ -78,64 +73,94 @@ async def auto_scroll(page):
     }""")
     await page.wait_for_timeout(1000)
 
-async def extract_graph_values(page):
+async def extract_shard_graph_data(page):
     """
-    Extracts price history from opened modal graph elements, hover tooltips, 
-    and detailed modal text.
+    Extracts numerical values from the Shard graph using state props, 
+    SVG chart nodes, and hover tooltips.
     """
     prices = []
-    
-    # 1. Hover over chart elements to expose tooltips
-    chart_nodes = page.locator("svg circle, svg path, [class*='recharts-symbols'], [class*='chart'] *")
-    node_count = min(await chart_nodes.count(), 15)  # Limit hover scans for speed
-    
-    for idx in range(node_count):
-        try:
-            node = chart_nodes.nth(idx)
-            await node.hover(timeout=500)
-            await page.wait_for_timeout(100)
-        except Exception:
-            continue
 
-    # 2. Extract values from active tooltips or chart attributes
-    tooltips = page.locator("[role='tooltip'], [class*='tooltip'], [class*='popover'], svg title, svg [aria-label]")
-    t_count = await tooltips.count()
+    # Strategy 1: Extract directly from page data state if available (Next.js / React)
+    try:
+        page_state = await page.evaluate("""() => {
+            const el = document.getElementById('__NEXT_DATA__');
+            if (!el) return null;
+            try { return JSON.parse(el.textContent); } catch(e) { return null; }
+        }""")
+        
+        if page_state:
+            def search_numbers(obj):
+                found = []
+                if isinstance(obj, dict):
+                    for k, v in obj.items():
+                        if any(term in k.lower() for term in ['trade', 'shard', 'price', 'history', 'value', 'graph']):
+                            if isinstance(v, list):
+                                for item in v:
+                                    if isinstance(item, (int, float)) and item > 0:
+                                        found.append(float(item))
+                                    elif isinstance(item, dict):
+                                        val = item.get('price') or item.get('value') or item.get('shards') or item.get('amount')
+                                        if isinstance(val, (int, float)) and val > 0:
+                                            found.append(float(val))
+                        found.extend(search_numbers(v))
+                elif isinstance(obj, list):
+                    for item in obj:
+                        found.extend(search_numbers(item))
+                return found
 
-    for idx in range(t_count):
-        try:
-            t_elem = tooltips.nth(idx)
-            t_text = await t_elem.inner_text()
-            parsed = parse_price(t_text)
+            extracted = search_numbers(page_state)
+            if extracted:
+                return extracted
+    except Exception:
+        pass
+
+    # Strategy 2: Hover over SVG graph dots/circles to trigger tooltips
+    try:
+        chart_dots = page.locator("svg circle, svg path, [class*='recharts-dot'], [class*='chart'] circle")
+        dot_count = min(await chart_dots.count(), 20)
+        
+        for i in range(dot_count):
+            try:
+                await chart_dots.nth(i).hover(timeout=500)
+                await page.wait_for_timeout(100)
+            except Exception:
+                continue
+
+        # Extract text values from active tooltips or chart labels
+        tooltips = page.locator("[role='tooltip'], [class*='tooltip'], svg title, svg text")
+        t_count = await tooltips.count()
+        for i in range(t_count):
+            txt = await tooltips.nth(i).inner_text()
+            parsed = parse_price(txt)
             if parsed is not None and parsed > 0:
                 prices.append(parsed)
-        except Exception:
-            continue
+    except Exception:
+        pass
 
-    # 3. Fallback: Parse visible numerical values inside the open modal
+    # Strategy 3: Fallback DOM text scan for shard/price values
     if not prices:
-        modal = page.locator("[role='dialog'], [class*='modal'], [class*='popup']").first
-        if await modal.count() > 0:
-            modal_text = await modal.inner_text()
-            for line in modal_text.split("\n"):
-                if any(k in line.lower() for k in ["shard", "price", "val", "k", "avg"]):
+        try:
+            page_text = await page.inner_text()
+            for line in page_text.split('\n'):
+                if any(w in line.lower() for w in ['shard', 'price', 'val', 'k']):
                     parsed = parse_price(line)
                     if parsed is not None and parsed > 0:
                         prices.append(parsed)
+        except Exception:
+            pass
 
-    return list(set(prices))  # Deduplicate prices
+    return list(set(prices))  # Deduplicate
 
 def auto_commit_and_push():
     """Commits and pushes data/trades.json to GitHub, ensuring git identity is set."""
     print("\n--- Checking Git Status & Pushing to GitHub ---")
     try:
-        # Check if any modified files exist
         status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
         
         if not status.stdout.strip():
             print("No changes detected in trades.json. Skipping Git commit/push.")
             return
 
-        # Check/set git user configuration
         user_name = subprocess.run(["git", "config", "user.name"], capture_output=True, text=True)
         user_email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True)
 
@@ -147,7 +172,6 @@ def auto_commit_and_push():
             print("Setting temporary Git user.email...")
             subprocess.run(["git", "config", "user.email", "bot@example.com"], check=True)
 
-        # Stage, commit, and push
         subprocess.run(["git", "add", "data/trades.json"], check=True)
         subprocess.run(["git", "commit", "-m", "Auto-update shard trade data"], check=True)
         subprocess.run(["git", "push"], check=True)
@@ -158,7 +182,7 @@ def auto_commit_and_push():
     except Exception as e:
         print(f"An unexpected error occurred during Git sync: {e}")
 
-async def scrape_shard_history():
+async def scrape_artifact_shards():
     os.makedirs("data", exist_ok=True)
     target_cosmetics = load_target_cosmetics()
     
@@ -190,127 +214,153 @@ async def scrape_shard_history():
             
         await page.wait_for_timeout(4000)
 
-        for cat_name in CATEGORIES:
-            print(f"\n================ Processing Category: {cat_name} ================")
+        print("\n================ Processing Category: Artifacts ================")
 
-            # Prepared regex pattern outside f-string brackets to prevent SyntaxError
-            cat_pattern_str = cat_name.replace('phrases', r'[\s]*phrases')
-            tab_pattern = re.compile(cat_pattern_str, re.I)
-            cat_tab = page.locator("button, a, [role='tab']").filter(has_text=tab_pattern).first
+        # Switch to Artifacts tab on vault
+        cat_tab = page.locator("button, a, [role='tab']").filter(has_text=re.compile(r"Artifacts", re.I)).first
+        if await cat_tab.count() > 0:
+            await cat_tab.click()
+            await page.wait_for_timeout(3000)
+
+        current_page = 1
+        artifact_targets = []
+
+        # Step 1: Collect direct Artifact links/cards
+        while True:
+            print(f"--- Scanning Artifacts | Page {current_page} ---")
+            await auto_scroll(page)
+
+            raw_cards = page.locator("main div[class*='grid'] > div, main [class*='cursor-pointer'], main a, main div[class*='card']")
+            count = await raw_cards.count()
             
-            if await cat_tab.count() > 0:
-                await cat_tab.click()
-                await page.wait_for_timeout(3000)
-
-            current_page = 1
-            while True:
-                print(f"--- Category: {cat_name} | Page {current_page} ---")
-                
-                await auto_scroll(page)
-
-                raw_cards = page.locator("main div[class*='grid'] > div, main [class*='cursor-pointer'], main a, main div[class*='card']")
-                count = await raw_cards.count()
-                matched_on_page = 0
-                
-                for i in range(count):
-                    try:
-                        card = raw_cards.nth(i)
-                        text = (await card.inner_text()).strip()
-                        if not text:
-                            continue
-                        
-                        lines = [l.strip() for l in text.split("\n") if l.strip()]
-                        if not lines:
-                            continue
-                        
-                        # Match ANY line in the card against target cosmetics (fixes rarity headers bug)
-                        matched_name = None
-                        for line in lines:
-                            if line.lower() in target_cosmetics:
-                                matched_name = line
-                                break
-
-                        if matched_name and matched_name not in processed_item_names:
-                            processed_item_names.add(matched_name)
-                            matched_on_page += 1
-                            
-                            card_prices = []
-                            try:
-                                await card.scroll_into_view_if_needed()
-                                await card.click(timeout=2000)
-                                await page.wait_for_timeout(1200)
-                                
-                                # Extract chart data points from open modal
-                                card_prices = await extract_graph_values(page)
-                                
-                                # Close modal dialog
-                                close_btn = page.locator("button:has-text('✕'), button:has-text('Close'), [aria-label*='Close' i]").first
-                                if await close_btn.count() > 0 and await close_btn.is_visible():
-                                    await close_btn.click()
-                                else:
-                                    await page.keyboard.press("Escape")
-                                await page.wait_for_timeout(400)
-                            except Exception:
-                                pass
-
-                            # Fallback to card text parsing if modal graph extraction yields nothing
-                            if not card_prices:
-                                for line in lines:
-                                    if line != matched_name:
-                                        parsed_val = parse_price(line)
-                                        if parsed_val is not None and parsed_val > 0:
-                                            card_prices.append(parsed_val)
-
-                            avg_value = round(sum(card_prices) / len(card_prices), 2) if card_prices else 0.0
-
-                            all_items_shard_data.append({
-                                "category": cat_name,
-                                "item_name": matched_name,
-                                "page": current_page,
-                                "average_shard_value": avg_value,
-                                "shard_trade_history": card_prices
-                            })
-                    except Exception:
+            for i in range(count):
+                try:
+                    card = raw_cards.nth(i)
+                    text = (await card.inner_text()).strip()
+                    if not text:
                         continue
+                    
+                    lines = [l.strip() for l in text.split("\n") if l.strip()]
+                    matched_name = None
+                    for line in lines:
+                        if line.lower() in target_cosmetics:
+                            matched_name = line
+                            break
 
-                print(f"Captured {matched_on_page} matched item(s) from page {current_page}.")
+                    if matched_name and matched_name not in processed_item_names:
+                        # Check if card is a direct link <a> tag
+                        href = await card.get_attribute("href")
+                        if not href:
+                            link_elem = card.locator("a").first
+                            if await link_elem.count() > 0:
+                                href = await link_elem.get_attribute("href")
 
-                # Page Advancement Logic
-                next_page_num = str(current_page + 1)
-                next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
-                generic_next = page.locator("button[aria-label*='Next' i], a[aria-label*='Next' i], button:has-text('Next'), nav button:has-text('>')").first
-                
-                advanced = False
-                
-                if await next_btn.count() > 0 and await next_btn.is_visible():
-                    await next_btn.scroll_into_view_if_needed()
-                    await next_btn.click()
+                        full_url = None
+                        if href:
+                            full_url = href if href.startswith("http") else f"https://inpvp.net{href}"
+
+                        artifact_targets.append({
+                            "name": matched_name,
+                            "card_index": i,
+                            "url": full_url,
+                            "page_num": current_page
+                        })
+                        processed_item_names.add(matched_name)
+                except Exception:
+                    continue
+
+            # Pagination advancement
+            next_page_num = str(current_page + 1)
+            next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
+            generic_next = page.locator("button[aria-label*='Next' i], a[aria-label*='Next' i], button:has-text('Next'), nav button:has-text('>')").first
+            
+            advanced = False
+            if await next_btn.count() > 0 and await next_btn.is_visible():
+                await next_btn.scroll_into_view_if_needed()
+                await next_btn.click()
+                current_page += 1
+                advanced = True
+            elif await generic_next.count() > 0 and await generic_next.is_visible():
+                is_disabled = await generic_next.get_attribute("disabled") is not None
+                aria_disabled = await generic_next.get_attribute("aria-disabled") == "true"
+                if not is_disabled and not aria_disabled:
+                    await generic_next.scroll_into_view_if_needed()
+                    await generic_next.click()
                     current_page += 1
                     advanced = True
-                elif await generic_next.count() > 0 and await generic_next.is_visible():
-                    is_disabled = await generic_next.get_attribute("disabled") is not None
-                    aria_disabled = await generic_next.get_attribute("aria-disabled") == "true"
-                    
-                    if not is_disabled and not aria_disabled:
-                        await generic_next.scroll_into_view_if_needed()
-                        await generic_next.click()
-                        current_page += 1
-                        advanced = True
 
-                if not advanced:
-                    print(f"Reached the end of category: {cat_name}")
-                    break
-                
-                await page.wait_for_timeout(3000)
+            if not advanced:
+                break
+            await page.wait_for_timeout(3000)
+
+        print(f"\nFound {len(artifact_targets)} target Artifacts to inspect directly.")
+
+        # Step 2: Visit each artifact page, click "Shards", and extract graph values
+        for idx, item in enumerate(artifact_targets, start=1):
+            item_name = item["name"]
+            item_url = item["url"]
+            print(f"[{idx}/{len(artifact_targets)}] Processing Artifact: '{item_name}'")
+
+            try:
+                if item_url:
+                    await page.goto(item_url, wait_until="domcontentloaded", timeout=30000)
+                else:
+                    # Fallback navigation if direct href wasn't present
+                    print(f"  Navigating via vault click for {item_name}...")
+                    await page.goto(VAULT_URL, wait_until="domcontentloaded", timeout=30000)
+                    await page.wait_for_timeout(2000)
+                    card = page.locator(f"main :has-text('{item_name}')").last
+                    await card.click()
+
+                await page.wait_for_timeout(2000)
+
+                # Immediately click the "Shards" button
+                shards_btn = page.locator("button, a, [role='tab']").filter(has_text=re.compile(r"^shards$", re.I)).first
+                if await shards_btn.count() > 0:
+                    await shards_btn.click()
+                    print("  Clicked 'Shards' button!")
+                    await page.wait_for_timeout(2000)  # Wait for graph to load
+                else:
+                    # Fallback search for any button containing 'Shard'
+                    alt_shards = page.locator("button:has-text('Shard'), a:has-text('Shard')").first
+                    if await alt_shards.count() > 0:
+                        await alt_shards.click()
+                        print("  Clicked fallback 'Shard' button!")
+                        await page.wait_for_timeout(2000)
+
+                # Extract graph values
+                graph_prices = await extract_shard_graph_data(page)
+                avg_value = round(sum(graph_prices) / len(graph_prices), 2) if graph_prices else 0.0
+
+                print(f"  Extracted {len(graph_prices)} graph points. Avg Shard Value: {avg_value}")
+
+                all_items_shard_data.append({
+                    "category": "Artifacts",
+                    "item_name": item_name,
+                    "url": item_url or page.url,
+                    "average_shard_value": avg_value,
+                    "shard_trade_history": graph_prices
+                })
+
+            except Exception as e:
+                print(f"  Failed to process {item_name}: {e}")
+                all_items_shard_data.append({
+                    "category": "Artifacts",
+                    "item_name": item_name,
+                    "url": item_url,
+                    "average_shard_value": 0.0,
+                    "shard_trade_history": []
+                })
 
         await browser.close()
 
+    # Save to data/trades.json
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
-    print(f"\nDone! Successfully processed all categories, calculated averages, and saved {len(all_items_shard_data)} items to data/trades.json.")
+    print(f"\nDone! Successfully processed Artifacts and saved {len(all_items_shard_data)} items to data/trades.json.")
 
     auto_commit_and_push()
 
 if __name__ == "__main__":
-    asyncio.run(scrape_shard_history())
+    asyncio.run(scrape_artifact_shards())
