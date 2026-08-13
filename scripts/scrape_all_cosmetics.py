@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import re
 import subprocess
 from playwright.async_api import async_playwright
 
@@ -40,7 +41,7 @@ def load_target_cosmetics():
     return target_set
 
 def parse_price(line):
-    """Parses numbers, decimals, and values with 'K' shorthand (e.g., '1.5K' -> 1500.0)."""
+    """Parses standard numbers, decimals, and values with 'K' shorthand (e.g., '1.5K' -> 1500.0)."""
     line_clean = line.strip().replace(",", "")
     if not line_clean:
         return None
@@ -50,9 +51,9 @@ def parse_price(line):
             num_part = float(line_clean[:-1])
             return num_part * 1000.0
         else:
-            digits_only = "".join([c for c in line_clean if c.isdigit() or c == '.'])
-            if digits_only:
-                return float(digits_only)
+            match = re.search(r'\d+(?:\.\d+)?', line_clean)
+            if match:
+                return float(match.group(0))
     except ValueError:
         pass
     return None
@@ -77,18 +78,64 @@ async def auto_scroll(page):
     }""")
     await page.wait_for_timeout(1000)
 
+async def extract_graph_values(page):
+    """
+    Extracts price history from opened modal graph elements, hover tooltips, 
+    and detailed modal text.
+    """
+    prices = []
+    
+    # 1. Hover over chart elements to expose tooltips
+    chart_nodes = page.locator("svg circle, svg path, [class*='recharts-symbols'], [class*='chart'] *")
+    node_count = min(await chart_nodes.count(), 15)  # Limit hover scans for speed
+    
+    for idx in range(node_count):
+        try:
+            node = chart_nodes.nth(idx)
+            await node.hover(timeout=500)
+            await page.wait_for_timeout(100)
+        except Exception:
+            continue
+
+    # 2. Extract values from active tooltips or chart attributes
+    tooltips = page.locator("[role='tooltip'], [class*='tooltip'], [class*='popover'], svg title, svg [aria-label]")
+    t_count = await tooltips.count()
+
+    for idx in range(t_count):
+        try:
+            t_elem = tooltips.nth(idx)
+            t_text = await t_elem.inner_text()
+            parsed = parse_price(t_text)
+            if parsed is not None and parsed > 0:
+                prices.append(parsed)
+        except Exception:
+            continue
+
+    # 3. Fallback: Parse visible numerical values inside the open modal
+    if not prices:
+        modal = page.locator("[role='dialog'], [class*='modal'], [class*='popup']").first
+        if await modal.count() > 0:
+            modal_text = await modal.inner_text()
+            for line in modal_text.split("\n"):
+                if any(k in line.lower() for k in ["shard", "price", "val", "k", "avg"]):
+                    parsed = parse_price(line)
+                    if parsed is not None and parsed > 0:
+                        prices.append(parsed)
+
+    return list(set(prices))  # Deduplicate prices
+
 def auto_commit_and_push():
     """Commits and pushes data/trades.json to GitHub, ensuring git identity is set."""
     print("\n--- Checking Git Status & Pushing to GitHub ---")
     try:
-        # 1. Check if any modified files exist
+        # Check if any modified files exist
         status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
         
         if not status.stdout.strip():
             print("No changes detected in trades.json. Skipping Git commit/push.")
             return
 
-        # 2. Check if git user configuration exists; if not, set temporary defaults
+        # Check/set git user configuration
         user_name = subprocess.run(["git", "config", "user.name"], capture_output=True, text=True)
         user_email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True)
 
@@ -100,14 +147,14 @@ def auto_commit_and_push():
             print("Setting temporary Git user.email...")
             subprocess.run(["git", "config", "user.email", "bot@example.com"], check=True)
 
-        # 3. Add, commit, and push
+        # Stage, commit, and push
         subprocess.run(["git", "add", "data/trades.json"], check=True)
         subprocess.run(["git", "commit", "-m", "Auto-update shard trade data"], check=True)
         subprocess.run(["git", "push"], check=True)
         print("Successfully committed and pushed updated JSON to GitHub!")
 
     except subprocess.CalledProcessError as e:
-        print(f"\nGit push failed ({e}).")
+        print(f"\nGit operation failed ({e}).")
     except Exception as e:
         print(f"An unexpected error occurred during Git sync: {e}")
 
@@ -146,8 +193,10 @@ async def scrape_shard_history():
         for cat_name in CATEGORIES:
             print(f"\n================ Processing Category: {cat_name} ================")
 
-            # Exact matching tab locator to properly register category buttons
-            cat_tab = page.locator(f"button:text-is('{cat_name}'), a:text-is('{cat_name}'), [role='tab']:has-text('{cat_name}')").first
+            # Flexible tab locator matching space variations like 'Killphrases' or 'Kill Phrases'
+            tab_pattern = re.compile(rf"{cat_name.replace('phrases', '[\s]*phrases')}", re.I)
+            cat_tab = page.locator("button, a, [role='tab']").filter(has_text=tab_pattern).first
+            
             if await cat_tab.count() > 0:
                 await cat_tab.click()
                 await page.wait_for_timeout(3000)
@@ -158,7 +207,6 @@ async def scrape_shard_history():
                 
                 await auto_scroll(page)
 
-                # Broader card selector for varying UI templates (Artifacts vs Killphrases)
                 raw_cards = page.locator("main div[class*='grid'] > div, main [class*='cursor-pointer'], main a, main div[class*='card']")
                 count = await raw_cards.count()
                 matched_on_page = 0
@@ -174,26 +222,49 @@ async def scrape_shard_history():
                         if not lines:
                             continue
                         
-                        name = lines[0]
-                        name_lower = name.lower()
+                        # Match ANY line in the card against target cosmetics (fixes rarity headers bug)
+                        matched_name = None
+                        for line in lines:
+                            if line.lower() in target_cosmetics:
+                                matched_name = line
+                                break
 
-                        if name_lower in target_cosmetics and name not in processed_item_names:
-                            processed_item_names.add(name)
+                        if matched_name and matched_name not in processed_item_names:
+                            processed_item_names.add(matched_name)
                             matched_on_page += 1
                             
                             card_prices = []
-                            for line in lines[1:]:
-                                parsed_val = parse_price(line)
-                                if parsed_val is not None and parsed_val > 0:
-                                    card_prices.append(parsed_val)
+                            try:
+                                await card.scroll_into_view_if_needed()
+                                await card.click(timeout=2000)
+                                await page.wait_for_timeout(1200)
+                                
+                                # Extract chart data points from open modal
+                                card_prices = await extract_graph_values(page)
+                                
+                                # Close modal dialog
+                                close_btn = page.locator("button:has-text('✕'), button:has-text('Close'), [aria-label*='Close' i]").first
+                                if await close_btn.count() > 0 and await close_btn.is_visible():
+                                    await close_btn.click()
+                                else:
+                                    await page.keyboard.press("Escape")
+                                await page.wait_for_timeout(400)
+                            except Exception:
+                                pass
 
-                            avg_value = 0
-                            if card_prices:
-                                avg_value = round(sum(card_prices) / len(card_prices), 2)
+                            # Fallback to card text parsing if modal graph extraction yields nothing
+                            if not card_prices:
+                                for line in lines:
+                                    if line != matched_name:
+                                        parsed_val = parse_price(line)
+                                        if parsed_val is not None and parsed_val > 0:
+                                            card_prices.append(parsed_val)
+
+                            avg_value = round(sum(card_prices) / len(card_prices), 2) if card_prices else 0.0
 
                             all_items_shard_data.append({
                                 "category": cat_name,
-                                "item_name": name,
+                                "item_name": matched_name,
                                 "page": current_page,
                                 "average_shard_value": avg_value,
                                 "shard_trade_history": card_prices
@@ -203,7 +274,7 @@ async def scrape_shard_history():
 
                 print(f"Captured {matched_on_page} matched item(s) from page {current_page}.")
 
-                # Page navigation handling
+                # Page Advancement Logic
                 next_page_num = str(current_page + 1)
                 next_btn = page.locator(f"button:text-is('{next_page_num}'), a:text-is('{next_page_num}')").first
                 generic_next = page.locator("button[aria-label*='Next' i], a[aria-label*='Next' i], button:has-text('Next'), nav button:has-text('>')").first
@@ -233,13 +304,11 @@ async def scrape_shard_history():
 
         await browser.close()
 
-    # Save to data/trades.json
     with open("data/trades.json", "w", encoding="utf-8") as f:
         json.dump(all_items_shard_data, f, indent=2, ensure_ascii=False)
         
     print(f"\nDone! Successfully processed all categories, calculated averages, and saved {len(all_items_shard_data)} items to data/trades.json.")
 
-    # Commit and push changes
     auto_commit_and_push()
 
 if __name__ == "__main__":
