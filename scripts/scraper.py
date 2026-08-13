@@ -2,11 +2,51 @@ import os
 import json
 from playwright.sync_api import sync_playwright
 
+def load_reference_names():
+    """Loads valid cosmetic names from cosmetics.json if it exists."""
+    ref_file = "data/cosmetics.json"
+    if os.path.exists(ref_file):
+        try:
+            with open(ref_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                # Extract names depending on whether it's a list or dictionary
+                if isinstance(data, list):
+                    return {item.get("name") for item in data if "name" in item}
+                elif isinstance(data, dict):
+                    return set(data.keys())
+        except Exception as e:
+            print(f"Could not load reference names: {e}")
+    return set()
+
+def clean_and_match_name(raw_name, valid_names):
+    """
+    Checks if any known valid name is present within the raw scraped string.
+    If a match is found, it returns only the matched name.
+    """
+    if not valid_names:
+        return raw_name  # Fallback if no reference file exists yet
+
+    # Exact match check first
+    if raw_name in valid_names:
+        return raw_name
+
+    # Substring / fuzzy match check (longest match preferred to avoid partial overlaps)
+    matched_name = None
+    for valid_name in sorted(valid_names, key=len, reverse=True):
+        if valid_name.lower() in raw_name.lower():
+            matched_name = valid_name
+            break
+            
+    return matched_name
+
 def run_scraper():
     url = "https://milkyclan.com/values"
     output_file = "data/cosmetics.json"
     
-    # 1. ALWAYS DELETE THE OLD FILE IF IT EXISTS TO WIPE GLITCHED DATA
+    # 1. Load valid names *before* potentially deleting the file
+    valid_names = load_reference_names()
+
+    # 2. ALWAYS DELETE THE OLD FILE IF IT EXISTS TO WIPE GLITCHED DATA
     if os.path.exists(output_file):
         try:
             os.remove(output_file)
@@ -94,9 +134,19 @@ def run_scraper():
 
             browser.close()
 
-            # Deduplicate items in memory
+            # Process, filter, and clean items
             for item in raw_items:
-                name = item["name"]
+                raw_name = item["name"]
+                
+                # Match and trim name against valid cosmetics list
+                matched_name = clean_and_match_name(raw_name, valid_names)
+                
+                # If a reference list exists and this item couldn't be matched, skip it
+                if valid_names and not matched_name:
+                    continue
+                
+                name = matched_name if matched_name else raw_name
+
                 if name not in cosmetics:
                     rarity_raw = str(item.get("rarity", "Common")).lower()
                     cosmetics[name] = {
@@ -110,7 +160,7 @@ def run_scraper():
         print(f"Scraper notice: {e}")
         cosmetics = {}
 
-    # 2. WRITE FRESH CLEAN DATA
+    # 3. WRITE FRESH CLEAN DATA
     os.makedirs("data", exist_ok=True)
     final_list = list(cosmetics.values())
 
