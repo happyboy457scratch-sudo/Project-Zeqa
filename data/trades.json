@@ -131,5 +131,33 @@
     "shards": "15k",
     "total_shards": "15k",
     "raw_trade": "Phoenix Wings \u2192 15.0k"
+  },
+  {
+    "item": "Chainmail Festive Hat",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Aug 14 Chainmail Festive Hat \u2192 2.0k Konobe7241"
+  },
+  {
+    "item": "Festive Hat",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Festive Hat \u2192 2.0k"
+  },
+  {
+    "item": "Chick Chainmail",
+    "quantity": 1,
+    "shards": "12k",
+    "total_shards": "12k",
+    "raw_trade": "Aug 14 Konobe7241 12.0k \u2192 Chick Chainmail"
+  },
+  {
+    "item": "Chick",
+    "quantity": 1,
+    "shards": "12k",
+    "total_shards": "12k",
+    "raw_trade": "12.0k \u2192 Chick"
   }
 ]
