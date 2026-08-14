@@ -51,7 +51,6 @@ def calculate_right_side_weighted_average(shards_list):
 def run_and_push_scraper():
     base_url = "https://inpvp.net/api/zeqa-cosmetics"
     
-    # Full targets for all cosmetics
     targets = [
         ("artifact", 327),
         ("cape", 385),
@@ -145,9 +144,12 @@ def run_and_push_scraper():
     print(f" SCRAPING COMPLETE. FILE SAVED TO data/trades.json")
     print(f"==========================================")
 
-    # --- AUTOMATED GIT COMMIT AND PUSH ---
-    print("\nCommitting and pushing data/trades.json to GitHub...")
+    # --- AUTOMATED GIT CONFIG, COMMIT, AND PUSH ---
+    print("\nConfiguring Git identity and pushing data/trades.json to GitHub...")
     try:
+        subprocess.run(["git", "config", "--global", "user.name", "github-actions[bot]"], check=True)
+        subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
+        
         subprocess.run(["git", "add", "data/trades.json"], check=True)
         commit_message = "Update data/trades.json with right-side weighted cosmetic shard averages"
         subprocess.run(["git", "commit", "-m", commit_message], check=True)
