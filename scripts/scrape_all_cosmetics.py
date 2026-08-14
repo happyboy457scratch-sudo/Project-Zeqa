@@ -14,7 +14,6 @@ def run_and_push_scraper():
     ]
     
     all_trade_entries = []
-    trade_index_counter = 1
 
     print("--- STARTING NAMED PER-ITEM SHARD AVERAGE SCRAPER & GIT PUSHER ---")
 
@@ -25,13 +24,15 @@ def run_and_push_scraper():
             print(f"Checking id {item_id} for {category}...")
             
             # 1. Fetch info endpoint to get the item's name
-            item_name = f"Unknown {category.capitalize()} {item_id}"
+            item_name = f"{item_id} {category.capitalize()}"
             info_endpoint = f"{base_url}/{category}/{item_id}?section=info"
             try:
                 info_resp = requests.get(info_endpoint, timeout=10)
                 if info_resp.status_code == 200:
                     info_data = info_resp.json()
-                    item_name = info_data.get("item", {}).get("name", item_name)
+                    fetched_name = info_data.get("item", {}).get("name")
+                    if fetched_name:
+                        item_name = f"{item_id} {fetched_name}"
             except Exception:
                 pass
 
@@ -70,18 +71,21 @@ def run_and_push_scraper():
             else:
                 item_avg_rounded = 0.0
 
-            # Add 10 trade entries for this specific item
+            # Format values as strings/integers per your requested layout
+            shards_str = str(int(item_avg_rounded))
+            total_shards_str = shards_str # Quantity is 1, so total matches single shard value
+            
+            # Add 10 trade entries for this specific item with quantity fixed to 1
             for _ in range(10):
                 all_trade_entries.append({
-                    "trade_index": trade_index_counter,
-                    "category": category,
-                    "item_id": item_id,
-                    "name": item_name,
-                    "shard_value": item_avg_rounded
+                    "item": item_name,
+                    "quantity": 1,
+                    "shards": shards_str,
+                    "total_shards": total_shards_str,
+                    "raw_trade": ""
                 })
-                trade_index_counter += 1
 
-            print(f" -> '{item_name}' (ID {item_id}): Avg Shards = {item_avg_rounded}")
+            print(f" -> '{item_name}': Shards = {shards_str}")
 
     # Ensure data directory exists and save to data/trades.json
     os.makedirs("data", exist_ok=True)
@@ -97,16 +101,10 @@ def run_and_push_scraper():
     # --- AUTOMATED GIT COMMIT AND PUSH ---
     print("\nCommitting and pushing data/trades.json to GitHub...")
     try:
-        # 1. Git Add
         subprocess.run(["git", "add", "data/trades.json"], check=True)
-        
-        # 2. Git Commit
-        commit_message = "Update data/trades.json with latest cosmetic shard averages"
+        commit_message = "Update data/trades.json with quantity 1 structured averages"
         subprocess.run(["git", "commit", "-m", commit_message], check=True)
-        
-        # 3. Git Push
         subprocess.run(["git", "push"], check=True)
-        
         print("Successfully committed and pushed updates to GitHub!")
     except subprocess.CalledProcessError as git_err:
         print(f"Git operation failed: {git_err}")
