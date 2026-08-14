@@ -3,43 +3,55 @@ import json
 import subprocess
 import requests
 
-def filter_outliers(shards_list):
-    """Filters out extreme price spikes using a standard statistical range."""
+def calculate_right_side_weighted_average(shards_list):
+    """
+    Filters out outlier spikes and heavily weights trades at the end of the list 
+    (the right side of the graph/recent trades) over the left side (older trades).
+    """
     if not shards_list:
         return 0.0
     
-    # Sort the values
+    # 1. Clean out extreme outlier spikes first
     sorted_shards = sorted(shards_list)
     n = len(sorted_shards)
     
-    if n < 4:
-        # If there are very few data points, just return their average
-        return sum(sorted_shards) / n
+    if n >= 4:
+        q1_idx = int(n * 0.25)
+        q3_idx = int(n * 0.75)
+        q1 = sorted_shards[q1_idx]
+        q3 = sorted_shards[q3_idx]
+        iqr = q3 - q1
+        upper_bound = q3 + (1.5 * iqr)
+        lower_bound = max(0, q1 - (1.5 * iqr))
+        
+        clean_trades = [s for s in shards_list if lower_bound <= s <= upper_bound]
+    else:
+        clean_trades = shards_list
 
-    # Use Interquartile Range (IQR) to filter out wild spikes (like 800k vs 1000)
-    q1_idx = int(n * 0.25)
-    q3_idx = int(n * 0.75)
-    q1 = sorted_shards[q1_idx]
-    q3 = sorted_shards[q3_idx]
-    iqr = q3 - q1
+    if not clean_trades:
+        clean_trades = shards_list
 
-    # Define bounds for normal trades (anything past 1.5 * IQR above Q3 is considered a spike)
-    upper_bound = q3 + (1.5 * iqr)
-    lower_bound = max(0, q1 - (1.5 * iqr))
+    total_weight = 0
+    weighted_sum = 0
+    num_trades = len(clean_trades)
 
-    # Keep only values within the normal curve
-    normal_trades = [s for s in sorted_shards if lower_bound <= s <= upper_bound]
+    # 2. Right-side weighting (exponential curve favoring the tail end/recent trades)
+    for index, trade_value in enumerate(clean_trades):
+        position_ratio = (index + 1) / num_trades
+        weight = position_ratio ** 2
+        
+        weighted_sum += trade_value * weight
+        total_weight += weight
 
-    # Fallback if filtering drops everything
-    if not normal_trades:
-        normal_trades = sorted_shards
+    if total_weight == 0:
+        return sum(clean_trades) / num_trades
 
-    # Return the clean average
-    return sum(normal_trades) / len(normal_trades)
+    return weighted_sum / total_weight
 
 def run_and_push_scraper():
     base_url = "https://inpvp.net/api/zeqa-cosmetics"
     
+    # Full targets for all cosmetics
     targets = [
         ("artifact", 327),
         ("cape", 385),
@@ -49,7 +61,7 @@ def run_and_push_scraper():
     
     all_trade_entries = []
 
-    print("--- STARTING FILTERED PER-ITEM SHARD SCRAPER & GIT PUSHER ---")
+    print("--- STARTING PRODUCTION SCRAPER & GIT PUSHER ---")
 
     for category, max_id in targets:
         print(f"\nProcessing category: '{category}' (IDs 1 to {max_id})...")
@@ -98,15 +110,19 @@ def run_and_push_scraper():
             except Exception:
                 pass
 
-            # Apply the spike filter to remove 800k outliers and get a clean curve average
-            clean_avg = filter_outliers(item_shards)
-            item_avg_rounded = round(clean_avg, 2)
+            # Apply right-side weighted calculation
+            right_weighted_avg = calculate_right_side_weighted_average(item_shards)
+            item_avg_rounded = round(right_weighted_avg, 2)
 
-            # Format values as strings/integers per your requested layout
-            shards_str = str(int(item_avg_rounded))
-            total_shards_str = shards_str 
+            # Check if shard value is 0 and set to "Untradable"
+            if item_avg_rounded <= 0:
+                shards_str = "Untradable"
+                total_shards_str = "Untradable"
+            else:
+                shards_str = str(int(item_avg_rounded))
+                total_shards_str = shards_str 
             
-            # Add 10 trade entries for this specific item
+            # Add 10 trade entries for this specific item matching your requested format
             for _ in range(10):
                 all_trade_entries.append({
                     "item": item_name,
@@ -116,7 +132,7 @@ def run_and_push_scraper():
                     "raw_trade": ""
                 })
 
-            print(f" -> '{item_name}': Clean Shards = {shards_str}")
+            print(f" -> '{item_name}': Shards = {shards_str}")
 
     # Ensure data directory exists and save to data/trades.json
     os.makedirs("data", exist_ok=True)
@@ -133,7 +149,7 @@ def run_and_push_scraper():
     print("\nCommitting and pushing data/trades.json to GitHub...")
     try:
         subprocess.run(["git", "add", "data/trades.json"], check=True)
-        commit_message = "Update data/trades.json with outlier-filtered shard averages"
+        commit_message = "Update data/trades.json with right-side weighted cosmetic shard averages"
         subprocess.run(["git", "commit", "-m", commit_message], check=True)
         subprocess.run(["git", "pull", "--rebase", "origin", "main"], check=True)
         subprocess.run(["git", "push"], check=True)
