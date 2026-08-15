@@ -54997,5 +54997,19 @@
     "shards": "580",
     "total_shards": "5.8k",
     "raw_trade": "5.8k \u2192 Golden Space Helmet x10 +5 more"
+  },
+  {
+    "item": "Chainmail Katana Symbol",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Aug 15 Chainmail Katana Symbol \u2192 2.0k Jelybeqn"
+  },
+  {
+    "item": "Katana Symbol",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Katana Symbol \u2192 2.0k"
   }
 ]
