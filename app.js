@@ -81,10 +81,10 @@ async function loadData() {
     console.warn('Could not fetch external data, utilizing fallback dataset:', err);
     if (cosmeticsData.length === 0) {
       cosmeticsData = [
-        { id: 1, name: 'Dragon Cape', category: 'Capes', rarity: 'Legendary', value: 25000, demand: 9, salesExistingRatio: 85, imageUrl: '' },
-        { id: 2, name: 'Ancient Relic', category: 'Artifacts', rarity: 'Mythic', value: 42000, demand: 10, salesExistingRatio: 92, imageUrl: '' },
-        { id: 3, name: 'Fireball Projectile', category: 'Projectiles', rarity: 'Rare', value: 8500, demand: 6, salesExistingRatio: 45, imageUrl: '' },
-        { id: 4, name: 'Golden Key', category: 'Items', rarity: 'Epic', value: 16000, demand: 8, salesExistingRatio: 70, imageUrl: '' }
+        { id: 1, name: 'Dragon Cape', category: 'cape', rarity: 'Legendary', value: 25000, demand: 9, salesExistingRatio: 85, imageUrl: '' },
+        { id: 2, name: 'Ancient Relic', category: 'artifact', rarity: 'Mythic', value: 42000, demand: 10, salesExistingRatio: 92, imageUrl: '' },
+        { id: 3, name: 'Fireball Projectile', category: 'projectile', rarity: 'Rare', value: 8500, demand: 6, salesExistingRatio: 45, imageUrl: '' },
+        { id: 4, name: 'Golden Key', category: 'item', rarity: 'Epic', value: 16000, demand: 8, salesExistingRatio: 70, imageUrl: '' }
       ];
     }
   }
@@ -571,7 +571,12 @@ function renderValueGridItemsHtml() {
   }
 
   if (valueCurrentCategory !== 'All') {
-    filtered = filtered.filter(item => (item.category || item.type || '').toLowerCase() === valueCurrentCategory.toLowerCase());
+    const targetCategory = valueCurrentCategory.toLowerCase().replace(/s$/, '');
+    
+    filtered = filtered.filter(item => {
+      const itemCat = (item.category || item.type || '').toLowerCase();
+      return itemCat === valueCurrentCategory.toLowerCase() || itemCat === targetCategory;
+    });
   }
 
   filtered.sort((a, b) => {
