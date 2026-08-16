@@ -48193,5 +48193,19 @@
     "shards": "277",
     "total_shards": "277",
     "raw_trade": "Ender Dragon Tail \u2192 A #277"
+  },
+  {
+    "item": "6 #14 xhnf",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Aug 16 Chainmail 50.0k \u2192 6 #14 xhnf"
+  },
+  {
+    "item": "6 #14",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "50.0k \u2192 6 #14"
   }
 ]
