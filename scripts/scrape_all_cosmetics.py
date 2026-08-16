@@ -3,163 +3,125 @@ import json
 import subprocess
 import requests
 
-def calculate_right_side_weighted_average(shards_list):
+def get_nexus_wing_average(base_url, item_id):
     """
-    Filters out outlier spikes and heavily weights trades at the end of the list 
-    (the right side of the graph/recent trades) over the left side (older trades).
+    Fetches trades for Nexus Wing and calculates a basic average of all valid shard trades.
     """
-    if not shards_list:
-        return 0.0
+    trades_endpoint = f"{base_url}/artifact/{item_id}?section=trades"
+    item_shards = []
     
-    # 1. Clean out extreme outlier spikes first
-    sorted_shards = sorted(shards_list)
-    n = len(sorted_shards)
-    
-    if n >= 4:
-        q1_idx = int(n * 0.25)
-        q3_idx = int(n * 0.75)
-        q1 = sorted_shards[q1_idx]
-        q3 = sorted_shards[q3_idx]
-        iqr = q3 - q1
-        upper_bound = q3 + (1.5 * iqr)
-        lower_bound = max(0, q1 - (1.5 * iqr))
-        
-        clean_trades = [s for s in shards_list if lower_bound <= s <= upper_bound]
-    else:
-        clean_trades = shards_list
-
-    if not clean_trades:
-        clean_trades = shards_list
-
-    total_weight = 0
-    weighted_sum = 0
-    num_trades = len(clean_trades)
-
-    # 2. Right-side weighting (exponential curve favoring the tail end/recent trades)
-    for index, trade_value in enumerate(clean_trades):
-        position_ratio = (index + 1) / num_trades
-        weight = position_ratio ** 2
-        
-        weighted_sum += trade_value * weight
-        total_weight += weight
-
-    if total_weight == 0:
-        return sum(clean_trades) / num_trades
-
-    return weighted_sum / total_weight
-
-def run_and_push_scraper():
-    base_url = "https://inpvp.net/api/zeqa-cosmetics"
-    
-    targets = [
-        ("artifact", 327),
-        ("cape", 385),
-        ("killphrase", 65),
-        ("projectile", 7)
-    ]
-    
-    all_trade_entries = []
-
-    print("--- STARTING PRODUCTION SCRAPER & GIT PUSHER ---")
-
-    for category, max_id in targets:
-        print(f"\nProcessing category: '{category}' (IDs 1 to {max_id})...")
-
-        for item_id in range(1, max_id + 1):
-            print(f"Checking id {item_id} for {category}...")
-            
-            # 1. Fetch info endpoint to get the item's name
-            item_name = f"{item_id} {category.capitalize()}"
-            info_endpoint = f"{base_url}/{category}/{item_id}?section=info"
-            try:
-                info_resp = requests.get(info_endpoint, timeout=10)
-                if info_resp.status_code == 200:
-                    info_data = info_resp.json()
-                    fetched_name = info_data.get("item", {}).get("name")
-                    if fetched_name:
-                        item_name = f"{item_id} {fetched_name}"
-            except Exception:
-                pass
-
-            # 2. Fetch trades endpoint to gather history
-            trades_endpoint = f"{base_url}/{category}/{item_id}?section=trades"
-            item_shards = []
-
-            try:
-                response = requests.get(trades_endpoint, timeout=10)
-                if response.status_code == 200:
-                    data = response.json()
-                    trades = data.get("trades", [])
-                    
-                    for trade in trades:
-                        all_items = trade.get("challengerItems", []) + trade.get("defenderItems", [])
-                        
-                        item_found = False
-                        for ci in all_items:
-                            if ci.get("type") == category and str(ci.get("id")) == str(item_id):
-                                item_found = True
-                                break
-                        
-                        if item_found:
-                            for ci in all_items:
-                                if ci.get("type") == "shard":
-                                    count = ci.get("count", 0)
-                                    if isinstance(count, (int, float)) and count > 0:
-                                        item_shards.append(count)
-            except Exception:
-                pass
-
-            # Apply right-side weighted calculation
-            right_weighted_avg = calculate_right_side_weighted_average(item_shards)
-            item_avg_rounded = round(right_weighted_avg, 2)
-
-            # Check if shard value is 0 and set to "Untradable"
-            if item_avg_rounded <= 0:
-                shards_str = "Untradable"
-                total_shards_str = "Untradable"
-            else:
-                shards_str = str(int(item_avg_rounded))
-                total_shards_str = shards_str 
-            
-            # Add 10 trade entries for this specific item matching your requested format
-            for _ in range(10):
-                all_trade_entries.append({
-                    "item": item_name,
-                    "quantity": 1,
-                    "shards": shards_str,
-                    "total_shards": total_shards_str,
-                    "raw_trade": ""
-                })
-
-            print(f" -> '{item_name}': Shards = {shards_str}")
-
-    # Ensure data directory exists and save to data/trades.json
-    os.makedirs("data", exist_ok=True)
-    output_path = os.path.abspath("data/trades.json")
-    
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(all_trade_entries, f, indent=2)
-
-    print(f"\n==========================================")
-    print(f" SCRAPING COMPLETE. FILE SAVED TO data/trades.json")
-    print(f"==========================================")
-
-    # --- AUTOMATED GIT CONFIG, COMMIT, AND PUSH ---
-    print("\nConfiguring Git identity and pushing data/trades.json to GitHub...")
     try:
-        subprocess.run(["git", "config", "--global", "user.name", "github-actions[bot]"], check=True)
-        subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
-        
-        subprocess.run(["git", "add", "data/trades.json"], check=True)
-        commit_message = "Update data/trades.json with right-side weighted cosmetic shard averages"
-        subprocess.run(["git", "commit", "-m", commit_message], check=True)
-        subprocess.run(["git", "pull", "--rebase", "origin", "main"], check=True)
-        subprocess.run(["git", "push"], check=True)
-        print("Successfully committed and pushed updates to GitHub!")
-    except subprocess.CalledProcessError as git_err:
-        print(f"Git operation failed: {git_err}")
+        response = requests.get(trades_endpoint, timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            trades = data.get("trades", [])
+            
+            for trade in trades:
+                challenger_items = trade.get("challengerItems", [])
+                defender_items = trade.get("defenderItems", [])
+                
+                # Discard one-sided or empty trades
+                if not challenger_items or not defender_items:
+                    continue
+                
+                all_items = challenger_items + defender_items
+                
+                # Ensure Nexus Wing is part of this trade
+                item_found = False
+                for ci in all_items:
+                    if ci.get("type") == "artifact" and str(ci.get("id")) == str(item_id):
+                        item_found = True
+                        break
+                
+                if item_found:
+                    # Sum up shard counts in the trade
+                    trade_shard_total = 0
+                    for ci in all_items:
+                        if ci.get("type") == "shard":
+                            count = ci.get("count", 0)
+                            if isinstance(count, (int, float)) and 0 < count < 1000000:
+                                trade_shard_total += count
+                                
+                    if trade_shard_total > 0:
+                        item_shards.append(trade_shard_total)
     except Exception as e:
-        print(f"An error occurred during git automation: {e}")
+        print(f"Error fetching trade data: {e}")
+
+    if not item_shards:
+        return None
+
+    # Basic average of the graph (no right-side weighting)
+    return sum(item_shards) / len(item_shards)
+
+def run_nexus_wing_scraper():
+    base_url = "https://inpvp.net/api/mineville-cosmetics" # Adjust base URL if needed based on your setup
+    item_id = 105
+    item_name = "Nexus Wing"
+    
+    print(f"Fetching data for {item_name} (ID: {item_id})...")
+    
+    avg_shards = get_nexus_wing_average(base_url, item_id)
+    
+    if avg_shards is None:
+        print("No valid trades found for Nexus Wing. Defaulting to 300,000 as requested.")
+        shards_str = "300000"
+    else:
+        shards_str = str(int(round(avg_shards)))
+    
+    print(f"Calculated average shards for {item_name}: {shards_str}")
+
+    # Path to trades.json inside data/ folder
+    target_dir = os.path.join(os.getcwd(), "data")
+    output_path = os.path.join(target_dir, "trades.json")
+    
+    existing_entries = []
+    if os.path.exists(output_path):
+        try:
+            with open(output_path, "r", encoding="utf-8") as f:
+                existing_entries = json.load(f)
+            print(f"Loaded existing trades.json ({len(existing_entries)} total entries).")
+        except Exception as e:
+            print(f"Warning: Could not parse trades.json: {e}")
+
+    # DELETE EVERYTHING mentioning Nexus Wing
+    filtered_entries = []
+    for entry in existing_entries:
+        entry_item_name = str(entry.get("item", "")).lower()
+        if "nexus wing" not in entry_item_name:
+            filtered_entries.append(entry)
+            
+    print(f"Removed old Nexus Wing entries. Remaining entries: {len(filtered_entries)}")
+
+    # Create exactly 10 new entries for Nexus Wing
+    new_entries = []
+    for _ in range(10):
+        new_entries.append({
+            "item": f"{item_id} {item_name}",
+            "quantity": 1,
+            "shards": shards_str,
+            "total_shards": shards_str,
+            "raw_trade": ""
+        })
+
+    combined_entries = filtered_entries + new_entries
+
+    # Save back to data/trades.json
+    os.makedirs(target_dir, exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(combined_entries, f, indent=2)
+    print(f"Saved updated trades to {output_path}")
+
+    # Git Automation
+    try:
+        print("\n--- RUNNING GIT AUTOMATION ---")
+        subprocess.run(["git", "add", output_path], check=True)
+        commit_message = f"Update Nexus Wing data to {shards_str} shards"
+        subprocess.run(["git", "commit", "-m", commit_message], check=True)
+        print("Successfully committed trades.json to Git!")
+    except subprocess.CalledProcessError as e:
+        print(f"Git command failed: {e}")
+    except Exception as ex:
+        print(f"Error running git automation: {ex}")
 
 if __name__ == "__main__":
-    run_and_push_scraper()
+    run_nexus_wing_scraper()
