@@ -114,10 +114,8 @@ function processTradeStats() {
     const itemKey = cleanName(matchedCosmetic.name);
     if (!groupedTrades[itemKey]) groupedTrades[itemKey] = [];
 
-    // FIXED: trade.shards is ALREADY pre-calculated as the per-item price in trades.json
     const unitPrice = parseShards(trade.shards);
     const qty = parseInt(trade.quantity, 10) || 1;
-    const totalShardsPaid = parseShards(trade.total_shards) || (unitPrice * qty);
     const tradeTimestamp = trade.timestamp ? new Date(trade.timestamp).getTime() : Date.now();
 
     groupedTrades[itemKey].push({
@@ -239,7 +237,6 @@ function openItemModal(item) {
   const calculatedVal = getItemCalculatedValue(item);
   const valDisplay = calculatedVal > 0 ? `${formatShardsDisplay(calculatedVal)} shards` : 'Unlisted';
 
-  // Recent Trades HTML Generator
   const key = cleanName(item.name);
   const stats = tradeStatsMap[key];
   let tradesHtml = '';
@@ -671,189 +668,193 @@ function renderComparePage(container) {
           <h3 style="margin: 0; color: #fff;">Select Cosmetic</h3>
           <button id="zv-close-picker" style="background: none; border: none; color: #aaa; font-size: 18px; cursor: pointer;">✕</button>
         </div>
-        <input type="text" id="zv-picker-search" placeholder="Type to search..." style="width: 100%; padding: 10px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #fff; box-sizing: border-box; margin-bottom: 12px;">
-        <div id="zv-picker-list" style="max-height: 260px; overflow-y: auto;">${renderPickerItemsHtml('')}</div>
       </div>
     </div>
   `;
 
   const pickerOverlay = container.querySelector('#zv-picker-overlay');
-  const closePicker = container.querySelector('#zv-close-picker');
-  const searchInput = container.querySelector('#zv-picker-search');
-  const pickerList = container.querySelector('#zv-picker-list');
+  const closePickerBtn = container.querySelector('#zv-close-picker');
 
   container.querySelector('#zv-add-left').onclick = () => {
     compareActiveSide = 'left';
     pickerOverlay.style.display = 'flex';
+    renderPickerList(pickerOverlay);
   };
 
   container.querySelector('#zv-add-right').onclick = () => {
     compareActiveSide = 'right';
     pickerOverlay.style.display = 'flex';
+    renderPickerList(pickerOverlay);
   };
 
-  closePicker.onclick = () => pickerOverlay.style.display = 'none';
-
-  searchInput.oninput = (e) => {
-    pickerList.innerHTML = renderPickerItemsHtml(e.target.value);
-    bindPickerItemClicks(pickerList, pickerOverlay, container);
+  closePickerBtn.onclick = () => {
+    pickerOverlay.style.display = 'none';
   };
 
-  bindPickerItemClicks(pickerList, pickerOverlay, container);
+  pickerOverlay.onclick = (e) => {
+    if (e.target.id === 'zv-picker-overlay') {
+      pickerOverlay.style.display = 'none';
+    }
+  };
 
-  container.querySelector('#zv-clear-left').onclick = () => { compareLeftItems = []; renderComparePage(container); };
-  container.querySelector('#zv-clear-right').onclick = () => { compareRightItems = []; renderComparePage(container); };
+  container.querySelector('#zv-clear-left').onclick = () => {
+    compareLeftItems = [];
+    renderComparePage(container);
+  };
 
-  container.querySelectorAll('.zv-slot-remove-btn').forEach(btn => {
-    btn.onclick = (e) => {
-      const side = e.target.dataset.side;
-      const idx = parseInt(e.target.dataset.index, 10);
-      if (side === 'left') compareLeftItems.splice(idx, 1);
-      else compareRightItems.splice(idx, 1);
-      renderComparePage(container);
-    };
-  });
+  container.querySelector('#zv-clear-right').onclick = () => {
+    compareRightItems = [];
+    renderComparePage(container);
+  };
 }
 
 function renderCompareSlotsHtml(items, side) {
-  if (items.length === 0) return `<div style="text-align: center; color: #666; padding-top: 60px; font-size: 13px;">No items added.</div>`;
+  if (!items || items.length === 0) {
+    return `<div style="text-align: center; color: #6e7681; padding: 40px 0; font-size: 13px;">No items added yet.</div>`;
+  }
+
   return items.map((item, index) => {
     const imgUrl = item.imageUrl || item.image || 'https://via.placeholder.com/150?text=No+Image';
     const val = getItemCalculatedValue(item);
     return `
-      <div style="background: #0d1117; border: 1px solid #21262d; border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <img src="${imgUrl}" style="width: 32px; height: 32px; object-fit: contain; border-radius: 4px; background: #161b22;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
-          <div>
-            <div style="color: #fff; font-weight: 600; font-size: 13px;">${escapeHtml(item.name)}</div>
-            <div style="color: #5EF2B6; font-size: 11px;">${formatShardsDisplay(val)} shards</div>
-          </div>
+      <div style="display: flex; align-items: center; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 8px; margin-bottom: 8px; gap: 10px;">
+        <img src="${imgUrl}" style="width: 36px; height: 36px; object-fit: contain; background: #161b22; border-radius: 4px;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
+        <div style="flex: 1; overflow: hidden;">
+          <div style="color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(item.name)}</div>
+          <div style="color: #5EF2B6; font-size: 11px;">${formatShardsDisplay(val)} shards</div>
         </div>
-        <button class="zv-slot-remove-btn" data-side="${side}" data-index="${index}" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px;">✕</button>
+        <button onclick="window.removeCompareItem('${side}', ${index})" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 14px;">✕</button>
       </div>
     `;
   }).join('');
 }
 
-function renderPickerItemsHtml(query) {
-  const q = query.toLowerCase().trim();
-  const filtered = cosmeticsData.filter(i => i.name.toLowerCase().includes(q));
+window.removeCompareItem = function(side, index) {
+  if (side === 'left') {
+    compareLeftItems.splice(index, 1);
+  } else {
+    compareRightItems.splice(index, 1);
+  }
+  renderApp();
+};
 
-  if (filtered.length === 0) return `<div style="text-align: center; color: #888; padding: 20px;">No items found.</div>`;
+function renderPickerList(overlay) {
+  const modalContent = overlay.querySelector('div > div');
+  let listContainer = overlay.querySelector('#zv-picker-list');
+  if (!listContainer) {
+    const searchInputHtml = `<input type="text" id="zv-picker-search" placeholder="Search item to add..." style="width: 100%; padding: 8px; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #fff; margin-bottom: 12px; box-sizing: border-box;">`;
+    const listHtml = `<div id="zv-picker-list" style="max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;"></div>`;
+    modalContent.insertAdjacentHTML('beforeend', searchInputHtml + listHtml);
+    listContainer = overlay.querySelector('#zv-picker-list');
 
-  return filtered.map(i => {
-    const imgUrl = i.imageUrl || i.image || 'https://via.placeholder.com/150?text=No+Image';
-    const itemKey = i.id || i.name;
-    const val = getItemCalculatedValue(i);
+    overlay.querySelector('#zv-picker-search').oninput = (e) => {
+      populatePickerItems(e.target.value, listContainer, overlay);
+    };
+  }
+  populatePickerItems('', listContainer, overlay);
+}
+
+function populatePickerItems(query, containerEl, overlay) {
+  let items = cosmeticsData;
+  if (query.trim() !== '') {
+    const q = query.toLowerCase();
+    items = items.filter(i => i.name.toLowerCase().includes(q));
+  }
+
+  containerEl.innerHTML = items.map(item => {
+    const imgUrl = item.imageUrl || item.image || 'https://via.placeholder.com/150?text=No+Image';
+    const val = getItemCalculatedValue(item);
     return `
-      <div class="zv-picker-item" data-id="${itemKey}" style="padding: 8px; border-bottom: 1px solid #21262d; display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <img src="${imgUrl}" style="width: 28px; height: 28px; object-fit: contain; background: #0d1117; border-radius: 4px;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
-          <span style="color: #fff; font-weight: 600; font-size: 13px;">${escapeHtml(i.name)}</span>
-        </div>
-        <span style="color: #5EF2B6; font-weight: 700; font-size: 12px;">${formatShardsDisplay(val)} shards</span>
+      <div class="picker-item-row" data-id="${item.id || item.name}" style="display: flex; align-items: center; background: #0d1117; padding: 8px; border-radius: 6px; cursor: pointer; border: 1px solid #21262d; gap: 10px;">
+        <img src="${imgUrl}" style="width: 30px; height: 30px; object-fit: contain;" onerror="this.src='https://via.placeholder.com/150?text=No+Image';">
+        <div style="flex: 1; color: #fff; font-size: 13px;">${escapeHtml(item.name)}</div>
+        <div style="color: #5EF2B6; font-size: 12px;">${formatShardsDisplay(val)} shards</div>
       </div>
     `;
   }).join('');
-}
 
-function bindPickerItemClicks(pickerList, pickerOverlay, container) {
-  pickerList.querySelectorAll('.zv-picker-item').forEach(el => {
-    el.onclick = () => {
-      const id = el.dataset.id;
-      const selected = cosmeticsData.find(i => String(i.id || i.name) === String(id));
-      if (selected) {
-        if (compareActiveSide === 'left') compareLeftItems.push(selected);
-        else compareRightItems.push(selected);
-        pickerOverlay.style.display = 'none';
-        renderComparePage(container);
+  containerEl.querySelectorAll('.picker-item-row').forEach(row => {
+    row.onclick = () => {
+      const id = row.dataset.id;
+      const selectedItem = cosmeticsData.find(i => String(i.id || i.name) === String(id));
+      if (selectedItem) {
+        if (compareActiveSide === 'left') {
+          compareLeftItems.push(selectedItem);
+        } else {
+          compareRightItems.push(selectedItem);
+        }
       }
+      overlay.style.display = 'none';
+      renderApp();
     };
   });
 }
 
 /* ==========================================================================
-   8. COLLECTION & WISHLIST PAGE
+   8. COLLECTION & SETTINGS PAGES
    ========================================================================== */
 
 function renderCollectionPage(container) {
   const inv = getInventory();
   const wl = getWishlist();
 
-  let totalNetWorth = 0;
-  let totalItemCount = 0;
-
-  Object.entries(inv).forEach(([id, qty]) => {
+  const invItems = Object.keys(inv).map(id => {
     const item = cosmeticsData.find(i => String(i.id || i.name) === String(id));
-    if (item) {
-      totalNetWorth += getItemCalculatedValue(item) * qty;
-      totalItemCount += qty;
-    }
-  });
+    return { item, qty: inv[id] };
+  }).filter(x => x.item && x.qty > 0);
 
-  const invItems = cosmeticsData.filter(i => (inv[i.id || i.name] || 0) > 0);
-  const wlItems = cosmeticsData.filter(i => wl.includes(String(i.id || i.name)));
+  const wlItems = wl.map(id => cosmeticsData.find(i => String(i.id || i.name) === String(id))).filter(Boolean);
 
   container.innerHTML = `
     <div style="max-width: 1000px; margin: 0 auto; padding: 24px;">
-      <h1 style="color: #fff; margin: 0 0 6px 0;">Portfolio & Wishlist</h1>
-      <p style="color: #aaa; margin: 0 0 20px 0; font-size: 14px;">Track owned cosmetics inventory value and desired items.</p>
+      <h1 style="color: #fff; margin: 0 0 6px 0;">My Collection & Wishlist</h1>
+      <p style="color: #aaa; margin: 0 0 20px 0; font-size: 14px;">Manage your personal cosmetic inventory and desired items.</p>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
-        <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
-          <div style="font-size: 12px; color: #aaa;">Total Inventory Value</div>
-          <div style="font-size: 22px; font-weight: 800; color: #5EF2B6; margin-top: 4px;">${formatShardsDisplay(totalNetWorth)} shards</div>
-        </div>
-        <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
-          <div style="font-size: 12px; color: #aaa;">Items Collected</div>
-          <div style="font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px;">${totalItemCount}</div>
-        </div>
-        <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 16px;">
-          <div style="font-size: 12px; color: #aaa;">Wishlisted Items</div>
-          <div style="font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px;">${wlItems.length}</div>
-        </div>
-      </div>
-
-      <div style="display: flex; gap: 12px; border-bottom: 1px solid #282e38; margin-bottom: 20px; padding-bottom: 8px;">
-        <button id="zv-tab-inv" style="background: none; border: none; color: ${collectionActiveTab === 'inventory' ? '#5EF2B6' : '#aaa'}; font-weight: 700; cursor: pointer; font-size: 15px;">Inventory (${invItems.length})</button>
-        <button id="zv-tab-wl" style="background: none; border: none; color: ${collectionActiveTab === 'wishlist' ? '#5EF2B6' : '#aaa'}; font-weight: 700; cursor: pointer; font-size: 15px;">Wishlist (${wlItems.length})</button>
+      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <button id="zv-tab-inv" style="padding: 8px 16px; border-radius: 8px; border: 1px solid ${collectionActiveTab === 'inventory' ? '#5EF2B6' : '#30363d'}; background: ${collectionActiveTab === 'inventory' ? 'rgba(94,242,182,0.1)' : '#14181f'}; color: ${collectionActiveTab === 'inventory' ? '#5EF2B6' : '#aaa'}; font-weight: 600; cursor: pointer;">Inventory (${invItems.length})</button>
+        <button id="zv-tab-wl" style="padding: 8px 16px; border-radius: 8px; border: 1px solid ${collectionActiveTab === 'wishlist' ? '#5EF2B6' : '#30363d'}; background: ${collectionActiveTab === 'wishlist' ? 'rgba(94,242,182,0.1)' : '#14181f'}; color: ${collectionActiveTab === 'wishlist' ? '#5EF2B6' : '#aaa'}; font-weight: 600; cursor: pointer;">Wishlist (${wlItems.length})</button>
       </div>
 
       <div id="zv-collection-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
         ${collectionActiveTab === 'inventory' 
-          ? (invItems.length > 0 ? invItems.map(i => renderItemCardHtml(i)).join('') : '<div style="color: #888;">No items in inventory.</div>')
-          : (wlItems.length > 0 ? wlItems.map(i => renderItemCardHtml(i)).join('') : '<div style="color: #888;">No items wishlisted.</div>')
+          ? (invItems.length === 0 ? '<div style="grid-column: 1/-1; color: #888; text-align: center; padding: 40px;">Your inventory is empty. Add items from the directory or item modals.</div>' : invItems.map(i => renderItemCardHtml(i.item)).join(''))
+          : (wlItems.length === 0 ? '<div style="grid-column: 1/-1; color: #888; text-align: center; padding: 40px;">Your wishlist is empty.</div>' : wlItems.map(item => renderItemCardHtml(item)).join(''))
         }
       </div>
     </div>
   `;
 
-  container.querySelector('#zv-tab-inv').onclick = () => { collectionActiveTab = 'inventory'; renderCollectionPage(container); };
-  container.querySelector('#zv-tab-wl').onclick = () => { collectionActiveTab = 'wishlist'; renderCollectionPage(container); };
+  container.querySelector('#zv-tab-inv').onclick = () => {
+    collectionActiveTab = 'inventory';
+    renderCollectionPage(container);
+  };
+
+  container.querySelector('#zv-tab-wl').onclick = () => {
+    collectionActiveTab = 'wishlist';
+    renderCollectionPage(container);
+  };
 
   bindCardClickEvents(container.querySelector('#zv-collection-grid'));
 }
 
-/* ==========================================================================
-   9. SETTINGS PAGE
-   ========================================================================== */
-
 function renderSettingsPage(container) {
-  const activeUser = localStorage.getItem('zv_active_user') || 'happyboy457';
-
   container.innerHTML = `
     <div style="max-width: 600px; margin: 0 auto; padding: 24px;">
       <h1 style="color: #fff; margin: 0 0 6px 0;">Settings</h1>
-      <p style="color: #aaa; margin: 0 0 24px 0; font-size: 14px;">Manage user session and application data.</p>
+      <p style="color: #aaa; margin: 0 0 20px 0; font-size: 14px;">Manage account session and local storage data.</p>
 
-      <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 20px;">
-        <div style="margin-bottom: 20px;">
-          <label style="color: #aaa; font-size: 12px; display: block; margin-bottom: 6px;">ACTIVE ACCOUNT</label>
-          <div style="color: #fff; font-weight: 700; font-size: 16px;">${escapeHtml(activeUser)}</div>
+      <div style="background: #14181f; border: 1px solid #282e38; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <h3 style="margin: 0 0 4px 0; color: #fff; font-size: 16px;">Session</h3>
+          <p style="margin: 0 0 12px 0; color: #aaa; font-size: 13px;">Logged in as: <strong style="color: #5EF2B6;">${escapeHtml(localStorage.getItem('zv_active_user') || 'happyboy457')}</strong></p>
+          <button id="zv-logout-btn" style="background: #e74c3c; border: none; color: #fff; padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer;">Sign Out</button>
         </div>
-        <button id="zv-logout-btn" style="background: #e74c3c; border: none; color: #fff; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer;">
-          Log Out
-        </button>
+        <hr style="border: none; border-top: 1px solid #282e38; margin: 0;">
+        <div>
+          <h3 style="margin: 0 0 4px 0; color: #fff; font-size: 16px;">Data Management</h3>
+          <p style="margin: 0 0 12px 0; color: #aaa; font-size: 13px;">Clear local inventories and saved preferences.</p>
+          <button id="zv-clear-storage-btn" style="background: #21262d; border: 1px solid #30363d; color: #e74c3c; padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer;">Reset Local Storage</button>
+        </div>
       </div>
     </div>
   `;
@@ -862,15 +863,26 @@ function renderSettingsPage(container) {
     sessionStorage.removeItem('loggedIn');
     renderApp();
   };
+
+  container.querySelector('#zv-clear-storage-btn').onclick = () => {
+    if (confirm('Are you sure you want to reset all local data?')) {
+      localStorage.removeItem('zv_user_inventory');
+      localStorage.removeItem('zv_user_wishlist');
+      alert('Local storage cleared.');
+      renderApp();
+    }
+  };
 }
 
+// XSS Sanitization helper
 function escapeHtml(str) {
-  return String(str || '')
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
-document.addEventListener('DOMContentLoaded', loadData);
+// Initial app load trigger
+loadData();
