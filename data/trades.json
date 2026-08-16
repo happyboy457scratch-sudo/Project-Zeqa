@@ -48088,5 +48088,110 @@
     "shards": "300000",
     "total_shards": "300000",
     "raw_trade": ""
+  },
+  {
+    "item": "Chainmail Katana Symbol",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Aug 15 Chainmail Katana Symbol \u2192 2.0k Jelybeqn"
+  },
+  {
+    "item": "Katana Symbol",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Katana Symbol \u2192 2.0k"
+  },
+  {
+    "item": "Chainmail Festive Hat",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Aug 14 Chainmail Festive Hat \u2192 2.0k Konobe7241"
+  },
+  {
+    "item": "Festive Hat",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Festive Hat \u2192 2.0k"
+  },
+  {
+    "item": "Chick Chainmail",
+    "quantity": 1,
+    "shards": "12k",
+    "total_shards": "12k",
+    "raw_trade": "Aug 14 Konobe7241 12.0k \u2192 Chick Chainmail"
+  },
+  {
+    "item": "Chick",
+    "quantity": 1,
+    "shards": "12k",
+    "total_shards": "12k",
+    "raw_trade": "12.0k \u2192 Chick"
+  },
+  {
+    "item": "Chainmail Valentines Headband",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "Aug 12 Chainmail Valentines Headband \u2192 10.0k MASTERHONEY01"
+  },
+  {
+    "item": "Valentines Headband",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "Valentines Headband \u2192 10.0k"
+  },
+  {
+    "item": "Shadow Bird Chainmail",
+    "quantity": 10,
+    "shards": "500",
+    "total_shards": "5k",
+    "raw_trade": "Aug 12 Solidbytee 5.0k \u2192 Shadow Bird x10 Chainmail"
+  },
+  {
+    "item": "Shadow Bird",
+    "quantity": 10,
+    "shards": "500",
+    "total_shards": "5k",
+    "raw_trade": "5.0k \u2192 Shadow Bird x10"
+  },
+  {
+    "item": "Terapagos \u2014",
+    "quantity": 1,
+    "shards": "932.4k",
+    "total_shards": "932.4k",
+    "raw_trade": "Aug 11 Terapagos \u2014 \u2192 932.4k Chainmail"
+  },
+  {
+    "item": "Pastel Cute Face Chainmail",
+    "quantity": 10,
+    "shards": "180",
+    "total_shards": "1.8k",
+    "raw_trade": "Aug 11 Solidbytee 1.8k \u2192 Pastel Cute Face x10 Chainmail"
+  },
+  {
+    "item": "Pastel Cute Face",
+    "quantity": 10,
+    "shards": "180",
+    "total_shards": "1.8k",
+    "raw_trade": "1.8k \u2192 Pastel Cute Face x10"
+  },
+  {
+    "item": "Chainmail Ender Dragon Tail",
+    "quantity": 1,
+    "shards": "277",
+    "total_shards": "277",
+    "raw_trade": "Aug 11 Chainmail Ender Dragon Tail \u2192 A #277 Voidpiercer9410"
+  },
+  {
+    "item": "Ender Dragon Tail",
+    "quantity": 1,
+    "shards": "277",
+    "total_shards": "277",
+    "raw_trade": "Ender Dragon Tail \u2192 A #277"
   }
 ]
