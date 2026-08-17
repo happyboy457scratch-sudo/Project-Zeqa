@@ -48221,5 +48221,19 @@
     "shards": "15k",
     "total_shards": "15k",
     "raw_trade": "15.0k \u2192 Phoenix Wings"
+  },
+  {
+    "item": "Chainmail Code +9 more",
+    "quantity": 1,
+    "shards": "6.3k",
+    "total_shards": "6.3k",
+    "raw_trade": "Aug 17 Chainmail Code +9 more \u2192 6.3k Voidpiercer9410"
+  },
+  {
+    "item": "Code +9 more",
+    "quantity": 1,
+    "shards": "6.3k",
+    "total_shards": "6.3k",
+    "raw_trade": "Code +9 more \u2192 6.3k"
   }
 ]
