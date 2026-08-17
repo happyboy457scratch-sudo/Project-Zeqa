@@ -48207,5 +48207,19 @@
     "shards": "50k",
     "total_shards": "50k",
     "raw_trade": "50.0k \u2192 6 #14"
+  },
+  {
+    "item": "Phoenix Wings Chainmail",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Aug 17 qZyphix 15.0k \u2192 Phoenix Wings Chainmail"
+  },
+  {
+    "item": "Phoenix Wings",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "15.0k \u2192 Phoenix Wings"
   }
 ]
