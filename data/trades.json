@@ -48249,5 +48249,19 @@
     "shards": "50k",
     "total_shards": "50k",
     "raw_trade": "Crimson Seedwing \u2192 50.0k"
+  },
+  {
+    "item": "Chainmail Pirate Flag",
+    "quantity": 1,
+    "shards": "8.5k",
+    "total_shards": "8.5k",
+    "raw_trade": "Aug 17 Chainmail Pirate Flag \u2192 8.5k MASTERHONEY01"
+  },
+  {
+    "item": "Pirate Flag",
+    "quantity": 1,
+    "shards": "8.5k",
+    "total_shards": "8.5k",
+    "raw_trade": "Pirate Flag \u2192 8.5k"
   }
 ]
