@@ -1,5 +1,209 @@
 [
   {
+    "name": "Explode",
+    "rarity": "common",
+    "category": "Projectile",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/projectile/1.webp"
+  },
+  {
+    "name": "Splash",
+    "rarity": "common",
+    "category": "Projectile",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/projectile/2.webp"
+  },
+  {
+    "name": "Water Splash",
+    "rarity": "common",
+    "category": "Projectile",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/projectile/3.webp"
+  },
+  {
+    "name": "Critical",
+    "rarity": "common",
+    "category": "Projectile",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/projectile/4.webp"
+  },
+  {
+    "name": "Smoke",
+    "rarity": "common",
+    "category": "Projectile",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/projectile/5.webp"
+  },
+  {
+    "name": "Mob Spell",
+    "rarity": "common",
+    "category": "Projectile",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/projectile/6.webp"
+  },
+  {
+    "name": "Flame",
+    "rarity": "common",
+    "category": "Projectile",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/projectile/7.webp"
+  },
+  {
+    "name": "Yeeted",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/1.webp"
+  },
+  {
+    "name": "Kicked Out",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/2.webp"
+  },
+  {
+    "name": "Smited",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/3.webp"
+  },
+  {
+    "name": "Couldn't Withstand",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/4.webp"
+  },
+  {
+    "name": "Shook Hand",
+    "rarity": "legendary",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/5.webp"
+  },
+  {
+    "name": "Knocked Out",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/6.webp"
+  },
+  {
+    "name": "Stabbed 2 Death",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/7.webp"
+  },
+  {
+    "name": "Grilled",
+    "rarity": "epic",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/8.webp"
+  },
+  {
+    "name": "Too Scared",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/9.webp"
+  },
+  {
+    "name": "Snapped",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/10.webp"
+  },
+  {
+    "name": "Destroyed",
+    "rarity": "epic",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/11.webp"
+  },
+  {
+    "name": "Slapped",
+    "rarity": "epic",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/12.webp"
+  },
+  {
+    "name": "Back2Bed",
+    "rarity": "legendary",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/13.webp"
+  },
+  {
+    "name": "Voting",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/14.webp"
+  },
+  {
+    "name": "Cooked",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/15.webp"
+  },
+  {
+    "name": "Almost Banned",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/16.webp"
+  },
+  {
+    "name": "Work To Death",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/17.webp"
+  },
+  {
+    "name": "Buried in Money",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/18.webp"
+  },
+  {
+    "name": "To The Moon",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/19.webp"
+  },
+  {
+    "name": "Kimino Toriko",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/20.webp"
+  },
+  {
+    "name": "Omae wa mou shindeiru!",
+    "rarity": "epic",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/21.webp"
+  },
+  {
+    "name": "MUDA MUDA MUDA",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/22.webp"
+  },
+  {
+    "name": "Be My Valentine",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/23.webp"
+  },
+  {
+    "name": "Rick Rolling",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/24.webp"
+  },
+  {
+    "name": "Xooper Cool",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/25.webp"
+  },
+  {
+    "name": "Xooperior",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/26.webp"
+  },
+  {
+    "name": "BioHack",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/27.webp"
+  },
+  {
     "name": "RTX3090",
     "rarity": "common",
     "category": "Killphrase",
@@ -22,6 +226,12 @@
     "rarity": "limited",
     "category": "Killphrase",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/31.webp"
+  },
+  {
+    "name": "I Pet You",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/32.webp"
   },
   {
     "name": "An Idiot Sandwich",
@@ -214,6 +424,162 @@
     "rarity": "rare",
     "category": "Killphrase",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/64.webp"
+  },
+  {
+    "name": "Antler",
+    "rarity": "common",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/1.webp"
+  },
+  {
+    "name": "Backcap",
+    "rarity": "common",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/2.webp"
+  },
+  {
+    "name": "Small Crown",
+    "rarity": "common",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/3.webp"
+  },
+  {
+    "name": "Halo",
+    "rarity": "common",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/4.webp"
+  },
+  {
+    "name": "Koala Hat",
+    "rarity": "common",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/5.webp"
+  },
+  {
+    "name": "Classic Moustache",
+    "rarity": "common",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/6.webp"
+  },
+  {
+    "name": "Question Mark",
+    "rarity": "common",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/7.webp"
+  },
+  {
+    "name": "Rabbit Ears",
+    "rarity": "limited",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/8.webp"
+  },
+  {
+    "name": "Thunder Cloud",
+    "rarity": "common",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/9.webp"
+  },
+  {
+    "name": "UFO",
+    "rarity": "common",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/10.webp"
+  },
+  {
+    "name": "Adidas Headband",
+    "rarity": "legendary",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/11.webp"
+  },
+  {
+    "name": "Nike Headband",
+    "rarity": "limited",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/12.webp"
+  },
+  {
+    "name": "Louis V. Headband",
+    "rarity": "legendary",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/13.webp"
+  },
+  {
+    "name": "Santa Hat",
+    "rarity": "rare",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/14.webp"
+  },
+  {
+    "name": "Witch Hat",
+    "rarity": "rare",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/15.webp"
+  },
+  {
+    "name": "Mini Angel Wing",
+    "rarity": "epic",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/16.webp"
+  },
+  {
+    "name": "SWAT Shield",
+    "rarity": "limited",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/17.webp"
+  },
+  {
+    "name": "Katana Set",
+    "rarity": "epic",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/18.webp"
+  },
+  {
+    "name": "Blaze Rod",
+    "rarity": "limited",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/19.webp"
+  },
+  {
+    "name": "Blue Susanoo",
+    "rarity": "limited",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/20.webp"
+  },
+  {
+    "name": "Angel Wing",
+    "rarity": "legendary",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/21.webp"
+  },
+  {
+    "name": "Red Kagune",
+    "rarity": "limited",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/22.webp"
+  },
+  {
+    "name": "Blue Lightsaber",
+    "rarity": "limited",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/23.webp"
+  },
+  {
+    "name": "Axe On Head",
+    "rarity": "rare",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/24.webp"
+  },
+  {
+    "name": "Leather Backpack",
+    "rarity": "epic",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/25.webp"
+  },
+  {
+    "name": "Holding Banana",
+    "rarity": "common",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/26.webp"
   },
   {
     "name": "Cute Creeper",
@@ -1428,6 +1794,168 @@
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/230.webp"
   },
   {
+    "name": "Black Butterfly",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/1.webp"
+  },
+  {
+    "name": "Dark Cross",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/2.webp"
+  },
+  {
+    "name": "Day Dream",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/3.webp"
+  },
+  {
+    "name": "Fake Wing",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/4.webp"
+  },
+  {
+    "name": "Black L",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/5.webp"
+  },
+  {
+    "name": "Orangest",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/6.webp"
+  },
+  {
+    "name": "Chimera",
+    "rarity": "legendary",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/7.webp"
+  },
+  {
+    "name": "Darkblue L",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/8.webp"
+  },
+  {
+    "name": "Double07",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/9.webp"
+  },
+  {
+    "name": "White Slash",
+    "rarity": "rare",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/10.webp"
+  },
+  {
+    "name": "Golden Heart",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/11.webp"
+  },
+  {
+    "name": "Katana Symbol",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/12.webp"
+  },
+  {
+    "name": "Herz",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/13.webp"
+  },
+  {
+    "name": "BlackHeart",
+    "rarity": "common",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/14.webp"
+  },
+  {
+    "name": "Brown Chicken",
+    "rarity": "rare",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/15.webp"
+  },
+  {
+    "name": "Crowned Clown",
+    "rarity": "rare",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/16.webp"
+  },
+  {
+    "name": "Uchiha",
+    "rarity": "rare",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/17.webp"
+  },
+  {
+    "name": "Sunset",
+    "rarity": "legendary",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/18.webp"
+  },
+  {
+    "name": "TikTok",
+    "rarity": "limited",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/19.webp"
+  },
+  {
+    "name": "Pepe",
+    "rarity": "rare",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/20.webp"
+  },
+  {
+    "name": "Polar Bear",
+    "rarity": "rare",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/21.webp"
+  },
+  {
+    "name": "Nike White",
+    "rarity": "limited",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/22.webp"
+  },
+  {
+    "name": "No Man Sky",
+    "rarity": "epic",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/23.webp"
+  },
+  {
+    "name": "Mashmello",
+    "rarity": "epic",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/24.webp"
+  },
+  {
+    "name": "Hacker",
+    "rarity": "epic",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/25.webp"
+  },
+  {
+    "name": "The Starry Night",
+    "rarity": "epic",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/26.webp"
+  },
+  {
+    "name": "White Wolf",
+    "rarity": "limited",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/27.webp"
+  },
+  {
     "name": "The Rich",
     "rarity": "legendary",
     "category": "Cape",
@@ -1480,6 +2008,12 @@
     "rarity": "epic",
     "category": "Cape",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/36.webp"
+  },
+  {
+    "name": "Black Hole",
+    "rarity": "limited",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/37.webp"
   },
   {
     "name": "Pastel MLG",
@@ -3508,6 +4042,12 @@
     "rarity": "exotic",
     "category": "Cape",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/377.webp"
+  },
+  {
+    "name": "5th Anniversary Cake",
+    "rarity": "limited",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/378.webp"
   },
   {
     "name": "5 Years of Zeqa",
