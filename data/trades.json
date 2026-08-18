@@ -48305,5 +48305,19 @@
     "shards": "2k",
     "total_shards": "4k",
     "raw_trade": "Katana Symbol x2 \u2192 4.0k"
+  },
+  {
+    "item": "Black Butterfly +10 more Chainmail",
+    "quantity": 1,
+    "shards": "15.5k",
+    "total_shards": "15.5k",
+    "raw_trade": "Aug 18 WizardPlayz7 15.5k \u2192 Black Butterfly +10 more Chainmail"
+  },
+  {
+    "item": "Black Butterfly +10 more",
+    "quantity": 1,
+    "shards": "15.5k",
+    "total_shards": "15.5k",
+    "raw_trade": "15.5k \u2192 Black Butterfly +10 more"
   }
 ]
