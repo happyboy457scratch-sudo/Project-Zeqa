@@ -48277,5 +48277,33 @@
     "shards": "2k",
     "total_shards": "2k",
     "raw_trade": "BlackHeart \u2192 2.0k"
+  },
+  {
+    "item": "Peacock Wings Chainmail",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Aug 18 Sanzo cat 2.0k \u2192 Peacock Wings Chainmail"
+  },
+  {
+    "item": "Peacock Wings",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "2.0k \u2192 Peacock Wings"
+  },
+  {
+    "item": "Chainmail Katana Symbol",
+    "quantity": 2,
+    "shards": "2k",
+    "total_shards": "4k",
+    "raw_trade": "Aug 18 Chainmail Katana Symbol x2 \u2192 4.0k YORealZynx"
+  },
+  {
+    "item": "Katana Symbol",
+    "quantity": 2,
+    "shards": "2k",
+    "total_shards": "4k",
+    "raw_trade": "Katana Symbol x2 \u2192 4.0k"
   }
 ]
