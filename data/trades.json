@@ -48333,5 +48333,19 @@
     "shards": "40k",
     "total_shards": "40k",
     "raw_trade": "A #C86 \u2192 40.0k"
+  },
+  {
+    "item": "Reaper Costume Chainmail",
+    "quantity": 1,
+    "shards": "5k",
+    "total_shards": "5k",
+    "raw_trade": "Aug 19 Chaiop1968 5.0k \u2192 Reaper Costume Chainmail"
+  },
+  {
+    "item": "Reaper Costume",
+    "quantity": 1,
+    "shards": "5k",
+    "total_shards": "5k",
+    "raw_trade": "5.0k \u2192 Reaper Costume"
   }
 ]
