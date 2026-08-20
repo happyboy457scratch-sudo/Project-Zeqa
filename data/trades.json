@@ -48354,5 +48354,19 @@
     "shards": "5.4k",
     "total_shards": "5.4k",
     "raw_trade": "Aug 19 Chainmail \u2014 \u2192 5.4k evwyll"
+  },
+  {
+    "item": "Chainmail Green Yukata",
+    "quantity": 1,
+    "shards": "2.3k",
+    "total_shards": "2.3k",
+    "raw_trade": "Aug 20 Chainmail Green Yukata \u2192 2.3k CryspoIRL"
+  },
+  {
+    "item": "Green Yukata",
+    "quantity": 1,
+    "shards": "2.3k",
+    "total_shards": "2.3k",
+    "raw_trade": "Green Yukata \u2192 2.3k"
   }
 ]
