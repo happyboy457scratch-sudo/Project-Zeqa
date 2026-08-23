@@ -42,6 +42,390 @@
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/projectile/7.webp"
   },
   {
+    "name": "Yeeted",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/1.webp"
+  },
+  {
+    "name": "Kicked Out",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/2.webp"
+  },
+  {
+    "name": "Smited",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/3.webp"
+  },
+  {
+    "name": "Couldn't Withstand",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/4.webp"
+  },
+  {
+    "name": "Shook Hand",
+    "rarity": "legendary",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/5.webp"
+  },
+  {
+    "name": "Knocked Out",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/6.webp"
+  },
+  {
+    "name": "Stabbed 2 Death",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/7.webp"
+  },
+  {
+    "name": "Grilled",
+    "rarity": "epic",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/8.webp"
+  },
+  {
+    "name": "Too Scared",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/9.webp"
+  },
+  {
+    "name": "Snapped",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/10.webp"
+  },
+  {
+    "name": "Destroyed",
+    "rarity": "epic",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/11.webp"
+  },
+  {
+    "name": "Slapped",
+    "rarity": "epic",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/12.webp"
+  },
+  {
+    "name": "Back2Bed",
+    "rarity": "legendary",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/13.webp"
+  },
+  {
+    "name": "Voting",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/14.webp"
+  },
+  {
+    "name": "Cooked",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/15.webp"
+  },
+  {
+    "name": "Almost Banned",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/16.webp"
+  },
+  {
+    "name": "Work To Death",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/17.webp"
+  },
+  {
+    "name": "Buried in Money",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/18.webp"
+  },
+  {
+    "name": "To The Moon",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/19.webp"
+  },
+  {
+    "name": "Kimino Toriko",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/20.webp"
+  },
+  {
+    "name": "Omae wa mou shindeiru!",
+    "rarity": "epic",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/21.webp"
+  },
+  {
+    "name": "MUDA MUDA MUDA",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/22.webp"
+  },
+  {
+    "name": "Be My Valentine",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/23.webp"
+  },
+  {
+    "name": "Rick Rolling",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/24.webp"
+  },
+  {
+    "name": "Xooper Cool",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/25.webp"
+  },
+  {
+    "name": "Xooperior",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/26.webp"
+  },
+  {
+    "name": "BioHack",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/27.webp"
+  },
+  {
+    "name": "RTX3090",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/28.webp"
+  },
+  {
+    "name": "Bitcoin",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/29.webp"
+  },
+  {
+    "name": "Disconnect",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/30.webp"
+  },
+  {
+    "name": "Salute",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/31.webp"
+  },
+  {
+    "name": "I Pet You",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/32.webp"
+  },
+  {
+    "name": "An Idiot Sandwich",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/33.webp"
+  },
+  {
+    "name": "Haiyaa!",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/34.webp"
+  },
+  {
+    "name": "Before you were born",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/35.webp"
+  },
+  {
+    "name": "Infinity & Beyond",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/36.webp"
+  },
+  {
+    "name": "Event Horizon",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/37.webp"
+  },
+  {
+    "name": "Go Wild",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/38.webp"
+  },
+  {
+    "name": "Extinct",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/39.webp"
+  },
+  {
+    "name": "Lure",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/40.webp"
+  },
+  {
+    "name": "Lightning Strike",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/41.webp"
+  },
+  {
+    "name": "Freezing",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/42.webp"
+  },
+  {
+    "name": "Buried Alive",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/43.webp"
+  },
+  {
+    "name": "Burning",
+    "rarity": "limited",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/44.webp"
+  },
+  {
+    "name": "Poisoned",
+    "rarity": "epic",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/45.webp"
+  },
+  {
+    "name": "Beheaded",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/46.webp"
+  },
+  {
+    "name": "Azkaban",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/47.webp"
+  },
+  {
+    "name": "Avada Kedavra",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/48.webp"
+  },
+  {
+    "name": "Triwizard Tournament",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/49.webp"
+  },
+  {
+    "name": "Clowned",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/50.webp"
+  },
+  {
+    "name": "Find the Exit",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/51.webp"
+  },
+  {
+    "name": "Banana Peel",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/52.webp"
+  },
+  {
+    "name": "Everything was fine",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/53.webp"
+  },
+  {
+    "name": "Frozen Popsicle",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/54.webp"
+  },
+  {
+    "name": "Trap Stack",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/55.webp"
+  },
+  {
+    "name": "So Sweet",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/56.webp"
+  },
+  {
+    "name": "Caked Up",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/57.webp"
+  },
+  {
+    "name": "Dumped On",
+    "rarity": "legendary",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/58.webp"
+  },
+  {
+    "name": "Picked Up",
+    "rarity": "epic",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/59.webp"
+  },
+  {
+    "name": "Slashed",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/60.webp"
+  },
+  {
+    "name": "Clawed",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/61.webp"
+  },
+  {
+    "name": "Lost All Aura",
+    "rarity": "common",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/62.webp"
+  },
+  {
+    "name": "Clip-Farmed",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/63.webp"
+  },
+  {
+    "name": "Mewing Streak",
+    "rarity": "rare",
+    "category": "Killphrase",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/64.webp"
+  },
+  {
     "name": "Antler",
     "rarity": "common",
     "category": "Artifact",
