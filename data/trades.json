@@ -37994,5 +37994,19 @@
     "shards": "45k",
     "total_shards": "45k",
     "raw_trade": "45.0k \u2192 A #C85"
+  },
+  {
+    "item": "Moon +8 more Chainmail",
+    "quantity": 2,
+    "shards": "6.3k",
+    "total_shards": "12.7k",
+    "raw_trade": "Aug 23 Solidbytee 12.7k \u2192 Moon x2 +8 more Chainmail"
+  },
+  {
+    "item": "Moon +8 more",
+    "quantity": 2,
+    "shards": "6.3k",
+    "total_shards": "12.7k",
+    "raw_trade": "12.7k \u2192 Moon x2 +8 more"
   }
 ]
