@@ -38022,5 +38022,19 @@
     "shards": "100",
     "total_shards": "100",
     "raw_trade": "100 \u2192 Moon"
+  },
+  {
+    "item": "Phoenix Wings +7 more Chainmail",
+    "quantity": 2,
+    "shards": "33.1k",
+    "total_shards": "66.3k",
+    "raw_trade": "Aug 25 Solidbytee 66.3k \u2192 Phoenix Wings x2 +7 more Chainmail"
+  },
+  {
+    "item": "Phoenix Wings +7 more",
+    "quantity": 2,
+    "shards": "33.1k",
+    "total_shards": "66.3k",
+    "raw_trade": "66.3k \u2192 Phoenix Wings x2 +7 more"
   }
 ]
