@@ -38008,5 +38008,19 @@
     "shards": "6.3k",
     "total_shards": "12.7k",
     "raw_trade": "12.7k \u2192 Moon x2 +8 more"
+  },
+  {
+    "item": "Moon Chainmail",
+    "quantity": 1,
+    "shards": "100",
+    "total_shards": "100",
+    "raw_trade": "Aug 25 WizardPlayz7 100 \u2192 Moon Chainmail"
+  },
+  {
+    "item": "Moon",
+    "quantity": 1,
+    "shards": "100",
+    "total_shards": "100",
+    "raw_trade": "100 \u2192 Moon"
   }
 ]
