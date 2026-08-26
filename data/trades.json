@@ -38036,5 +38036,19 @@
     "shards": "33.1k",
     "total_shards": "66.3k",
     "raw_trade": "66.3k \u2192 Phoenix Wings x2 +7 more"
+  },
+  {
+    "item": "Chainmail Thief Bird",
+    "quantity": 1,
+    "shards": "500",
+    "total_shards": "500",
+    "raw_trade": "Aug 26 Chainmail Thief Bird \u2192 500 nuftufs"
+  },
+  {
+    "item": "Thief Bird",
+    "quantity": 1,
+    "shards": "500",
+    "total_shards": "500",
+    "raw_trade": "Thief Bird \u2192 500"
   }
 ]
