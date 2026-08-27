@@ -38050,5 +38050,89 @@
     "shards": "500",
     "total_shards": "500",
     "raw_trade": "Thief Bird \u2192 500"
+  },
+  {
+    "item": "Chainmail Hot Dog Hat",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Aug 27 Chainmail Hot Dog Hat \u2192 2.0k evwyll"
+  },
+  {
+    "item": "Hot Dog Hat",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Hot Dog Hat \u2192 2.0k"
+  },
+  {
+    "item": "Rqyxll A #C103",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Aug 27 Rqyxll A #C103 \u2192 50.0k Chainmail"
+  },
+  {
+    "item": "A #C103",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "A #C103 \u2192 50.0k"
+  },
+  {
+    "item": "Chainmail Phoenix Wings",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Aug 27 Chainmail Phoenix Wings \u2192 15.0k Cina king"
+  },
+  {
+    "item": "Phoenix Wings",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Phoenix Wings \u2192 15.0k"
+  },
+  {
+    "item": "Chainmail Hot Air Balloon +34 more",
+    "quantity": 1,
+    "shards": "25.5k",
+    "total_shards": "25.5k",
+    "raw_trade": "Aug 27 Chainmail Hot Air Balloon +34 more \u2192 25.5k fawyl"
+  },
+  {
+    "item": "Hot Air Balloon +34 more",
+    "quantity": 1,
+    "shards": "25.5k",
+    "total_shards": "25.5k",
+    "raw_trade": "Hot Air Balloon +34 more \u2192 25.5k"
+  },
+  {
+    "item": "Chick Chainmail",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Aug 27 Katsuro 15.0k \u2192 Chick Chainmail"
+  },
+  {
+    "item": "Chick",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "15.0k \u2192 Chick"
+  },
+  {
+    "item": "Chainmail Pumpkin Bite",
+    "quantity": 1,
+    "shards": "8k",
+    "total_shards": "8k",
+    "raw_trade": "Aug 27 Chainmail Pumpkin Bite \u2192 8.0k OrangeConch4075"
+  },
+  {
+    "item": "Pumpkin Bite",
+    "quantity": 1,
+    "shards": "8k",
+    "total_shards": "8k",
+    "raw_trade": "Pumpkin Bite \u2192 8.0k"
   }
 ]
