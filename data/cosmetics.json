@@ -3042,6 +3042,12 @@
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/208.webp"
   },
   {
+    "name": "ZeqMas",
+    "rarity": "exotic",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/209.webp"
+  },
+  {
     "name": "Bat",
     "rarity": "limited",
     "category": "Cape",
@@ -3280,6 +3286,12 @@
     "rarity": "legendary",
     "category": "Cape",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/249.webp"
+  },
+  {
+    "name": "Fortnite Pi\u00f1ata",
+    "rarity": "legendary",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/250.webp"
   },
   {
     "name": "Tetris",
@@ -3862,6 +3874,12 @@
     "rarity": "limited",
     "category": "Cape",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/347.webp"
+  },
+  {
+    "name": "Sumo Warrior",
+    "rarity": "limited",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/348.webp"
   },
   {
     "name": "Wrath Warrior",
