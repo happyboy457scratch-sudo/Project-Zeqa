@@ -38134,5 +38134,19 @@
     "shards": "8k",
     "total_shards": "8k",
     "raw_trade": "Pumpkin Bite \u2192 8.0k"
+  },
+  {
+    "item": "A #C102 Rqyxll",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Aug 28 Chainmail 50.0k \u2192 A #C102 Rqyxll"
+  },
+  {
+    "item": "A #C102",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "50.0k \u2192 A #C102"
   }
 ]
