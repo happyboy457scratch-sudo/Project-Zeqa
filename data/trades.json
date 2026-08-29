@@ -38148,5 +38148,19 @@
     "shards": "50k",
     "total_shards": "50k",
     "raw_trade": "50.0k \u2192 A #C102"
+  },
+  {
+    "item": "Chainmail Moon",
+    "quantity": 10,
+    "shards": "500",
+    "total_shards": "5k",
+    "raw_trade": "Aug 28 Chainmail Moon x10 \u2192 5.0k Sanzo cat"
+  },
+  {
+    "item": "Moon",
+    "quantity": 10,
+    "shards": "500",
+    "total_shards": "5k",
+    "raw_trade": "Moon x10 \u2192 5.0k"
   }
 ]
