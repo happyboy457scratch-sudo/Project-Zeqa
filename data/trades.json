@@ -38162,5 +38162,12 @@
     "shards": "500",
     "total_shards": "5k",
     "raw_trade": "Moon x10 \u2192 5.0k"
+  },
+  {
+    "item": "Chainmail \u2014",
+    "quantity": 1,
+    "shards": "360",
+    "total_shards": "360",
+    "raw_trade": "Aug 29 Chainmail \u2014 \u2192 Classic Moustache +360 more nuftufs"
   }
 ]
