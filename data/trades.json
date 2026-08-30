@@ -38169,5 +38169,19 @@
     "shards": "360",
     "total_shards": "360",
     "raw_trade": "Aug 29 Chainmail \u2014 \u2192 Classic Moustache +360 more nuftufs"
+  },
+  {
+    "item": "Chainmail Raijin Drums +5 more",
+    "quantity": 1,
+    "shards": "101.8k",
+    "total_shards": "101.8k",
+    "raw_trade": "Aug 30 Chainmail Raijin Drums +5 more \u2192 101.8k MASTERHONEY01"
+  },
+  {
+    "item": "Raijin Drums +5 more",
+    "quantity": 1,
+    "shards": "101.8k",
+    "total_shards": "101.8k",
+    "raw_trade": "Raijin Drums +5 more \u2192 101.8k"
   }
 ]
