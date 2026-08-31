@@ -38211,5 +38211,19 @@
     "shards": "2k",
     "total_shards": "2k",
     "raw_trade": "Peacock Wings \u2192 2.0k"
+  },
+  {
+    "item": "The Rich Chainmail",
+    "quantity": 1,
+    "shards": "2.5k",
+    "total_shards": "2.5k",
+    "raw_trade": "Aug 31 MASTERHONEY01 2.5k \u2192 The Rich Chainmail"
+  },
+  {
+    "item": "The Rich",
+    "quantity": 1,
+    "shards": "2.5k",
+    "total_shards": "2.5k",
+    "raw_trade": "2.5k \u2192 The Rich"
   }
 ]
