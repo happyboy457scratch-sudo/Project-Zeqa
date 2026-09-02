@@ -38274,5 +38274,40 @@
     "shards": "8k",
     "total_shards": "8k",
     "raw_trade": "Earth +9 more \u2192 8.0k"
+  },
+  {
+    "item": "Chainmail Crimson Seedwing",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Sep 2 Chainmail Crimson Seedwing \u2192 50.0k wShip"
+  },
+  {
+    "item": "Fire Aura Chainmail",
+    "quantity": 1,
+    "shards": "5k",
+    "total_shards": "5k",
+    "raw_trade": "Sep 1 Konobe7241 5.0k \u2192 Fire Aura Chainmail"
+  },
+  {
+    "item": "Fire Aura",
+    "quantity": 1,
+    "shards": "5k",
+    "total_shards": "5k",
+    "raw_trade": "5.0k \u2192 Fire Aura"
+  },
+  {
+    "item": "DanyPlayz' Knockback Nemo +33 more Chainmail",
+    "quantity": 1,
+    "shards": "151.2k",
+    "total_shards": "151.2k",
+    "raw_trade": "Sep 1 Solidbytee 151.2k \u2192 DanyPlayz' Knockback Nemo +33 more Chainmail"
+  },
+  {
+    "item": "DanyPlayz' Knockback Nemo +33 more",
+    "quantity": 1,
+    "shards": "151.2k",
+    "total_shards": "151.2k",
+    "raw_trade": "151.2k \u2192 DanyPlayz' Knockback Nemo +33 more"
   }
 ]
