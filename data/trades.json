@@ -38386,5 +38386,12 @@
     "shards": "15k",
     "total_shards": "15k",
     "raw_trade": "Sep 4 vkq6 15.0k \u2192 Phoenix Wings Chainmail"
+  },
+  {
+    "item": "Chainmail -",
+    "quantity": 1,
+    "shards": "192k",
+    "total_shards": "192k",
+    "raw_trade": "Sep 4 Chainmail - \u2192 192.0k Mineusas"
   }
 ]
