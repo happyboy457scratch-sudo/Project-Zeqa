@@ -38393,5 +38393,47 @@
     "shards": "192k",
     "total_shards": "192k",
     "raw_trade": "Sep 4 Chainmail - \u2192 192.0k Mineusas"
+  },
+  {
+    "item": "Chainmail Snowflake",
+    "quantity": 1,
+    "shards": "8k",
+    "total_shards": "8k",
+    "raw_trade": "Sep 5 Chainmail Snowflake \u2192 8.0k Katsuro"
+  },
+  {
+    "item": "Snowflake",
+    "quantity": 1,
+    "shards": "8k",
+    "total_shards": "8k",
+    "raw_trade": "Snowflake \u2192 8.0k"
+  },
+  {
+    "item": "White Karate Gi +5 more Chainmail",
+    "quantity": 1,
+    "shards": "397",
+    "total_shards": "397",
+    "raw_trade": "Sep 5 Katsuro C #397 x2 +15 more \u2192 White Karate Gi +5 more Chainmail"
+  },
+  {
+    "item": "White Karate Gi +5 more",
+    "quantity": 1,
+    "shards": "397",
+    "total_shards": "397",
+    "raw_trade": "C #397 x2 +15 more \u2192 White Karate Gi +5 more"
+  },
+  {
+    "item": "Chainmail Jupiter +10 more",
+    "quantity": 1,
+    "shards": "6.3k",
+    "total_shards": "6.3k",
+    "raw_trade": "Sep 5 Chainmail Jupiter +10 more \u2192 6.3k SAID9o oP"
+  },
+  {
+    "item": "Jupiter +10 more",
+    "quantity": 1,
+    "shards": "6.3k",
+    "total_shards": "6.3k",
+    "raw_trade": "Jupiter +10 more \u2192 6.3k"
   }
 ]
