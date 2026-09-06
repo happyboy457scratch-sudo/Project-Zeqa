@@ -38435,5 +38435,40 @@
     "shards": "6.3k",
     "total_shards": "6.3k",
     "raw_trade": "Jupiter +10 more \u2192 6.3k"
+  },
+  {
+    "item": "Chainmail Red Kagune",
+    "quantity": 1,
+    "shards": "7k",
+    "total_shards": "7k",
+    "raw_trade": "Sep 6 Chainmail Red Kagune \u2192 7.0k ImPatsman"
+  },
+  {
+    "item": "Red Kagune",
+    "quantity": 1,
+    "shards": "7k",
+    "total_shards": "7k",
+    "raw_trade": "Red Kagune \u2192 7.0k"
+  },
+  {
+    "item": "Chainmail Phoenix Feather",
+    "quantity": 1,
+    "shards": "7.5k",
+    "total_shards": "7.5k",
+    "raw_trade": "Sep 6 Chainmail Phoenix Feather \u2192 7.5k BOiL 555"
+  },
+  {
+    "item": "Chainmail",
+    "quantity": 1,
+    "shards": "555",
+    "total_shards": "555",
+    "raw_trade": "Chainmail \u2192 BOiL 555 Sep 6"
+  },
+  {
+    "item": "Phoenix Feather",
+    "quantity": 1,
+    "shards": "7.5k",
+    "total_shards": "7.5k",
+    "raw_trade": "Phoenix Feather \u2192 7.5k"
   }
 ]
