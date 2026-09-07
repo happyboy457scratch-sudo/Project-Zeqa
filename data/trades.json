@@ -38526,5 +38526,26 @@
     "shards": "6k",
     "total_shards": "6k",
     "raw_trade": "Small Crown \u2192 6.0k"
+  },
+  {
+    "item": "Chainmail Pumpkin Bite",
+    "quantity": 1,
+    "shards": "8k",
+    "total_shards": "8k",
+    "raw_trade": "Sep 7 Chainmail Pumpkin Bite \u2192 8.0k Solidbytee"
+  },
+  {
+    "item": "Chainmail Carrot Hat +49 more",
+    "quantity": 1,
+    "shards": "376.1k",
+    "total_shards": "376.1k",
+    "raw_trade": "Sep 7 Chainmail Carrot Hat +49 more \u2192 376.1k Solidbytee"
+  },
+  {
+    "item": "Carrot Hat +49 more",
+    "quantity": 1,
+    "shards": "376.1k",
+    "total_shards": "376.1k",
+    "raw_trade": "Carrot Hat +49 more \u2192 376.1k"
   }
 ]
