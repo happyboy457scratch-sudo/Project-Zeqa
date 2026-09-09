@@ -38547,5 +38547,19 @@
     "shards": "376.1k",
     "total_shards": "376.1k",
     "raw_trade": "Carrot Hat +49 more \u2192 376.1k"
+  },
+  {
+    "item": "Chainmail Valentines Confetti",
+    "quantity": 1,
+    "shards": "3k",
+    "total_shards": "3k",
+    "raw_trade": "Sep 9 Chainmail Valentines Confetti \u2192 3.0k Katsuro"
+  },
+  {
+    "item": "Valentines Confetti",
+    "quantity": 1,
+    "shards": "3k",
+    "total_shards": "3k",
+    "raw_trade": "Valentines Confetti \u2192 3.0k"
   }
 ]
