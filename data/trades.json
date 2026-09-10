@@ -38561,5 +38561,19 @@
     "shards": "3k",
     "total_shards": "3k",
     "raw_trade": "Valentines Confetti \u2192 3.0k"
+  },
+  {
+    "item": "Chainmail Moon",
+    "quantity": 4,
+    "shards": "109",
+    "total_shards": "438",
+    "raw_trade": "Sep 10 Chainmail Moon x4 \u2192 C #438 Sanzo cat"
+  },
+  {
+    "item": "Moon",
+    "quantity": 4,
+    "shards": "109",
+    "total_shards": "438",
+    "raw_trade": "Moon x4 \u2192 C #438"
   }
 ]
