@@ -38610,5 +38610,26 @@
     "shards": "20k",
     "total_shards": "20k",
     "raw_trade": "Sep 13 vkq6 - \u2192 20.0k Chainmail"
+  },
+  {
+    "item": "66 M6go",
+    "quantity": 1,
+    "shards": "20k",
+    "total_shards": "20k",
+    "raw_trade": "Sep 13 Chainmail 20.0k \u2192 66 M6go"
+  },
+  {
+    "item": "66",
+    "quantity": 1,
+    "shards": "20k",
+    "total_shards": "20k",
+    "raw_trade": "20.0k \u2192 66"
+  },
+  {
+    "item": "trzhxw -",
+    "quantity": 1,
+    "shards": "20k",
+    "total_shards": "20k",
+    "raw_trade": "Sep 13 trzhxw - \u2192 20.0k Chainmail"
   }
 ]
