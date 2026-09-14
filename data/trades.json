@@ -38631,5 +38631,68 @@
     "shards": "20k",
     "total_shards": "20k",
     "raw_trade": "Sep 13 trzhxw - \u2192 20.0k Chainmail"
+  },
+  {
+    "item": "Stardust Wings Chainmail",
+    "quantity": 1,
+    "shards": "252.1k",
+    "total_shards": "252.1k",
+    "raw_trade": "Sep 14 trzhxw 252.1k \u2192 Stardust Wings Chainmail"
+  },
+  {
+    "item": "Stardust Wings",
+    "quantity": 1,
+    "shards": "252.1k",
+    "total_shards": "252.1k",
+    "raw_trade": "252.1k \u2192 Stardust Wings"
+  },
+  {
+    "item": "ItzLodgedd -",
+    "quantity": 1,
+    "shards": "5k",
+    "total_shards": "5k",
+    "raw_trade": "Sep 14 ItzLodgedd - \u2192 5.0k Chainmail"
+  },
+  {
+    "item": "Fire Crown Chainmail",
+    "quantity": 1,
+    "shards": "80k",
+    "total_shards": "80k",
+    "raw_trade": "Sep 14 M6go 80.0k \u2192 Fire Crown Chainmail"
+  },
+  {
+    "item": "Fire Crown",
+    "quantity": 1,
+    "shards": "80k",
+    "total_shards": "80k",
+    "raw_trade": "80.0k \u2192 Fire Crown"
+  },
+  {
+    "item": "MLG Set +37 more Chainmail",
+    "quantity": 1,
+    "shards": "356k",
+    "total_shards": "356k",
+    "raw_trade": "Sep 14 Evil cqw 356.0k \u2192 MLG Set +37 more Chainmail"
+  },
+  {
+    "item": "MLG Set +37 more",
+    "quantity": 1,
+    "shards": "356k",
+    "total_shards": "356k",
+    "raw_trade": "356.0k \u2192 MLG Set +37 more"
+  },
+  {
+    "item": "Dragon Wing Chainmail",
+    "quantity": 1,
+    "shards": "65k",
+    "total_shards": "65k",
+    "raw_trade": "Sep 14 MASTERHONEY01 65.0k \u2192 Dragon Wing Chainmail"
+  },
+  {
+    "item": "Dragon Wing",
+    "quantity": 1,
+    "shards": "65k",
+    "total_shards": "65k",
+    "raw_trade": "65.0k \u2192 Dragon Wing"
   }
 ]
