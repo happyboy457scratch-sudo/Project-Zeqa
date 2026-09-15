@@ -38694,5 +38694,75 @@
     "shards": "65k",
     "total_shards": "65k",
     "raw_trade": "65.0k \u2192 Dragon Wing"
+  },
+  {
+    "item": "Pineapple Hat Chainmail",
+    "quantity": 1,
+    "shards": "120k",
+    "total_shards": "120k",
+    "raw_trade": "Sep 15 Dirtypoet343 120.0k \u2192 Pineapple Hat Chainmail"
+  },
+  {
+    "item": "Pineapple Hat",
+    "quantity": 1,
+    "shards": "120k",
+    "total_shards": "120k",
+    "raw_trade": "120.0k \u2192 Pineapple Hat"
+  },
+  {
+    "item": "Egg Head +11 more Chainmail",
+    "quantity": 1,
+    "shards": "5k",
+    "total_shards": "5k",
+    "raw_trade": "Sep 15 restupided 5.0k \u2192 Egg Head +11 more Chainmail"
+  },
+  {
+    "item": "Egg Head +11 more",
+    "quantity": 1,
+    "shards": "5k",
+    "total_shards": "5k",
+    "raw_trade": "5.0k \u2192 Egg Head +11 more"
+  },
+  {
+    "item": "Enchanters Cape Chainmail",
+    "quantity": 2,
+    "shards": "45.9k",
+    "total_shards": "91.7k",
+    "raw_trade": "Sep 15 Chaos2776 91.7k \u2192 Enchanters Cape x2 Chainmail"
+  },
+  {
+    "item": "Enchanters Cape",
+    "quantity": 2,
+    "shards": "45.9k",
+    "total_shards": "91.7k",
+    "raw_trade": "91.7k \u2192 Enchanters Cape x2"
+  },
+  {
+    "item": "Chainmail Fire Wing",
+    "quantity": 1,
+    "shards": "325k",
+    "total_shards": "325k",
+    "raw_trade": "Sep 15 Chainmail Fire Wing \u2192 325.0k ImPatsman"
+  },
+  {
+    "item": "Fire Wing",
+    "quantity": 1,
+    "shards": "325k",
+    "total_shards": "325k",
+    "raw_trade": "Fire Wing \u2192 325.0k"
+  },
+  {
+    "item": "Chainmail Blaze Rod",
+    "quantity": 1,
+    "shards": "250k",
+    "total_shards": "250k",
+    "raw_trade": "Sep 15 Chainmail Blaze Rod \u2192 250.0k void45407"
+  },
+  {
+    "item": "Blaze Rod",
+    "quantity": 1,
+    "shards": "250k",
+    "total_shards": "250k",
+    "raw_trade": "Blaze Rod \u2192 250.0k"
   }
 ]
