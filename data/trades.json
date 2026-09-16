@@ -38764,5 +38764,33 @@
     "shards": "250k",
     "total_shards": "250k",
     "raw_trade": "Blaze Rod \u2192 250.0k"
+  },
+  {
+    "item": "Chainmail Black Hole",
+    "quantity": 1,
+    "shards": "350k",
+    "total_shards": "350k",
+    "raw_trade": "Sep 15 Chainmail Black Hole \u2192 350.0k Sanzo cat"
+  },
+  {
+    "item": "Black Hole",
+    "quantity": 1,
+    "shards": "350k",
+    "total_shards": "350k",
+    "raw_trade": "Black Hole \u2192 350.0k"
+  },
+  {
+    "item": "Foxzy Costume +5 more Chainmail",
+    "quantity": 1,
+    "shards": "295k",
+    "total_shards": "295k",
+    "raw_trade": "Sep 15 fernlly 295.0k \u2192 Foxzy Costume +5 more Chainmail"
+  },
+  {
+    "item": "Foxzy Costume +5 more",
+    "quantity": 1,
+    "shards": "295k",
+    "total_shards": "295k",
+    "raw_trade": "295.0k \u2192 Foxzy Costume +5 more"
   }
 ]
