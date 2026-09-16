@@ -38855,5 +38855,47 @@
     "shards": "75k",
     "total_shards": "75k",
     "raw_trade": "Dragon Wing \u2192 75.0k"
+  },
+  {
+    "item": "Crocodile Hat Chainmail",
+    "quantity": 1,
+    "shards": "67k",
+    "total_shards": "67k",
+    "raw_trade": "Sep 16 fawyl 67.0k \u2192 Crocodile Hat Chainmail"
+  },
+  {
+    "item": "Crocodile Hat",
+    "quantity": 1,
+    "shards": "67k",
+    "total_shards": "67k",
+    "raw_trade": "67.0k \u2192 Crocodile Hat"
+  },
+  {
+    "item": "Black Hole Chainmail",
+    "quantity": 1,
+    "shards": "350k",
+    "total_shards": "350k",
+    "raw_trade": "Sep 16 ywoki 350.0k \u2192 Black Hole Chainmail"
+  },
+  {
+    "item": "Black Hole",
+    "quantity": 1,
+    "shards": "350k",
+    "total_shards": "350k",
+    "raw_trade": "350.0k \u2192 Black Hole"
+  },
+  {
+    "item": "Cute Cowboy Chainmail",
+    "quantity": 1,
+    "shards": "375k",
+    "total_shards": "375k",
+    "raw_trade": "Sep 16 ywoki 375.0k \u2192 Cute Cowboy Chainmail"
+  },
+  {
+    "item": "Cute Cowboy",
+    "quantity": 1,
+    "shards": "375k",
+    "total_shards": "375k",
+    "raw_trade": "375.0k \u2192 Cute Cowboy"
   }
 ]
