@@ -38827,5 +38827,33 @@
     "shards": "7.5k",
     "total_shards": "7.5k",
     "raw_trade": "Sunset \u2192 7.5k"
+  },
+  {
+    "item": "Chainmail Golden Totem Costume",
+    "quantity": 2,
+    "shards": "275k",
+    "total_shards": "550k",
+    "raw_trade": "Sep 16 Chainmail Golden Totem Costume x2 \u2192 550.0k ZEUS OP9830"
+  },
+  {
+    "item": "Golden Totem Costume",
+    "quantity": 2,
+    "shards": "275k",
+    "total_shards": "550k",
+    "raw_trade": "Golden Totem Costume x2 \u2192 550.0k"
+  },
+  {
+    "item": "Chainmail Dragon Wing",
+    "quantity": 1,
+    "shards": "75k",
+    "total_shards": "75k",
+    "raw_trade": "Sep 16 Chainmail Dragon Wing \u2192 75.0k Chris14514"
+  },
+  {
+    "item": "Dragon Wing",
+    "quantity": 1,
+    "shards": "75k",
+    "total_shards": "75k",
+    "raw_trade": "Dragon Wing \u2192 75.0k"
   }
 ]
