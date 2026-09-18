@@ -38897,5 +38897,33 @@
     "shards": "375k",
     "total_shards": "375k",
     "raw_trade": "375.0k \u2192 Cute Cowboy"
+  },
+  {
+    "item": "Chainmail Lightning",
+    "quantity": 1,
+    "shards": "65k",
+    "total_shards": "65k",
+    "raw_trade": "Sep 18 Chainmail Lightning \u2192 65.0k wShip"
+  },
+  {
+    "item": "Lightning",
+    "quantity": 1,
+    "shards": "65k",
+    "total_shards": "65k",
+    "raw_trade": "Lightning \u2192 65.0k"
+  },
+  {
+    "item": "Chainmail Blaze Rod",
+    "quantity": 1,
+    "shards": "250k",
+    "total_shards": "250k",
+    "raw_trade": "Sep 18 Chainmail Blaze Rod \u2192 250.0k TranMy165"
+  },
+  {
+    "item": "ywoki -",
+    "quantity": 1,
+    "shards": "20k",
+    "total_shards": "20k",
+    "raw_trade": "Sep 18 ywoki - \u2192 20.0k Chainmail"
   }
 ]
