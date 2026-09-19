@@ -38932,5 +38932,19 @@
     "shards": "555",
     "total_shards": "555",
     "raw_trade": "BOiL 555 \u2192 Chainmail Sep 18"
+  },
+  {
+    "item": "Blue Wing Chainmail",
+    "quantity": 1,
+    "shards": "65k",
+    "total_shards": "65k",
+    "raw_trade": "Sep 19 TranMy165 65.0k \u2192 Blue Wing Chainmail"
+  },
+  {
+    "item": "Blue Wing",
+    "quantity": 1,
+    "shards": "65k",
+    "total_shards": "65k",
+    "raw_trade": "65.0k \u2192 Blue Wing"
   }
 ]
