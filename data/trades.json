@@ -38925,5 +38925,12 @@
     "shards": "20k",
     "total_shards": "20k",
     "raw_trade": "Sep 18 ywoki - \u2192 20.0k Chainmail"
+  },
+  {
+    "item": "Chainmail",
+    "quantity": 1,
+    "shards": "555",
+    "total_shards": "555",
+    "raw_trade": "BOiL 555 \u2192 Chainmail Sep 18"
   }
 ]
