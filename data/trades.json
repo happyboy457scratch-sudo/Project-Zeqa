@@ -38946,5 +38946,19 @@
     "shards": "65k",
     "total_shards": "65k",
     "raw_trade": "65.0k \u2192 Blue Wing"
+  },
+  {
+    "item": "Chainmail Purple Zeqa Bandanna",
+    "quantity": 1,
+    "shards": "340k",
+    "total_shards": "340k",
+    "raw_trade": "Sep 21 Chainmail Purple Zeqa Bandanna \u2192 340.0k xNoAli"
+  },
+  {
+    "item": "Purple Zeqa Bandanna",
+    "quantity": 1,
+    "shards": "340k",
+    "total_shards": "340k",
+    "raw_trade": "Purple Zeqa Bandanna \u2192 340.0k"
   }
 ]
