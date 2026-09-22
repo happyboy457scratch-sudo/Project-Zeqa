@@ -38960,5 +38960,33 @@
     "shards": "340k",
     "total_shards": "340k",
     "raw_trade": "Purple Zeqa Bandanna \u2192 340.0k"
+  },
+  {
+    "item": "Banana Man Costume Chainmail",
+    "quantity": 1,
+    "shards": "415k",
+    "total_shards": "415k",
+    "raw_trade": "Sep 21 bxmsi 415.0k \u2192 Banana Man Costume Chainmail"
+  },
+  {
+    "item": "Banana Man Costume",
+    "quantity": 1,
+    "shards": "415k",
+    "total_shards": "415k",
+    "raw_trade": "415.0k \u2192 Banana Man Costume"
+  },
+  {
+    "item": "Earth Chainmail",
+    "quantity": 1,
+    "shards": "35k",
+    "total_shards": "35k",
+    "raw_trade": "Sep 21 ywoki 35.0k \u2192 Earth Chainmail"
+  },
+  {
+    "item": "Earth",
+    "quantity": 1,
+    "shards": "35k",
+    "total_shards": "35k",
+    "raw_trade": "35.0k \u2192 Earth"
   }
 ]
