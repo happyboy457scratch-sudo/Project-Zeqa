@@ -39009,5 +39009,19 @@
     "shards": "75k",
     "total_shards": "75k",
     "raw_trade": "Crocodile Hat \u2192 75.0k"
+  },
+  {
+    "item": "Chainmail Enchanters Cape",
+    "quantity": 1,
+    "shards": "35k",
+    "total_shards": "35k",
+    "raw_trade": "Sep 22 Chainmail Enchanters Cape \u2192 35.0k Deadpool85833"
+  },
+  {
+    "item": "Enchanters Cape",
+    "quantity": 1,
+    "shards": "35k",
+    "total_shards": "35k",
+    "raw_trade": "Enchanters Cape \u2192 35.0k"
   }
 ]
