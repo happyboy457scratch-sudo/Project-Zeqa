@@ -39023,5 +39023,19 @@
     "shards": "35k",
     "total_shards": "35k",
     "raw_trade": "Enchanters Cape \u2192 35.0k"
+  },
+  {
+    "item": "Chainmail Balloons",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Sep 23 Chainmail Balloons \u2192 15.0k Katsuro"
+  },
+  {
+    "item": "Balloons",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Balloons \u2192 15.0k"
   }
 ]
