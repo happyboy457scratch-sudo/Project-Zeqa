@@ -38988,5 +38988,26 @@
     "shards": "35k",
     "total_shards": "35k",
     "raw_trade": "35.0k \u2192 Earth"
+  },
+  {
+    "item": "Chainmail",
+    "quantity": 1,
+    "shards": "555",
+    "total_shards": "555",
+    "raw_trade": "BOiL 555 \u2192 Chainmail Sep 22"
+  },
+  {
+    "item": "Chainmail Crocodile Hat",
+    "quantity": 1,
+    "shards": "75k",
+    "total_shards": "75k",
+    "raw_trade": "Sep 22 Chainmail Crocodile Hat \u2192 75.0k OrangeConch4075"
+  },
+  {
+    "item": "Crocodile Hat",
+    "quantity": 1,
+    "shards": "75k",
+    "total_shards": "75k",
+    "raw_trade": "Crocodile Hat \u2192 75.0k"
   }
 ]
