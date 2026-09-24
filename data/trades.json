@@ -39037,5 +39037,19 @@
     "shards": "15k",
     "total_shards": "15k",
     "raw_trade": "Balloons \u2192 15.0k"
+  },
+  {
+    "item": "Fist Warrior Chainmail",
+    "quantity": 1,
+    "shards": "400k",
+    "total_shards": "400k",
+    "raw_trade": "Sep 24 Konobe7241 400.0k \u2192 Fist Warrior Chainmail"
+  },
+  {
+    "item": "Fist Warrior",
+    "quantity": 1,
+    "shards": "400k",
+    "total_shards": "400k",
+    "raw_trade": "400.0k \u2192 Fist Warrior"
   }
 ]
