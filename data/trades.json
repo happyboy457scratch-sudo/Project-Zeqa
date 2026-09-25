@@ -39051,5 +39051,19 @@
     "shards": "400k",
     "total_shards": "400k",
     "raw_trade": "400.0k \u2192 Fist Warrior"
+  },
+  {
+    "item": "Chainmail Parrot Feather",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "Sep 25 Chainmail Parrot Feather \u2192 10.0k MASTERHONEY01"
+  },
+  {
+    "item": "Parrot Feather",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "Parrot Feather \u2192 10.0k"
   }
 ]
