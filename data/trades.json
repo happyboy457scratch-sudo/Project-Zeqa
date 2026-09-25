@@ -39065,5 +39065,19 @@
     "shards": "10k",
     "total_shards": "10k",
     "raw_trade": "Parrot Feather \u2192 10.0k"
+  },
+  {
+    "item": "Chainmail Blue Susanoo",
+    "quantity": 1,
+    "shards": "375k",
+    "total_shards": "375k",
+    "raw_trade": "Sep 25 Chainmail Blue Susanoo \u2192 375.0k Sanzo cat"
+  },
+  {
+    "item": "Blue Susanoo",
+    "quantity": 1,
+    "shards": "375k",
+    "total_shards": "375k",
+    "raw_trade": "Blue Susanoo \u2192 375.0k"
   }
 ]
