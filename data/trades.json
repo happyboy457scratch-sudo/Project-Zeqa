@@ -39079,5 +39079,19 @@
     "shards": "375k",
     "total_shards": "375k",
     "raw_trade": "Blue Susanoo \u2192 375.0k"
+  },
+  {
+    "item": "Chainmail Phantom Wing",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Sep 26 Chainmail Phantom Wing \u2192 50.0k produckbot"
+  },
+  {
+    "item": "Phantom Wing",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Phantom Wing \u2192 50.0k"
   }
 ]
