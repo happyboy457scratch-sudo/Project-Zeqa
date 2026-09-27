@@ -39114,5 +39114,33 @@
     "shards": "7.5k",
     "total_shards": "7.5k",
     "raw_trade": "7.5k \u2192 Mushling"
+  },
+  {
+    "item": "Crocodile Hat Chainmail",
+    "quantity": 2,
+    "shards": "75k",
+    "total_shards": "150k",
+    "raw_trade": "Sep 27 Nobita6018 150.0k \u2192 Crocodile Hat x2 Chainmail"
+  },
+  {
+    "item": "Crocodile Hat",
+    "quantity": 2,
+    "shards": "75k",
+    "total_shards": "150k",
+    "raw_trade": "150.0k \u2192 Crocodile Hat x2"
+  },
+  {
+    "item": "Chainmail Stonks Costume",
+    "quantity": 1,
+    "shards": "1000k",
+    "total_shards": "1000k",
+    "raw_trade": "Sep 27 Chainmail Stonks Costume \u2192 1000.0k bxmsi"
+  },
+  {
+    "item": "Stonks Costume",
+    "quantity": 1,
+    "shards": "1000k",
+    "total_shards": "1000k",
+    "raw_trade": "Stonks Costume \u2192 1000.0k"
   }
 ]
