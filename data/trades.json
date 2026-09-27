@@ -39142,5 +39142,19 @@
     "shards": "1000k",
     "total_shards": "1000k",
     "raw_trade": "Stonks Costume \u2192 1000.0k"
+  },
+  {
+    "item": "ImPatsman -",
+    "quantity": 1,
+    "shards": "10000k",
+    "total_shards": "10000k",
+    "raw_trade": "Sep 27 ImPatsman - \u2192 10000.0k Chainmail"
+  },
+  {
+    "item": "Chainmail -",
+    "quantity": 1,
+    "shards": "9534.9k",
+    "total_shards": "9534.9k",
+    "raw_trade": "Sep 27 Chainmail - \u2192 9534.9k ImPatsman"
   }
 ]
