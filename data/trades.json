@@ -39093,5 +39093,26 @@
     "shards": "50k",
     "total_shards": "50k",
     "raw_trade": "Phantom Wing \u2192 50.0k"
+  },
+  {
+    "item": "Mushling Chainmail",
+    "quantity": 1,
+    "shards": "555",
+    "total_shards": "555",
+    "raw_trade": "Sep 27 BOiL 555 7.5k \u2192 Mushling Chainmail"
+  },
+  {
+    "item": "Chainmail",
+    "quantity": 1,
+    "shards": "555",
+    "total_shards": "555",
+    "raw_trade": "BOiL 555 \u2192 Chainmail Sep 27"
+  },
+  {
+    "item": "Mushling",
+    "quantity": 1,
+    "shards": "7.5k",
+    "total_shards": "7.5k",
+    "raw_trade": "7.5k \u2192 Mushling"
   }
 ]
