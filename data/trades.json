@@ -39156,5 +39156,19 @@
     "shards": "9534.9k",
     "total_shards": "9534.9k",
     "raw_trade": "Sep 27 Chainmail - \u2192 9534.9k ImPatsman"
+  },
+  {
+    "item": "Shadow Bird +6 more Chainmail",
+    "quantity": 2,
+    "shards": "7.5k",
+    "total_shards": "14.9k",
+    "raw_trade": "Sep 30 Kakarot5646 14.9k \u2192 Shadow Bird x2 +6 more Chainmail"
+  },
+  {
+    "item": "Shadow Bird +6 more",
+    "quantity": 2,
+    "shards": "7.5k",
+    "total_shards": "14.9k",
+    "raw_trade": "14.9k \u2192 Shadow Bird x2 +6 more"
   }
 ]
