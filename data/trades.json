@@ -39170,5 +39170,33 @@
     "shards": "7.5k",
     "total_shards": "14.9k",
     "raw_trade": "14.9k \u2192 Shadow Bird x2 +6 more"
+  },
+  {
+    "item": "Blue Wing Evil cqw",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Oct 4 Chainmail 50.0k \u2192 Blue Wing Evil cqw"
+  },
+  {
+    "item": "Blue Wing",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "50.0k \u2192 Blue Wing"
+  },
+  {
+    "item": "Chainmail Broom +35 more",
+    "quantity": 1,
+    "shards": "13.1k",
+    "total_shards": "13.1k",
+    "raw_trade": "Oct 4 Chainmail Broom +35 more \u2192 13.1k Konobe7241"
+  },
+  {
+    "item": "Broom +35 more",
+    "quantity": 1,
+    "shards": "13.1k",
+    "total_shards": "13.1k",
+    "raw_trade": "Broom +35 more \u2192 13.1k"
   }
 ]
