@@ -39205,5 +39205,12 @@
     "shards": "600k",
     "total_shards": "600k",
     "raw_trade": "Oct 4 Chainmail - \u2192 600.0k v9aq"
+  },
+  {
+    "item": "Chainmail -",
+    "quantity": 1,
+    "shards": "100k",
+    "total_shards": "100k",
+    "raw_trade": "Oct 6 Chainmail - \u2192 100.0k Sntb"
   }
 ]
