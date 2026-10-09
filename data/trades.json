@@ -39212,5 +39212,26 @@
     "shards": "100k",
     "total_shards": "100k",
     "raw_trade": "Oct 6 Chainmail - \u2192 100.0k Sntb"
+  },
+  {
+    "item": "Chainmail",
+    "quantity": 1,
+    "shards": "555",
+    "total_shards": "555",
+    "raw_trade": "BOiL 555 \u2192 Chainmail Oct 9"
+  },
+  {
+    "item": "Air Chainmail",
+    "quantity": 1,
+    "shards": "2.5k",
+    "total_shards": "2.5k",
+    "raw_trade": "Oct 9 Chris14514 2.5k \u2192 Air Chainmail"
+  },
+  {
+    "item": "Air",
+    "quantity": 1,
+    "shards": "2.5k",
+    "total_shards": "2.5k",
+    "raw_trade": "2.5k \u2192 Air"
   }
 ]
