@@ -39233,5 +39233,19 @@
     "shards": "2.5k",
     "total_shards": "2.5k",
     "raw_trade": "2.5k \u2192 Air"
+  },
+  {
+    "item": "Chainmail Melon Madness",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Oct 11 Chainmail Melon Madness \u2192 50.0k Katsuro"
+  },
+  {
+    "item": "Melon Madness",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Melon Madness \u2192 50.0k"
   }
 ]
