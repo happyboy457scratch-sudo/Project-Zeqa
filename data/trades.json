@@ -39247,5 +39247,19 @@
     "shards": "50k",
     "total_shards": "50k",
     "raw_trade": "Melon Madness \u2192 50.0k"
+  },
+  {
+    "item": "Widows Grasp Chainmail",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Oct 12 Konobe7241 50.0k \u2192 Widows Grasp Chainmail"
+  },
+  {
+    "item": "Widows Grasp",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "50.0k \u2192 Widows Grasp"
   }
 ]
