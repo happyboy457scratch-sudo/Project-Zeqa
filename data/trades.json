@@ -39261,5 +39261,19 @@
     "shards": "50k",
     "total_shards": "50k",
     "raw_trade": "50.0k \u2192 Widows Grasp"
+  },
+  {
+    "item": "A #C96 Sanzo cat",
+    "quantity": 1,
+    "shards": "7k",
+    "total_shards": "7k",
+    "raw_trade": "Oct 19 Chainmail 7.0k \u2192 A #C96 Sanzo cat"
+  },
+  {
+    "item": "A #C96",
+    "quantity": 1,
+    "shards": "7k",
+    "total_shards": "7k",
+    "raw_trade": "7.0k \u2192 A #C96"
   }
 ]
