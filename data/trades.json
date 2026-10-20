@@ -39275,5 +39275,19 @@
     "shards": "7k",
     "total_shards": "7k",
     "raw_trade": "7.0k \u2192 A #C96"
+  },
+  {
+    "item": "Crimson Seedwing Chainmail",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "Oct 20 Kakarot5646 50.0k \u2192 Crimson Seedwing Chainmail"
+  },
+  {
+    "item": "Crimson Seedwing",
+    "quantity": 1,
+    "shards": "50k",
+    "total_shards": "50k",
+    "raw_trade": "50.0k \u2192 Crimson Seedwing"
   }
 ]
