@@ -39373,5 +39373,19 @@
     "shards": "10k",
     "total_shards": "10k",
     "raw_trade": "Green Balloon \u2192 10.0k"
+  },
+  {
+    "item": "C Chainmail LightBringer Cape",
+    "quantity": 1,
+    "shards": "145k",
+    "total_shards": "145k",
+    "raw_trade": "Oct 22 C Chainmail LightBringer Cape \u2192 145.0k bxmsi B"
+  },
+  {
+    "item": "LightBringer Cape",
+    "quantity": 1,
+    "shards": "145k",
+    "total_shards": "145k",
+    "raw_trade": "LightBringer Cape \u2192 145.0k"
   }
 ]
