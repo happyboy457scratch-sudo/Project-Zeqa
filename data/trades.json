@@ -39331,5 +39331,47 @@
     "shards": "100k",
     "total_shards": "100k",
     "raw_trade": "Oct 6 C Chainmail - \u2192 100.0k Sntb S"
+  },
+  {
+    "item": "Bonehead Costume Chainmail C",
+    "quantity": 1,
+    "shards": "6.1k",
+    "total_shards": "6.1k",
+    "raw_trade": "Oct 21 P PokeGamer267199 6.1k \u2192 Bonehead Costume Chainmail C"
+  },
+  {
+    "item": "Bonehead Costume",
+    "quantity": 1,
+    "shards": "6.1k",
+    "total_shards": "6.1k",
+    "raw_trade": "6.1k \u2192 Bonehead Costume"
+  },
+  {
+    "item": "C Chainmail Ender Wing",
+    "quantity": 1,
+    "shards": "45k",
+    "total_shards": "45k",
+    "raw_trade": "Oct 21 C Chainmail Ender Wing \u2192 45.0k NerfadoMC"
+  },
+  {
+    "item": "Ender Wing",
+    "quantity": 1,
+    "shards": "45k",
+    "total_shards": "45k",
+    "raw_trade": "Ender Wing \u2192 45.0k"
+  },
+  {
+    "item": "C Chainmail Green Balloon",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "Oct 21 C Chainmail Green Balloon \u2192 10.0k NerfadoMC"
+  },
+  {
+    "item": "Green Balloon",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "Green Balloon \u2192 10.0k"
   }
 ]
