@@ -39394,5 +39394,40 @@
     "shards": "25k",
     "total_shards": "25k",
     "raw_trade": "Oct 22 IamOwl9582 - \u2192 25.0k Chainmail C"
+  },
+  {
+    "item": "IamOwl9582 -",
+    "quantity": 1,
+    "shards": "25k",
+    "total_shards": "25k",
+    "raw_trade": "Oct 22 IamOwl9582 - \u2192 25.0k Chainmail"
+  },
+  {
+    "item": "Chainmail LightBringer Cape",
+    "quantity": 1,
+    "shards": "145k",
+    "total_shards": "145k",
+    "raw_trade": "Oct 22 Chainmail LightBringer Cape \u2192 145.0k bxmsi"
+  },
+  {
+    "item": "Bonehead Costume Chainmail",
+    "quantity": 1,
+    "shards": "6.1k",
+    "total_shards": "6.1k",
+    "raw_trade": "Oct 21 PokeGamer267199 6.1k \u2192 Bonehead Costume Chainmail"
+  },
+  {
+    "item": "Chainmail Ender Wing",
+    "quantity": 1,
+    "shards": "45k",
+    "total_shards": "45k",
+    "raw_trade": "Oct 21 Chainmail Ender Wing \u2192 45.0k NerfadoMC"
+  },
+  {
+    "item": "Chainmail Green Balloon",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "Oct 21 Chainmail Green Balloon \u2192 10.0k NerfadoMC"
   }
 ]
