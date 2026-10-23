@@ -39443,5 +39443,19 @@
     "shards": "15k",
     "total_shards": "15k",
     "raw_trade": "15.0k \u2192 Cherry Blossom Crown"
+  },
+  {
+    "item": "C Chainmail Treasure Chest",
+    "quantity": 1,
+    "shards": "7.5k",
+    "total_shards": "7.5k",
+    "raw_trade": "Oct 23 C Chainmail Treasure Chest \u2192 7.5k Papelitoe8 P"
+  },
+  {
+    "item": "Treasure Chest",
+    "quantity": 1,
+    "shards": "7.5k",
+    "total_shards": "7.5k",
+    "raw_trade": "Treasure Chest \u2192 7.5k"
   }
 ]
