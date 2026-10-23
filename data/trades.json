@@ -39457,5 +39457,33 @@
     "shards": "7.5k",
     "total_shards": "7.5k",
     "raw_trade": "Treasure Chest \u2192 7.5k"
+  },
+  {
+    "item": "Chainmail Crown Of Shadows",
+    "quantity": 1,
+    "shards": "37k",
+    "total_shards": "37k",
+    "raw_trade": "Oct 23 Chainmail Crown Of Shadows \u2192 37.0k Deadpool85833"
+  },
+  {
+    "item": "Crown Of Shadows",
+    "quantity": 1,
+    "shards": "37k",
+    "total_shards": "37k",
+    "raw_trade": "Crown Of Shadows \u2192 37.0k"
+  },
+  {
+    "item": "Chainmail Treasure Chest",
+    "quantity": 1,
+    "shards": "7.5k",
+    "total_shards": "7.5k",
+    "raw_trade": "Oct 23 Chainmail Treasure Chest \u2192 7.5k Papelitoe8"
+  },
+  {
+    "item": "Cherry Blossom Crown Chainmail",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Oct 23 Papelitoe8 15.0k \u2192 Cherry Blossom Crown Chainmail"
   }
 ]
