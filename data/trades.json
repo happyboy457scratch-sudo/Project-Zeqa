@@ -39499,5 +39499,26 @@
     "shards": "10k",
     "total_shards": "10k",
     "raw_trade": "10.0k \u2192 Ski Backpack"
+  },
+  {
+    "item": "Chainmail Classic Spaceman +79 more",
+    "quantity": 1,
+    "shards": "15.8k",
+    "total_shards": "15.8k",
+    "raw_trade": "Oct 24 Chainmail Classic Spaceman +79 more \u2192 15.8k Happyboy457 GG"
+  },
+  {
+    "item": "Classic Spaceman +79 more",
+    "quantity": 1,
+    "shards": "15.8k",
+    "total_shards": "15.8k",
+    "raw_trade": "Classic Spaceman +79 more \u2192 15.8k"
+  },
+  {
+    "item": "Chainmail BlackHeart",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Oct 24 Chainmail BlackHeart \u2192 2.0k Chris14514"
   }
 ]
