@@ -39485,5 +39485,19 @@
     "shards": "15k",
     "total_shards": "15k",
     "raw_trade": "Oct 23 Papelitoe8 15.0k \u2192 Cherry Blossom Crown Chainmail"
+  },
+  {
+    "item": "Ski Backpack Chainmail",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "Oct 24 Papelitoe8 10.0k \u2192 Ski Backpack Chainmail"
+  },
+  {
+    "item": "Ski Backpack",
+    "quantity": 1,
+    "shards": "10k",
+    "total_shards": "10k",
+    "raw_trade": "10.0k \u2192 Ski Backpack"
   }
 ]
