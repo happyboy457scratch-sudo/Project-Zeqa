@@ -39520,5 +39520,33 @@
     "shards": "2k",
     "total_shards": "2k",
     "raw_trade": "Oct 24 Chainmail BlackHeart \u2192 2.0k Chris14514"
+  },
+  {
+    "item": "Chainmail Mrs. Moo",
+    "quantity": 2,
+    "shards": "150",
+    "total_shards": "300",
+    "raw_trade": "Oct 25 Chainmail Mrs. Moo x2 \u2192 300 NotBiswa"
+  },
+  {
+    "item": "Mrs. Moo",
+    "quantity": 2,
+    "shards": "150",
+    "total_shards": "300",
+    "raw_trade": "Mrs. Moo x2 \u2192 300"
+  },
+  {
+    "item": "Golden Space Helmet +9 more Chainmail",
+    "quantity": 12,
+    "shards": "3.5k",
+    "total_shards": "42.3k",
+    "raw_trade": "Oct 25 NotBiswa 42.3k \u2192 Golden Space Helmet x12 +9 more Chainmail"
+  },
+  {
+    "item": "Golden Space Helmet +9 more",
+    "quantity": 12,
+    "shards": "3.5k",
+    "total_shards": "42.3k",
+    "raw_trade": "42.3k \u2192 Golden Space Helmet x12 +9 more"
   }
 ]
