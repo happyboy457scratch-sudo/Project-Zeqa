@@ -39576,5 +39576,33 @@
     "shards": "1.6k",
     "total_shards": "1.6k",
     "raw_trade": "Island +10 more \u2192 1.6k"
+  },
+  {
+    "item": "Chainmail Herz",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Oct 29 Chainmail Herz \u2192 2.0k FBI3730"
+  },
+  {
+    "item": "Herz",
+    "quantity": 1,
+    "shards": "2k",
+    "total_shards": "2k",
+    "raw_trade": "Herz \u2192 2.0k"
+  },
+  {
+    "item": "bxmsi Arrow Head",
+    "quantity": 1,
+    "shards": "2.3k",
+    "total_shards": "2.3k",
+    "raw_trade": "Oct 29 bxmsi Arrow Head \u2192 2.3k Chainmail"
+  },
+  {
+    "item": "Arrow Head",
+    "quantity": 1,
+    "shards": "2.3k",
+    "total_shards": "2.3k",
+    "raw_trade": "Arrow Head \u2192 2.3k"
   }
 ]
