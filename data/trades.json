@@ -39604,5 +39604,19 @@
     "shards": "2.3k",
     "total_shards": "2.3k",
     "raw_trade": "Arrow Head \u2192 2.3k"
+  },
+  {
+    "item": "Rabbit Chainmail",
+    "quantity": 1,
+    "shards": "30k",
+    "total_shards": "30k",
+    "raw_trade": "Oct 31 FBI3730 30.0k \u2192 Rabbit Chainmail"
+  },
+  {
+    "item": "Rabbit",
+    "quantity": 1,
+    "shards": "30k",
+    "total_shards": "30k",
+    "raw_trade": "30.0k \u2192 Rabbit"
   }
 ]
