@@ -39618,5 +39618,40 @@
     "shards": "30k",
     "total_shards": "30k",
     "raw_trade": "30.0k \u2192 Rabbit"
+  },
+  {
+    "item": "Emric Chain Chainmail",
+    "quantity": 1,
+    "shards": "20k",
+    "total_shards": "20k",
+    "raw_trade": "Nov 3 Konobe7241 20.0k \u2192 Emric Chain Chainmail"
+  },
+  {
+    "item": "Emric Chain",
+    "quantity": 1,
+    "shards": "20k",
+    "total_shards": "20k",
+    "raw_trade": "20.0k \u2192 Emric Chain"
+  },
+  {
+    "item": "Chainmail -",
+    "quantity": 1,
+    "shards": "4k",
+    "total_shards": "4k",
+    "raw_trade": "Nov 3 Chainmail - \u2192 4.0k PokeGamer267199"
+  },
+  {
+    "item": "Chainmail Fenwos' Fox Buddy",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Nov 3 Chainmail Fenwos' Fox Buddy \u2192 15.0k Konobe7241"
+  },
+  {
+    "item": "Fenwos' Fox Buddy",
+    "quantity": 1,
+    "shards": "15k",
+    "total_shards": "15k",
+    "raw_trade": "Fenwos' Fox Buddy \u2192 15.0k"
   }
 ]
