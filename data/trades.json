@@ -39667,5 +39667,33 @@
     "shards": "2.3k",
     "total_shards": "2.3k",
     "raw_trade": "2.3k \u2192 Heart Headphones"
+  },
+  {
+    "item": "Rising Sun Chainmail",
+    "quantity": 1,
+    "shards": "100",
+    "total_shards": "100",
+    "raw_trade": "Nov 5 WizardPlayz7 100 \u2192 Rising Sun Chainmail"
+  },
+  {
+    "item": "Rising Sun",
+    "quantity": 1,
+    "shards": "100",
+    "total_shards": "100",
+    "raw_trade": "100 \u2192 Rising Sun"
+  },
+  {
+    "item": "Chainmail Fire Aura +16 more",
+    "quantity": 1,
+    "shards": "73k",
+    "total_shards": "73k",
+    "raw_trade": "Nov 5 Chainmail Fire Aura +16 more \u2192 73.0k xKlax"
+  },
+  {
+    "item": "Fire Aura +16 more",
+    "quantity": 1,
+    "shards": "73k",
+    "total_shards": "73k",
+    "raw_trade": "Fire Aura +16 more \u2192 73.0k"
   }
 ]
