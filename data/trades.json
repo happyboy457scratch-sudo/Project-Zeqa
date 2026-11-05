@@ -39653,5 +39653,19 @@
     "shards": "15k",
     "total_shards": "15k",
     "raw_trade": "Fenwos' Fox Buddy \u2192 15.0k"
+  },
+  {
+    "item": "Heart Headphones FBI3730",
+    "quantity": 1,
+    "shards": "2.3k",
+    "total_shards": "2.3k",
+    "raw_trade": "Nov 4 Chainmail 2.3k \u2192 Heart Headphones FBI3730"
+  },
+  {
+    "item": "Heart Headphones",
+    "quantity": 1,
+    "shards": "2.3k",
+    "total_shards": "2.3k",
+    "raw_trade": "2.3k \u2192 Heart Headphones"
   }
 ]
