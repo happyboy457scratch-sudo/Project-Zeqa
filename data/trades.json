@@ -39695,5 +39695,19 @@
     "shards": "73k",
     "total_shards": "73k",
     "raw_trade": "Fire Aura +16 more \u2192 73.0k"
+  },
+  {
+    "item": "6 #2 ImPatsman",
+    "quantity": 1,
+    "shards": "1.5k",
+    "total_shards": "1.5k",
+    "raw_trade": "Nov 6 Chainmail 1.5k \u2192 6 #2 ImPatsman"
+  },
+  {
+    "item": "6 #2",
+    "quantity": 1,
+    "shards": "1.5k",
+    "total_shards": "1.5k",
+    "raw_trade": "1.5k \u2192 6 #2"
   }
 ]
