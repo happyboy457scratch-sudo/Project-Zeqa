@@ -39709,5 +39709,19 @@
     "shards": "1.5k",
     "total_shards": "1.5k",
     "raw_trade": "1.5k \u2192 6 #2"
+  },
+  {
+    "item": "Chainmail BED",
+    "quantity": 1,
+    "shards": "550",
+    "total_shards": "550",
+    "raw_trade": "Nov 6 Chainmail BED \u2192 550 OrangeConch4075"
+  },
+  {
+    "item": "BED",
+    "quantity": 1,
+    "shards": "550",
+    "total_shards": "550",
+    "raw_trade": "BED \u2192 550"
   }
 ]
