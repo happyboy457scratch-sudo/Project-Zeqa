@@ -39723,5 +39723,33 @@
     "shards": "550",
     "total_shards": "550",
     "raw_trade": "BED \u2192 550"
+  },
+  {
+    "item": "Chainmail A #C98",
+    "quantity": 3,
+    "shards": "30k",
+    "total_shards": "90k",
+    "raw_trade": "Nov 10 Chainmail A #C98 x3 \u2192 90.0k ImPatsman"
+  },
+  {
+    "item": "A #C98",
+    "quantity": 3,
+    "shards": "30k",
+    "total_shards": "90k",
+    "raw_trade": "A #C98 x3 \u2192 90.0k"
+  },
+  {
+    "item": "A #C98 +5 more Papelitoe8",
+    "quantity": 1,
+    "shards": "47.8k",
+    "total_shards": "47.8k",
+    "raw_trade": "Nov 9 Chainmail 47.8k \u2192 A #C98 +5 more Papelitoe8"
+  },
+  {
+    "item": "A #C98 +5 more",
+    "quantity": 1,
+    "shards": "47.8k",
+    "total_shards": "47.8k",
+    "raw_trade": "47.8k \u2192 A #C98 +5 more"
   }
 ]
