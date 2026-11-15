@@ -402,10 +402,10 @@
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/60.webp"
   },
   {
-    "name": "Clip-Farmed",
-    "rarity": "rare",
+    "name": "Lost All Aura",
+    "rarity": "common",
     "category": "Killphrase",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/63.webp"
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/killphrase/62.webp"
   },
   {
     "name": "Mewing Streak",
@@ -780,12 +780,6 @@
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/61.webp"
   },
   {
-    "name": "Candy Cane",
-    "rarity": "rare",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/63.webp"
-  },
-  {
     "name": "Green Yukata",
     "rarity": "legendary",
     "category": "Artifact",
@@ -798,130 +792,22 @@
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/67.webp"
   },
   {
+    "name": "Tatakae",
+    "rarity": "legendary",
+    "category": "Artifact",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/68.webp"
+  },
+  {
     "name": "Waist Lightsaber",
     "rarity": "common",
     "category": "Artifact",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/69.webp"
   },
   {
-    "name": "Sumo Suit",
-    "rarity": "legendary",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/70.webp"
-  },
-  {
-    "name": "Axe & Shield",
-    "rarity": "rare",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/209.webp"
-  },
-  {
-    "name": "Dragon",
-    "rarity": "epic",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/210.webp"
-  },
-  {
-    "name": "Mushling",
-    "rarity": "epic",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/211.webp"
-  },
-  {
-    "name": "Phoenix Wings",
-    "rarity": "legendary",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/212.webp"
-  },
-  {
-    "name": "Galaxy Dream",
+    "name": "Cat Mask",
     "rarity": "limited",
     "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/213.webp"
-  },
-  {
-    "name": "Broom",
-    "rarity": "limited",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/214.webp"
-  },
-  {
-    "name": "Eye",
-    "rarity": "limited",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/215.webp"
-  },
-  {
-    "name": "Crown Of Shadows",
-    "rarity": "exotic",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/216.webp"
-  },
-  {
-    "name": "Pumpkin Bite",
-    "rarity": "exotic",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/217.webp"
-  },
-  {
-    "name": "Lil Megalodon",
-    "rarity": "limited",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/218.webp"
-  },
-  {
-    "name": "Crimson Seedwing",
-    "rarity": "limited",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/219.webp"
-  },
-  {
-    "name": "Widows Grasp",
-    "rarity": "limited",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/220.webp"
-  },
-  {
-    "name": "White Angel Set",
-    "rarity": "limited",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/221.webp"
-  },
-  {
-    "name": "Christmas Stocking",
-    "rarity": "exotic",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/222.webp"
-  },
-  {
-    "name": "Frostveil",
-    "rarity": "exotic",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/223.webp"
-  },
-  {
-    "name": "Festive Hat",
-    "rarity": "limited",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/224.webp"
-  },
-  {
-    "name": "67 Headband",
-    "rarity": "rare",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/225.webp"
-  },
-  {
-    "name": "Firework Aura",
-    "rarity": "limited",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/228.webp"
-  },
-  {
-    "name": "Cupids Wings",
-    "rarity": "exotic",
-    "category": "Artifact",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/229.webp"
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/artifact/71.webp"
   },
   {
     "name": "Valentines Headband",
@@ -1296,304 +1182,22 @@
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/61.webp"
   },
   {
+    "name": "Valentine 2022 - Bed Heart",
+    "rarity": "limited",
+    "category": "Cape",
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/62.webp"
+  },
+  {
     "name": "Valentine 2022 - Black Heart",
     "rarity": "limited",
     "category": "Cape",
     "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/65.webp"
   },
   {
-    "name": "Baby Yoda",
-    "rarity": "rare",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/68.webp"
-  },
-  {
-    "name": "Confused Winnie",
-    "rarity": "common",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/69.webp"
-  },
-  {
-    "name": "Golden Hearts",
+    "name": "Valentine 2022 - White Heart",
     "rarity": "limited",
     "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/212.webp"
-  },
-  {
-    "name": "Heart King",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/213.webp"
-  },
-  {
-    "name": "Red Heart",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/214.webp"
-  },
-  {
-    "name": "Pink Heart",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/215.webp"
-  },
-  {
-    "name": "Candy",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/216.webp"
-  },
-  {
-    "name": "Heart",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/217.webp"
-  },
-  {
-    "name": "Chocolate",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/218.webp"
-  },
-  {
-    "name": "Blossom",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/219.webp"
-  },
-  {
-    "name": "White Chocolate",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/220.webp"
-  },
-  {
-    "name": "Dark Chocolate",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/221.webp"
-  },
-  {
-    "name": "Music Note",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/222.webp"
-  },
-  {
-    "name": "Red Balloon",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/223.webp"
-  },
-  {
-    "name": "Green Balloon",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/224.webp"
-  },
-  {
-    "name": "Blue Balloon",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/225.webp"
-  },
-  {
-    "name": "Purple Balloon",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/226.webp"
-  },
-  {
-    "name": "Glimmer",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/227.webp"
-  },
-  {
-    "name": "Clown Cape",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/228.webp"
-  },
-  {
-    "name": "Pinata",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/229.webp"
-  },
-  {
-    "name": "Donkey Tail",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/230.webp"
-  },
-  {
-    "name": "Root Beer",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/231.webp"
-  },
-  {
-    "name": "ButterBeer",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/232.webp"
-  },
-  {
-    "name": "Chocolate Cake",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/233.webp"
-  },
-  {
-    "name": "Cake",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/234.webp"
-  },
-  {
-    "name": "Birthday Cake",
-    "rarity": "limited",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/235.webp"
-  },
-  {
-    "name": "Easter Egg",
-    "rarity": "exotic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/236.webp"
-  },
-  {
-    "name": "Terry The Chick",
-    "rarity": "exotic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/237.webp"
-  },
-  {
-    "name": "Fresh Start",
-    "rarity": "exotic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/238.webp"
-  },
-  {
-    "name": "Golden Egg",
-    "rarity": "exotic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/239.webp"
-  },
-  {
-    "name": "Butterfly",
-    "rarity": "exotic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/240.webp"
-  },
-  {
-    "name": "Carrot",
-    "rarity": "exotic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/241.webp"
-  },
-  {
-    "name": "Tulips",
-    "rarity": "exotic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/242.webp"
-  },
-  {
-    "name": "Chicken Coop",
-    "rarity": "exotic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/243.webp"
-  },
-  {
-    "name": "Clown",
-    "rarity": "common",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/244.webp"
-  },
-  {
-    "name": "Nerd",
-    "rarity": "common",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/245.webp"
-  },
-  {
-    "name": "Noob Smile",
-    "rarity": "common",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/246.webp"
-  },
-  {
-    "name": "Disguise",
-    "rarity": "rare",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/247.webp"
-  },
-  {
-    "name": "Mike Wazoski",
-    "rarity": "epic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/248.webp"
-  },
-  {
-    "name": "CODM Gun",
-    "rarity": "legendary",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/249.webp"
-  },
-  {
-    "name": "Fortnite Pi\u00f1ata",
-    "rarity": "legendary",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/250.webp"
-  },
-  {
-    "name": "Tetris",
-    "rarity": "epic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/251.webp"
-  },
-  {
-    "name": "Angry Bird",
-    "rarity": "epic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/252.webp"
-  },
-  {
-    "name": "Terraria",
-    "rarity": "epic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/253.webp"
-  },
-  {
-    "name": "Retro Bowl",
-    "rarity": "epic",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/254.webp"
-  },
-  {
-    "name": "Hoverboard",
-    "rarity": "rare",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/255.webp"
-  },
-  {
-    "name": "Bad Piggie",
-    "rarity": "rare",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/256.webp"
-  },
-  {
-    "name": "Pokeball",
-    "rarity": "rare",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/257.webp"
-  },
-  {
-    "name": "Fruit Ninja",
-    "rarity": "rare",
-    "category": "Cape",
-    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/258.webp"
+    "imageUrl": "https://app.zeqa.net/cosmetic/preview/cape/67.webp"
   },
   {
     "name": "Pipe",
