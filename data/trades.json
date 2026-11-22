@@ -39765,5 +39765,40 @@
     "shards": "342",
     "total_shards": "342",
     "raw_trade": "Nov 15 Chainmail - \u2192 A #342 ImPatsman"
+  },
+  {
+    "item": "Reindeer Chainmail",
+    "quantity": 1,
+    "shards": "555",
+    "total_shards": "555",
+    "raw_trade": "Nov 22 BOiL 555 8.0k \u2192 Reindeer Chainmail"
+  },
+  {
+    "item": "Chainmail",
+    "quantity": 1,
+    "shards": "555",
+    "total_shards": "555",
+    "raw_trade": "BOiL 555 \u2192 Chainmail Nov 22"
+  },
+  {
+    "item": "Reindeer",
+    "quantity": 1,
+    "shards": "8k",
+    "total_shards": "8k",
+    "raw_trade": "8.0k \u2192 Reindeer"
+  },
+  {
+    "item": "Chainmail Present Head +22 more",
+    "quantity": 1,
+    "shards": "29k",
+    "total_shards": "29k",
+    "raw_trade": "Nov 22 Chainmail Present Head +22 more \u2192 29.0k Konobe7241"
+  },
+  {
+    "item": "Present Head +22 more",
+    "quantity": 1,
+    "shards": "29k",
+    "total_shards": "29k",
+    "raw_trade": "Present Head +22 more \u2192 29.0k"
   }
 ]
