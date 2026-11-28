@@ -39863,5 +39863,12 @@
     "shards": "346",
     "total_shards": "346",
     "raw_trade": "A #C125 \u2192 A #346"
+  },
+  {
+    "item": "Chainmail",
+    "quantity": 1,
+    "shards": "555",
+    "total_shards": "555",
+    "raw_trade": "BOiL 555 \u2192 Chainmail Nov 27"
   }
 ]
